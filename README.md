@@ -18,3 +18,7 @@ Then, you need to start the front-end:
 - [ ] Interval within period might be set
 - [ ] Customized indicators for paid users (BOOM)
 - [ ] Add users...
+
+# Current Status
+
+![](current-status.gif)
