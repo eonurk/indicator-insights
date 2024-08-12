@@ -1,7 +1,6 @@
-import { useMemo } from "react";
+import React, { useMemo } from "react";
 import { Line } from "react-chartjs-2";
-import { RSI } from "@/utils/Indicators";
-
+import { RMI, RSI } from "@/utils/Indicators";
 import {
 	Card,
 	CardContent,
@@ -24,46 +23,47 @@ interface Dataset {
 	fill: boolean;
 	tension: number;
 }
-interface RSIChartProps {
+
+interface RMIChartProps {
 	formattedData: {
 		labels: Date[];
 		datasets: Dataset[];
 	};
-	RSIperiod?: number;
+	RMIperiod?: number;
 	options?: any;
 }
 
-export default function RSIChart({
+export default function RMIChart({
 	formattedData,
-	RSIperiod = 14,
+	RMIperiod = 14,
 	options = {},
-}: RSIChartProps) {
+}: RMIChartProps) {
 	const rmiData = useMemo(() => {
 		if (
 			!formattedData ||
 			!formattedData.datasets ||
 			formattedData.datasets.length === 0
 		) {
-			console.error("Invalid data structure provided to RSIChart");
+			console.error("Invalid data structure provided to RMIChart");
 			return null;
 		}
 
 		const prices = formattedData.datasets[0].data.map((point) => point.y);
-		return RSI(prices, RSIperiod);
-	}, [formattedData, RSIperiod]);
+		return RMI(prices, RMIperiod);
+	}, [formattedData, RMIperiod]);
 
 	if (!rmiData) return null;
 
 	const chartData = {
-		labels: formattedData.labels.slice(RSIperiod - 1),
+		labels: formattedData.labels.slice(RMIperiod),
 		datasets: [
 			{
-				label: "RSI",
+				label: "RMI",
 				data: rmiData.map((value, index) => ({
-					x: formattedData.labels[index + RSIperiod - 1],
+					x: formattedData.labels[index + RMIperiod],
 					y: value,
 				})),
-				borderColor: "brown",
+				borderColor: "green",
 				borderWidth: 2,
 				backgroundColor: "rgba(0, 255, 0, 0.1)",
 				fill: false,
@@ -75,8 +75,8 @@ export default function RSIChart({
 		<>
 			<CardHeader className="flex items-center gap-2 space-y-0 py-5 sm:flex-row">
 				<div className="grid flex-1 gap-1 text-center sm:text-left">
-					<CardTitle>RSI({RSIperiod})</CardTitle>
-					<CardDescription>RSI({RSIperiod})</CardDescription>
+					<CardTitle>RMI({RMIperiod})</CardTitle>
+					<CardDescription>RMI({RMIperiod})</CardDescription>
 				</div>
 			</CardHeader>
 			<Line data={chartData} options={options} />
