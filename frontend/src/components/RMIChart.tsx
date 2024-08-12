@@ -49,7 +49,10 @@ export default function RMIChart({
 		}
 
 		const prices = formattedData.datasets[0].data.map((point) => point.y);
-		return RMI(prices, RMIperiod);
+		console.log(prices.length);
+		const rmi = RMI(prices, RMIperiod);
+		console.log(rmi);
+		return rmi;
 	}, [formattedData, RMIperiod]);
 
 	if (!rmiData) return null;
@@ -60,7 +63,7 @@ export default function RMIChart({
 			{
 				label: "RMI",
 				data: rmiData.map((value, index) => ({
-					x: formattedData.labels[index + RMIperiod],
+					x: formattedData.labels[index],
 					y: value,
 				})),
 				borderColor: "green",
