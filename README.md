@@ -11,12 +11,12 @@ Then, you need to start the front-end:
 
 # TO-DO
 
-- [ ] Implement buy/sell logic. eg. RSI 30/70
-- [ ] Show possible profit/loss with each indicator
+- [x] Implement buy/sell logic. eg. RSI 30/70
+- [x] Show possible profit/loss with each indicator
 - [ ] Find/add all stocks from NASDAQ
 - [ ] Add other indicators
 - [ ] Interval within period might be set
-- [ ] Customized indicators for paid users (BOOM)
+- [ ] Customized indicators for paid users
 - [ ] Add users...
 
 # Current Status

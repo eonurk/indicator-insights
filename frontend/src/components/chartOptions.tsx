@@ -36,7 +36,7 @@ export function chartOptions(period: string) {
 				ticks: {
 					source: "labels",
 					autoSkip: true,
-					maxTicksLimit: 10,
+					maxTicksLimit: 5,
 				},
 				grid: {
 					display: false,

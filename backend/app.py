@@ -13,7 +13,7 @@ period_interval_map = {
     "1m": ("1mo", "1h"),
     "3m": ("3mo", "1h"),
     "ytd": ("ytd", "1h"),
-    "1y": ("1y", "1d"),
+    "1y": ("1y", "1h"),
     "all": ("max", "1mo")
 }
 

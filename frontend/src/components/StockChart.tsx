@@ -63,7 +63,7 @@ const periodOptions = [
 ];
 
 function StockChart() {
-	const [period, setPeriod] = useState<string>("1d");
+	const [period, setPeriod] = useState<string>("1w");
 	const [symbol, setSymbol] = useState<string>("AAPL");
 	const [stockInfo, setStockInfo] = useState<{
 		symbol: string;

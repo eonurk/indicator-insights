@@ -3,34 +3,40 @@ import { Line } from "react-chartjs-2";
 import { RSI } from "@/utils/Indicators";
 import { CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 
-// Calculate profit based on RSI with buy/sell signals
-function calculateRSIProfit(prices: any[], rsiData: string | any[]) {
-	let positions = [];
-	let profit = 0;
-	let status = false; // bought if true, sold otherwise
+function calculateRSIProfit(prices: number[], rsiData: number[]) {
+	let capital = 100; // Start with an initial capital (can be any arbitrary value)
+	let latestBuyPrice = null;
 	const buyPoints = [];
 	const sellPoints = [];
-	// [TODO]: SOMETHING IS OFF. We need to check for pushing many buy price.
+
 	for (let i = 1; i < rsiData.length; i++) {
+		// Buy signal: RSI crosses above 30
 		if (rsiData[i - 1] < 30 && rsiData[i] > 30 && rsiData[i - 1] != null) {
-			// Buy signal
-			status = true;
-			positions.push(prices[i]);
+			latestBuyPrice = prices[i];
 			buyPoints.push({ x: i, y: rsiData[i] });
-		} else if (rsiData[i - 1] > 70 && rsiData[i] < 70 && positions.length > 0) {
-			// Sell signal
-			status = false;
-			let buyPrice = positions.pop();
-			profit += ((prices[i] - buyPrice) / buyPrice) * 100;
+		}
+		// Sell signal: RSI crosses below 70
+		else if (
+			rsiData[i - 1] > 70 &&
+			rsiData[i] < 70 &&
+			latestBuyPrice !== null
+		) {
+			// Calculate profit/loss for this trade and update capital
+			capital = capital * (1 + (prices[i] - latestBuyPrice) / latestBuyPrice);
 			sellPoints.push({ x: i, y: rsiData[i] });
+			latestBuyPrice = null; // Reset after tracking the latest sell
 		}
 	}
 
-	// if the last position is buy add it to the latest position
-	if (status) {
-		let lastBuy = buyPoints[buyPoints.length - 1].y;
-		profit += ((prices[prices.length - 1] - lastBuy) / lastBuy) * 100;
+	// If there's an open position at the end, close it using the last price
+	if (latestBuyPrice !== null) {
+		capital =
+			capital *
+			(1 + (prices[prices.length - 1] - latestBuyPrice) / latestBuyPrice);
 	}
+
+	// Compound profit/loss is the difference between the final capital and initial capital
+	const profit = capital - 100;
 
 	return { profit, buyPoints, sellPoints };
 }
@@ -144,7 +150,11 @@ export default function RSIChart({
 			<CardHeader className="flex items-center gap-2 space-y-0 py-5 sm:flex-row">
 				<div className="grid flex-1 gap-1 text-center sm:text-left">
 					<CardTitle>RSI({RSIperiod})</CardTitle>
-					<CardDescription>Total Profit: {profit.toFixed(2)}%</CardDescription>
+					<CardDescription
+						className={`${profit > 0 ? "text-green-500" : "text-red-500"}`}
+					>
+						Total Profit: {profit.toFixed(2)}%
+					</CardDescription>
 				</div>
 			</CardHeader>
 			<Line data={chartData} options={customOptions} />
