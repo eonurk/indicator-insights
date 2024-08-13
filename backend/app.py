@@ -6,12 +6,13 @@ app = Flask(__name__)
 CORS(app)
 
 # Mapping user selection to yfinance's period and interval
+# [TODO]: Allow users to select interval in each selection
 period_interval_map = {
     "1d": ("1d", "1m"),
     "1w": ("5d", "5m"),
     "1m": ("1mo", "1h"),
-    "3m": ("3mo", "1d"),
-    "ytd": ("ytd", "1d"),
+    "3m": ("3mo", "1h"),
+    "ytd": ("ytd", "1h"),
     "1y": ("1y", "1d"),
     "all": ("max", "1mo")
 }

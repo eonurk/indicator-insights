@@ -220,7 +220,7 @@ function StockChart() {
 						{showRSI && (
 							<RSIChart
 								formattedData={stockInfo.formattedData}
-								RSIperiod={14}
+								RSIperiod={14} // [TODO]: Allow users to select indicator periods
 								options={stockInfo.chartOptions}
 							/>
 						)}
