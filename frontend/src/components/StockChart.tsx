@@ -34,6 +34,7 @@ import {
 
 import RMIChart from "@/components/RMIChart";
 import RSIChart from "@/components/RSIChart";
+import { stockOptions } from "@/utils/stocks";
 
 ChartJS.register(
 	CategoryScale,
@@ -45,12 +46,6 @@ ChartJS.register(
 	Legend,
 	TimeSeriesScale
 );
-
-const stockOptions = [
-	{ id: "AAPL", name: "Apple" },
-	{ id: "TXG", name: "10x Genomics" },
-	{ id: "MSFT", name: "Microsoft" },
-];
 
 const periodOptions = [
 	{ value: "1d", label: "1 Day" },
@@ -77,8 +72,8 @@ function StockChart() {
 	} | null>(null);
 
 	// indicators
+	const [showRMI, setShowRMI] = useState<boolean>(true);
 	const [showRSI, setShowRSI] = useState<boolean>(false);
-	const [showRMI, setShowRMI] = useState<boolean>(false);
 
 	const getStockInfo = async (symbol: string, period: string) => {
 		try {

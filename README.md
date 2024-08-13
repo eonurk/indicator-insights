@@ -17,7 +17,7 @@ Then, you need to start the front-end:
 - [ ] Add other indicators
 - [ ] Interval within period might be set
 - [ ] Customized indicators for paid users
-- [ ] Add users...
+- [ ] Allow users to select indicator periods
 
 # Current Status
 
