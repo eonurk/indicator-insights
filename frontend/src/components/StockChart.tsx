@@ -127,7 +127,7 @@ function StockChart() {
 
 	return (
 		<Card>
-			<CardHeader className="flex items-center gap-2 space-y-0 border-b py-5 sm:flex-row">
+			<CardHeader className="items-center gap-2 space-y-0 border-b py-5 sm:flex-row">
 				<div className="grid flex-1 gap-1 text-center sm:text-left">
 					<CardTitle>{stockInfo?.symbol}</CardTitle>
 					<CardDescription className={stockInfo?.cardTitleColor}>
@@ -138,7 +138,7 @@ function StockChart() {
 				<div className="flex gap-1">
 					<Select value={symbol} onValueChange={setSymbol}>
 						<SelectTrigger
-							className="w-[160px] rounded-lg sm:ml-auto"
+							className="flex min-w-32 rounded-lg sm:ml-auto"
 							aria-label="Select a value"
 						>
 							<SelectValue placeholder="AAPL" />
@@ -153,7 +153,7 @@ function StockChart() {
 					</Select>
 					<Select value={period} onValueChange={setPeriod}>
 						<SelectTrigger
-							className="w-[160px] rounded-lg sm:ml-auto"
+							className="flex min-w-32 rounded-lg sm:ml-auto"
 							aria-label="Select a value"
 						>
 							<SelectValue placeholder="1w" />

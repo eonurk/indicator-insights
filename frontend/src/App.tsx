@@ -1,6 +1,6 @@
 import "./App.css";
 import StockChart from "@/components/StockChart";
-
+import IndicatorChecker from "@/components/IndicatorChecker";
 function App() {
 	return (
 		<>
@@ -12,6 +12,8 @@ function App() {
 				</div>
 			</div>
 			<StockChart />
+
+			<IndicatorChecker />
 		</>
 	);
 }
