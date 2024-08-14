@@ -32,6 +32,7 @@ Then, you need to start the front-end:
     }
 ```
 
+- [x] Run indicator for all stocks
 - [ ] Find/add all stocks from NASDAQ
 - [ ] Add other indicators
 - [ ] Interval within period might be set
