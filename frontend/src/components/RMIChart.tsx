@@ -27,7 +27,7 @@ interface RMIChartProps {
 }
 
 // Calculate profit based on RSI with buy/sell signals
-function calculateRMIProfit(prices: any[], rmiData: string | any[]) {
+export function calculateRMIProfit(prices: any[], rmiData: string | any[]) {
 	let capital = 100; // Start with an initial capital (can be any arbitrary value)
 	let latestBuyPrice = null;
 	const buyPoints = [];
@@ -62,7 +62,7 @@ function calculateRMIProfit(prices: any[], rmiData: string | any[]) {
 	// Compound profit/loss is the difference between the final capital and initial capital
 	const profit = capital - 100;
 
-	return { profit, buyPoints, sellPoints };
+	return { profit, buyPoints, sellPoints, latestBuyPrice };
 }
 
 export default function RMIChart({
