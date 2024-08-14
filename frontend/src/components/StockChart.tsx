@@ -34,7 +34,7 @@ import {
 
 import RMIChart from "@/components/RMIChart";
 import RSIChart from "@/components/RSIChart";
-import { stockOptions } from "@/utils/stocks";
+import { stocks } from "@/utils/stocks";
 
 ChartJS.register(
 	CategoryScale,
@@ -78,7 +78,9 @@ function StockChart() {
 	const getStockInfo = async (symbol: string, period: string) => {
 		try {
 			const fetchedData = await fetchStockData(symbol, period);
-			const history = fetchedData.history;
+
+			// for now fetch only one symbol
+			const history = fetchedData[symbol].history;
 			const dates = Object.keys(history).map((date) => new Date(date));
 			const closingPrices = dates
 				.map((date) => history[format(date, "yyyy-MM-dd HH:mm:ss")]?.Close)
@@ -144,9 +146,9 @@ function StockChart() {
 							<SelectValue placeholder="AAPL" />
 						</SelectTrigger>
 						<SelectContent>
-							{stockOptions.map((option) => (
-								<SelectItem key={option.id} value={option.id}>
-									{option.name}
+							{Object.entries(stocks).map(([id, name]) => (
+								<SelectItem key={id} value={id}>
+									{name}
 								</SelectItem>
 							))}
 						</SelectContent>
