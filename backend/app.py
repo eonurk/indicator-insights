@@ -6,7 +6,6 @@ app = Flask(__name__)
 CORS(app)
 
 # Mapping user selection to yfinance's period and interval
-# [TODO]: Allow users to select interval in each selection
 period_interval_map = {
     "1d": ("1d", "1m"),
     "1w": ("5d", "5m"),
@@ -17,8 +16,8 @@ period_interval_map = {
     "all": ("max", "1mo")
 }
 
-@app.route('/api/stock/<symbol>', methods=['GET'])
-def get_stock_data(symbol):
+@app.route('/api/stock/<symbols>', methods=['GET'])
+def get_stock_data(symbols):
     try:
         # Get the user-specified period from the query string
         period_key = request.args.get('period', '1m')  # Default to '1m' if not provided
@@ -28,16 +27,24 @@ def get_stock_data(symbol):
 
         period, interval = period_interval_map[period_key]
 
-        stock = yf.Ticker(symbol)
-        hist = stock.history(period=period, interval=interval)
-        
-        # Convert the DataFrame index (Timestamps) to strings
-        hist.index = hist.index.strftime('%Y-%m-%d %H:%M:%S')
+        # Initialize the Tickers object with the list of symbols
+        tickers = yf.Tickers(symbols.replace(',', ' '))  # yfinance Tickers expects space-separated symbols
 
-        data = {
-            "symbol": symbol,
-            "history": hist.to_dict(orient="index")
-        }
+        data = {}
+
+        for symbol in symbols.split(','):
+            ticker = tickers.tickers[symbol]
+            hist = ticker.history(period=period, interval=interval)
+            
+            # Convert the DataFrame index (Timestamps) to strings
+            hist.index = hist.index.strftime('%Y-%m-%d %H:%M:%S')
+
+            # Add data for this symbol to the result dictionary
+            data[symbol] = {
+                "symbol": symbol,
+                "history": hist.to_dict(orient="index")
+            }
+
         return jsonify(data), 200
     except Exception as e:
         return jsonify({"error": str(e)}), 500
