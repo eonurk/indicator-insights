@@ -41,4 +41,4 @@ Then, you need to start the front-end:
 
 # Current Status
 
-![](current-status.gif)
+![](current-status.mov)
