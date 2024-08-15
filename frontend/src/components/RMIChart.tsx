@@ -37,7 +37,7 @@ export function calculateRMIProfit(prices: any[], rmiData: string | any[]) {
 		// Buy signal: RSI crosses above 30
 		if (rmiData[i - 1] < 30 && rmiData[i] > 30 && rmiData[i - 1] != null) {
 			latestBuyPrice = prices[i];
-			buyPoints.push({ x: i, y: rmiData[i] });
+			buyPoints.push({ x: i, y: rmiData[i], price: prices[i] });
 		}
 		// Sell signal: RSI crosses below 70
 		else if (
@@ -47,7 +47,7 @@ export function calculateRMIProfit(prices: any[], rmiData: string | any[]) {
 		) {
 			// Calculate profit/loss for this trade and update capital
 			capital = capital * (1 + (prices[i] - latestBuyPrice) / latestBuyPrice);
-			sellPoints.push({ x: i, y: rmiData[i] });
+			sellPoints.push({ x: i, y: rmiData[i], price: prices[i] });
 			latestBuyPrice = null; // Reset after tracking the latest sell
 		}
 	}

@@ -40,3 +40,5 @@ Then, you need to start the front-end:
 - [ ] Allow users to select indicator periods
 
 # Current Status
+
+![](current-status.gif)

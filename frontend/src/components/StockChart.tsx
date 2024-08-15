@@ -16,6 +16,7 @@ import {
 	CardTitle,
 	CardFooter,
 } from "@/components/ui/card";
+
 import { Checkbox } from "@/components/ui/checkbox";
 import { Line } from "react-chartjs-2";
 import "chartjs-adapter-date-fns";
@@ -130,14 +131,14 @@ function StockChart() {
 	return (
 		<Card>
 			<CardHeader className="items-center gap-2 space-y-0 border-b py-5 sm:flex-row">
-				<div className="grid flex-1 gap-1 text-center sm:text-left">
+				<div className="flex-1 gap-1 text-center sm:text-left">
 					<CardTitle>{stockInfo?.symbol}</CardTitle>
 					<CardDescription className={stockInfo?.cardTitleColor}>
 						${stockInfo?.currentPrice} ({stockInfo?.priceChangePercentage}%)
 					</CardDescription>
 				</div>
 
-				<div className="flex gap-1">
+				<div className="flex gap-2">
 					<Select value={symbol} onValueChange={setSymbol}>
 						<SelectTrigger
 							className="flex min-w-32 rounded-lg sm:ml-auto"
@@ -145,7 +146,7 @@ function StockChart() {
 						>
 							<SelectValue placeholder="AAPL" />
 						</SelectTrigger>
-						<SelectContent>
+						<SelectContent position="popper">
 							{Object.entries(stocks).map(([id, name]) => (
 								<SelectItem key={id} value={id}>
 									{name}
@@ -199,7 +200,8 @@ function StockChart() {
 					</div>
 				</div>
 			</CardHeader>
-			<CardContent>
+			<CardContent className="">
+				<br />
 				{stockInfo && (
 					<>
 						<Line

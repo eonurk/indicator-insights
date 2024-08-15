@@ -10,6 +10,8 @@ import {
 	CardHeader,
 	CardTitle,
 } from "@/components/ui/card";
+import { ScrollArea } from "@/components/ui/scroll-area";
+
 import { Label } from "@/components/ui/label";
 import {
 	Select,
@@ -18,6 +20,16 @@ import {
 	SelectTrigger,
 	SelectValue,
 } from "@/components/ui/select";
+import {
+	Table,
+	TableBody,
+	TableCaption,
+	TableCell,
+	TableHead,
+	TableHeader,
+	TableRow,
+} from "@/components/ui/table";
+
 import { RMI } from "@/utils/Indicators";
 import { calculateRMIProfit } from "@/components/RMIChart";
 
@@ -34,12 +46,10 @@ const periodOptions = [
 ];
 
 // Helper function to determine the last signal
-function determineLastSignal(prices: number[], rmiData: number[]): string {
+function determineLastSignal(prices: number[], rmiData: number[]): any {
 	if (rmiData.length < 2) return "No signal";
-
-	const temp = calculateRMIProfit(prices, rmiData);
-	if (temp.latestBuyPrice !== null) return "Buy";
-	else return "Sell";
+	// return { profit, buyPoints, sellPoints, latestBuyPrice };
+	return calculateRMIProfit(prices, rmiData);
 }
 
 export default function IndicatorChecker() {
@@ -72,7 +82,7 @@ export default function IndicatorChecker() {
 				// Call your RMI function with the extracted prices and the period
 				const indicatorResult = RMI(closingPrices, 14);
 				const lastSignal = determineLastSignal(closingPrices, indicatorResult);
-				rsiResults.push({ symbol, indicatorResult, lastSignal });
+				rsiResults.push({ symbol, indicatorResult, lastSignal, closingPrices });
 			}
 
 			setResults(rsiResults);
@@ -95,7 +105,7 @@ export default function IndicatorChecker() {
 				</CardHeader>
 				<CardContent>
 					<form>
-						<div className="grid w-full items-center gap-4">
+						<div className="grid items-center gap-4">
 							<div className="flex flex-col space-y-1.5">
 								<Label htmlFor="indicator">Indicator</Label>
 								<Select value={indicator} onValueChange={setIndicator}>
@@ -133,40 +143,81 @@ export default function IndicatorChecker() {
 				</CardFooter>
 			</Card>
 
-			<div>
-				{results.length > 0 && (
+			{results.length > 0 && (
+				<div className="mt-4">
 					<Card>
 						<CardContent>
 							<br />
-							<div className="justify-center items-center w-full gap-4 mx-auto font-normal text-neutral-600 dark:text-neutral-400">
-								<table className="w-full">
-									<thead>
-										<tr>
-											<th>Symbol</th>
-											<th>Last Signal</th>
-										</tr>
-									</thead>
-									<tbody>
+							<ScrollArea className="h-[300px]">
+								<Table>
+									<TableCaption>
+										All trading involves risks. <br />
+										This table is not a recommendation of a specific security or
+										investment strategy.
+									</TableCaption>
+
+									<TableHeader>
+										<TableRow>
+											<TableHead className="text-center">Symbol</TableHead>
+											<TableHead className="text-center">Last Signal</TableHead>
+											<TableHead className="text-center">
+												Last Signal Price
+											</TableHead>
+											<TableHead className="text-center">
+												Current Price
+											</TableHead>
+											<TableHead className="text-center">
+												Indicator Profit
+											</TableHead>
+										</TableRow>
+									</TableHeader>
+
+									<TableBody>
 										{results.map((result) => (
-											<tr
+											<TableRow
 												key={result.symbol}
 												className={
-													result.lastSignal === "Buy"
+													// return { profit, buyPoints, sellPoints, latestBuyPrice };
+													result.lastSignal.latestBuyPrice !== null
 														? "text-green-500"
 														: "text-red-500"
 												}
 											>
-												<td>{result.symbol}</td>
-												<td>{result.lastSignal}</td>
-											</tr>
+												<TableCell>{result.symbol}</TableCell>
+												<TableCell>
+													{result.lastSignal.latestBuyPrice !== null
+														? "Buy"
+														: "Sell"}
+												</TableCell>
+												<TableCell>
+													{result.lastSignal.latestBuyPrice !== null
+														? result.lastSignal.latestBuyPrice.toFixed(2)
+														: "Sell"}
+												</TableCell>
+												<TableCell>
+													{result.closingPrices[
+														result.closingPrices.length - 1
+													].toFixed(2)}
+												</TableCell>
+												<TableCell
+													className={
+														// return { profit, buyPoints, sellPoints, latestBuyPrice };
+														result.lastSignal.profit > 0
+															? "text-green-500"
+															: "text-red-500"
+													}
+												>
+													{result.lastSignal.profit.toFixed(2)}%
+												</TableCell>
+											</TableRow>
 										))}
-									</tbody>
-								</table>
-							</div>
+									</TableBody>
+								</Table>
+							</ScrollArea>
 						</CardContent>
 					</Card>
-				)}
-			</div>
+				</div>
+			)}
 		</>
 	);
 }

@@ -3,13 +3,12 @@ const getTimeUnit = (period: string) => {
 		case "1d":
 			return "minute";
 		case "1w":
+			return "hour";
 		case "1m":
 		case "3m":
 		case "ytd":
 		case "1y":
-			return "hour";
 		case "all":
-			return "month";
 		default:
 			return "day";
 	}
