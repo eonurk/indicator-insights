@@ -66,10 +66,13 @@ export default function IndicatorChecker() {
 
 			// Construct the API URL with the symbols and period
 			const response = await fetch(
-				`http://localhost:5000/api/stock/${symbols.join(",")}?period=${period}`
+				`http://localhost:5000/api/stock/${symbols.join(
+					","
+				)}?period=${period}&getAll=False`
 			);
 
 			const fetchedData = await response.json();
+			console.log(fetchedData);
 			const rsiResults = [];
 
 			for (let symbol of symbols) {
@@ -192,7 +195,9 @@ export default function IndicatorChecker() {
 												<TableCell>
 													{result.lastSignal.latestBuyPrice !== null
 														? result.lastSignal.latestBuyPrice.toFixed(2)
-														: "Sell"}
+														: result.lastSignal.latestSellPrice !== null
+														? result.lastSignal.latestSellPrice.toFixed(2)
+														: "-"}
 												</TableCell>
 												<TableCell>
 													{result.closingPrices[
@@ -201,7 +206,6 @@ export default function IndicatorChecker() {
 												</TableCell>
 												<TableCell
 													className={
-														// return { profit, buyPoints, sellPoints, latestBuyPrice };
 														result.lastSignal.profit > 0
 															? "text-green-500"
 															: "text-red-500"

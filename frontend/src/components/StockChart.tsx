@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { fetchStockData, getPercentChange } from "@/fetchStockData";
 import { format } from "date-fns";
+import { formatNumber } from "@/utils/formatting";
 import {
 	Select,
 	SelectTrigger,
@@ -64,6 +65,12 @@ function StockChart() {
 	const [stockInfo, setStockInfo] = useState<{
 		symbol: string;
 		period: string;
+		volume: string;
+		avgVolume: string;
+		marketCap: string;
+		week52High: Number;
+		week52Low: Number;
+		peRatio: Number;
 		currentPrice: string | undefined;
 		priceChangePercentage: string;
 		lineColor: string;
@@ -81,7 +88,7 @@ function StockChart() {
 			const fetchedData = await fetchStockData(symbol, period);
 
 			// for now fetch only one symbol
-			const history = fetchedData[symbol].history;
+			const history = fetchedData[symbol]["history"];
 			const dates = Object.keys(history).map((date) => new Date(date));
 			const closingPrices = dates
 				.map((date) => history[format(date, "yyyy-MM-dd HH:mm:ss")]?.Close)
@@ -96,6 +103,12 @@ function StockChart() {
 			setStockInfo({
 				symbol,
 				period,
+				volume: formatNumber(fetchedData[symbol]["volume"]),
+				avgVolume: formatNumber(fetchedData[symbol]["avgVolume"]),
+				marketCap: formatNumber(fetchedData[symbol]["marketCap"]),
+				week52High: fetchedData[symbol]["week52High"],
+				week52Low: fetchedData[symbol]["week52Low"],
+				peRatio: fetchedData[symbol]["peRatio"],
 				currentPrice: latestPrice ? latestPrice.toFixed(2) : undefined,
 				priceChangePercentage: priceChangePercentage.toFixed(2),
 				lineColor: lineColor,
@@ -135,6 +148,18 @@ function StockChart() {
 					<CardTitle>{stockInfo?.symbol}</CardTitle>
 					<CardDescription className={stockInfo?.cardTitleColor}>
 						${stockInfo?.currentPrice} ({stockInfo?.priceChangePercentage}%)
+						<div className="flex gap-4">
+							<div className="grid text-slate-400">
+								<p>Volume: {stockInfo?.volume}</p>
+								<p>Avg Volume: {stockInfo?.avgVolume}</p>
+								<p>Market Cap: {stockInfo?.marketCap}</p>
+							</div>
+							<div className="grid text-slate-400">
+								<p>P/E ratio: {stockInfo?.peRatio.toFixed(2)}</p>
+								<p>52 Wk Low: {stockInfo?.week52Low.toFixed(2)}</p>
+								<p>52 Wk High: {stockInfo?.week52High.toFixed(2)}</p>
+							</div>
+						</div>
 					</CardDescription>
 				</div>
 

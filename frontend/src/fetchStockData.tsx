@@ -1,5 +1,3 @@
-import { format } from "date-fns";
-
 interface StockHistory {
 	[date: string]: {
 		Close: number;
@@ -17,11 +15,15 @@ interface StockData {
 }
 
 // fetches and returns StockData for a symbol and period
-export async function fetchStockData(symbol: string, period: string) {
+export async function fetchStockData(
+	symbol: string,
+	period: string,
+	getAll: boolean = true
+) {
 	try {
 		// send a request to the server and wait for its answer
 		const response = await fetch(
-			`http://localhost:5000/api/stock/${symbol}?period=${period}`
+			`http://localhost:5000/api/stock/${symbol}?period=${period}&getAll=${getAll}`
 		);
 		const data: StockData = await response.json();
 		return data;

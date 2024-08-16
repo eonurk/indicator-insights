@@ -1,9 +1,8 @@
 const getTimeUnit = (period: string) => {
 	switch (period) {
 		case "1d":
-			return "minute";
-		case "1w":
 			return "hour";
+		case "1w":
 		case "1m":
 		case "3m":
 		case "ytd":

@@ -30,6 +30,7 @@ interface RMIChartProps {
 export function calculateRMIProfit(prices: any[], rmiData: string | any[]) {
 	let capital = 100; // Start with an initial capital (can be any arbitrary value)
 	let latestBuyPrice = null;
+	let latestSellPrice = null;
 	const buyPoints = [];
 	const sellPoints = [];
 
@@ -49,6 +50,7 @@ export function calculateRMIProfit(prices: any[], rmiData: string | any[]) {
 			capital = capital * (1 + (prices[i] - latestBuyPrice) / latestBuyPrice);
 			sellPoints.push({ x: i, y: rmiData[i], price: prices[i] });
 			latestBuyPrice = null; // Reset after tracking the latest sell
+			latestSellPrice = prices[i];
 		}
 	}
 
@@ -62,7 +64,7 @@ export function calculateRMIProfit(prices: any[], rmiData: string | any[]) {
 	// Compound profit/loss is the difference between the final capital and initial capital
 	const profit = capital - 100;
 
-	return { profit, buyPoints, sellPoints, latestBuyPrice };
+	return { profit, buyPoints, sellPoints, latestBuyPrice, latestSellPrice };
 }
 
 export default function RMIChart({
