@@ -38,6 +38,36 @@ import RMIChart from "@/components/RMIChart";
 import RSIChart from "@/components/RSIChart";
 import { stocks } from "@/utils/stocks";
 
+const pulsingPlugin = {
+	id: "pulsing",
+	beforeDraw: function (chart) {
+		const ctx = chart.ctx;
+		const chartArea = chart.chartArea;
+
+		// Save the current state
+		ctx.save();
+
+		// Calculate pulsing effect (you can customize this)
+		const time = Date.now();
+		const pulse = (Math.sin(time / 200) + 1) / 2; // Oscillates between 0 and 1
+
+		// Apply the pulsing effect (this example affects the entire chart area)
+		ctx.fillStyle = `rgba(255, 99, 132, ${0.1 + pulse * 0.2})`; // Adjust as needed
+		ctx.fillRect(
+			chartArea.left,
+			chartArea.top,
+			chartArea.right - chartArea.left,
+			chartArea.bottom - chartArea.top
+		);
+
+		// Restore the previous state
+		ctx.restore();
+
+		// Request the next animation frame
+		chart.draw(); // Continues drawing the chart to create an animation effect
+	},
+};
+
 ChartJS.register(
 	CategoryScale,
 	LinearScale,
@@ -100,6 +130,11 @@ function StockChart() {
 			const cardTitleColor =
 				priceChangePercentage < 0 ? "text-red-500" : "text-green-500";
 
+			let customChartOptions = chartOptions(period);
+			customChartOptions = {
+				...customChartOptions, // Correct spread syntax to copy existing options
+			};
+
 			setStockInfo({
 				symbol,
 				period,
@@ -130,7 +165,7 @@ function StockChart() {
 						},
 					],
 				},
-				chartOptions: chartOptions(period),
+				chartOptions: customChartOptions,
 			});
 		} catch (error) {
 			console.error("Error fetching stock info:", error);
@@ -138,8 +173,17 @@ function StockChart() {
 	};
 
 	useEffect(() => {
+		// Initial fetch when the component mounts
 		getStockInfo(symbol, period);
-	}, [symbol, period, showRMI, showRSI]);
+
+		// Set up the interval to refresh the chart every 60 seconds
+		const intervalId = setInterval(() => {
+			getStockInfo(symbol, period);
+		}, 30000); // 600ms = 60 seconds
+
+		// Cleanup the interval on component unmount
+		return () => clearInterval(intervalId);
+	}, [symbol, period, showRMI, showRSI]); // Dependencies ensure the effect runs again if symbol or period change
 
 	return (
 		<Card>
