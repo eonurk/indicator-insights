@@ -1,7 +1,12 @@
 import { useMemo } from "react";
 import { Line } from "react-chartjs-2";
 import { RMI } from "@/utils/Indicators";
-import { CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+	CardDescription,
+	CardFooter,
+	CardHeader,
+	CardTitle,
+} from "@/components/ui/card";
 interface DataPoint {
 	x: Date;
 	y: number;
@@ -99,24 +104,13 @@ export default function RMIChart({
 		labels: formattedData.labels,
 		datasets: [
 			{
-				label: "RMI",
-				data: rmiData.map((value, index) => ({
-					x: formattedData.labels[index],
-					y: value,
-				})),
-				borderColor: "darkblue",
-				borderWidth: 2,
-				backgroundColor: "rgba(0, 255, 0, 0.1)",
-				fill: false,
-			},
-			{
 				label: "Buy Points",
 				data: buyPoints.map((point) => ({
 					x: formattedData.labels[point.x],
 					y: point.y,
 				})),
-				backgroundColor: "green",
-				borderColor: "green",
+				backgroundColor: "#22c55e",
+				borderColor: "#22c55e",
 				pointRadius: 5,
 				showLine: false,
 			},
@@ -130,6 +124,17 @@ export default function RMIChart({
 				borderColor: "red",
 				pointRadius: 5,
 				showLine: false,
+			},
+			{
+				label: "RMI",
+				data: rmiData.map((value, index) => ({
+					x: formattedData.labels[index],
+					y: value,
+				})),
+				borderColor: "darkblue",
+				borderWidth: 2,
+				backgroundColor: "rgba(0, 255, 0, 0.1)",
+				fill: false,
 			},
 		],
 	};
@@ -158,6 +163,12 @@ export default function RMIChart({
 				</div>
 			</CardHeader>
 			<Line data={chartData} options={customOptions} />
+			<br />
+			<CardFooter className="text-left text-sm text-slate-400">
+				RMI 30/70 was calculated for all indicator points. <br />
+				Sum of the potential cumulative profit/loss was reported as Total
+				Profit.
+			</CardFooter>
 		</>
 	);
 }
