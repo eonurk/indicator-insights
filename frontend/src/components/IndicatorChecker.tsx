@@ -66,12 +66,10 @@ export default function IndicatorChecker() {
 			const symbols = Object.keys(stocks);
 
 			const response = await fetchStockData(symbols.join(","), period, false);
-
-			const fetchedData = await response.json();
 			const rsiResults = [];
 
 			for (let symbol of symbols) {
-				const history = fetchedData[symbol].history; // Get the historical data for the symbol
+				const history = response[symbol].history; // Get the historical data for the symbol
 				const dates = Object.keys(history).map((date) => new Date(date));
 				const closingPrices = dates
 					.map((date) => history[format(date, "yyyy-MM-dd HH:mm:ss")]?.Close)

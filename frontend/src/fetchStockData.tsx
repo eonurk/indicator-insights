@@ -30,7 +30,6 @@ export async function fetchStockData(
 		const response = await fetch(
 			`${baseURL}/api/stock/${symbol}?period=${period}&getAll=${getAll}`
 		);
-		console.log(response);
 		const data: StockData = await response.json();
 		return data;
 	} catch (error) {
