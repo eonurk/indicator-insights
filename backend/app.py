@@ -16,6 +16,7 @@ period_interval_map = {
     "all": ("max", "1mo")
 }
 
+
 @app.route('/api/stock/<symbols>', methods=['GET'])
 def get_stock_data(symbols):
     try:
@@ -44,9 +45,9 @@ def get_stock_data(symbols):
             if getAll:
                 # Add full data for this symbol to the result dictionary
                 data[symbol] = {
+                    "history": hist.to_dict(orient="index"),
                     "volume": ticker.info["volume"],
                     "avgVolume": ticker.info["averageVolume"],
-                    "history": hist.to_dict(orient="index"),
                     "marketCap": ticker.info["marketCap"],
                     "week52High": ticker.info["fiftyTwoWeekHigh"],
                     "week52Low": ticker.info["fiftyTwoWeekLow"],
