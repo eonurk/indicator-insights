@@ -19,9 +19,7 @@ function App() {
 					<div className="text-4xl motion-safe:animate-bounce">&#8964;</div>
 				</div>
 			</div>
-			<div className="grid justify-center items-center ">
-				<IndicatorChecker />
-			</div>
+			<IndicatorChecker />
 		</>
 	);
 }

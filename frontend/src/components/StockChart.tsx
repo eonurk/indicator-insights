@@ -36,6 +36,7 @@ import {
 
 import RMIChart from "@/components/RMIChart";
 import RSIChart from "@/components/RSIChart";
+
 import { stocks } from "@/utils/stocks";
 
 // const pulsingPlugin = {
