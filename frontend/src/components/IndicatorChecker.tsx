@@ -140,23 +140,26 @@ export default function IndicatorChecker() {
 			</Card>
 
 			{results.length > 0 && (
-				<div className="mt-4">
+				<div className="mt-4 ">
 					<Card>
-						<CardContent>
-							<br />
-							<ScrollArea className="h-[300px]">
+						<CardContent className="p-2">
+							<ScrollArea className="h-[300px] mt-2">
 								<Table>
 									<TableHeader>
 										<TableRow>
-											<TableHead className="text-center">Symbol</TableHead>
-											<TableHead className="text-center">Last Signal</TableHead>
-											<TableHead className="text-center">
-												Last Signal Price
+											<TableHead className="text-center p-1 pl-2">
+												Stock Symbol
 											</TableHead>
-											<TableHead className="text-center">
+											<TableHead className="text-center p-1">
+												Last Signal
+											</TableHead>
+											<TableHead className="text-center p-1">
+												Signal Price
+											</TableHead>
+											<TableHead className="text-center p-1">
 												Current Price
 											</TableHead>
-											<TableHead className="text-center">
+											<TableHead className="text-center p-1">
 												Indicator Profit
 											</TableHead>
 										</TableRow>
@@ -173,20 +176,20 @@ export default function IndicatorChecker() {
 														: "text-red-500"
 												}
 											>
-												<TableCell>{result.symbol}</TableCell>
-												<TableCell>
+												<TableCell className="p-1">{result.symbol}</TableCell>
+												<TableCell className="p-1">
 													{result.lastSignal.latestBuyPrice !== null
 														? "Buy"
 														: "Sell"}
 												</TableCell>
-												<TableCell>
+												<TableCell className="p-1">
 													{result.lastSignal.latestBuyPrice !== null
 														? result.lastSignal.latestBuyPrice.toFixed(2)
 														: result.lastSignal.latestSellPrice !== null
 														? result.lastSignal.latestSellPrice.toFixed(2)
 														: "-"}
 												</TableCell>
-												<TableCell>
+												<TableCell className="p-1">
 													{result.closingPrices[
 														result.closingPrices.length - 1
 													].toFixed(2)}
@@ -194,8 +197,8 @@ export default function IndicatorChecker() {
 												<TableCell
 													className={
 														result.lastSignal.profit > 0
-															? "text-green-500"
-															: "text-red-500"
+															? "text-green-500 p-1"
+															: "text-red-500 p-1"
 													}
 												>
 													{result.lastSignal.profit.toFixed(2)}%

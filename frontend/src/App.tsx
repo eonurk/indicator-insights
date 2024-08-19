@@ -19,7 +19,10 @@ function App() {
 					<div className="text-4xl motion-safe:animate-bounce">&#8964;</div>
 				</div>
 			</div>
-			<IndicatorChecker />
+
+			<div className="h-[40rem]">
+				<IndicatorChecker />
+			</div>
 		</>
 	);
 }
