@@ -14,6 +14,11 @@ interface StockData {
 	history: StockHistory;
 }
 
+const baseURL =
+	window.location.hostname === "localhost"
+		? "http://localhost:5000"
+		: "https://aiheaven.net";
+
 // fetches and returns StockData for a symbol and period
 export async function fetchStockData(
 	symbol: string,
@@ -23,7 +28,7 @@ export async function fetchStockData(
 	try {
 		// send a request to the server and wait for its answer
 		const response = await fetch(
-			`http://localhost:5000/api/stock/${symbol}?period=${period}&getAll=${getAll}`
+			`${baseURL}/api/stock/${symbol}?period=${period}&getAll=${getAll}`
 		);
 		console.log(response);
 		const data: StockData = await response.json();

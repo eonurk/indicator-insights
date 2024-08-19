@@ -34,6 +34,7 @@ import { RMI } from "@/utils/Indicators";
 import { calculateRMIProfit } from "@/components/RMIChart";
 
 import { stocks } from "@/utils/stocks";
+import { fetchStockData } from "@/fetchStockData";
 
 const periodOptions = [
 	{ value: "1d", label: "1 Day" },
@@ -64,12 +65,7 @@ export default function IndicatorChecker() {
 			// Assuming chartOptions is an object where keys are symbols and values are options
 			const symbols = Object.keys(stocks);
 
-			// Construct the API URL with the symbols and period
-			const response = await fetch(
-				`http://localhost:5000/api/stock/${symbols.join(
-					","
-				)}?period=${period}&getAll=False`
-			);
+			const response = await fetchStockData(symbols.join(","), period, false);
 
 			const fetchedData = await response.json();
 			const rsiResults = [];
