@@ -9,7 +9,7 @@ interface StockHistory {
 }
 
 interface StockData {
-	// name: string; // [TODO: Add name of the]
+	[key: string]: any; // Include this if you need dynamic keys
 	symbol: string;
 	history: StockHistory;
 }
@@ -25,6 +25,7 @@ export async function fetchStockData(
 		const response = await fetch(
 			`http://localhost:5000/api/stock/${symbol}?period=${period}&getAll=${getAll}`
 		);
+		console.log(response);
 		const data: StockData = await response.json();
 		return data;
 	} catch (error) {

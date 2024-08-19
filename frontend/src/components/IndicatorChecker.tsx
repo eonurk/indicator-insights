@@ -72,7 +72,6 @@ export default function IndicatorChecker() {
 			);
 
 			const fetchedData = await response.json();
-			console.log(fetchedData);
 			const rsiResults = [];
 
 			for (let symbol of symbols) {
@@ -153,12 +152,6 @@ export default function IndicatorChecker() {
 							<br />
 							<ScrollArea className="h-[300px]">
 								<Table>
-									<TableCaption>
-										All trading involves risks. <br />
-										This table is not a recommendation of a specific security or
-										investment strategy.
-									</TableCaption>
-
 									<TableHeader>
 										<TableRow>
 											<TableHead className="text-center">Symbol</TableHead>
@@ -216,6 +209,12 @@ export default function IndicatorChecker() {
 											</TableRow>
 										))}
 									</TableBody>
+
+									<TableCaption>
+										All trading involves risks. <br />
+										This table is not a recommendation of a specific security or
+										investment strategy.
+									</TableCaption>
 								</Table>
 							</ScrollArea>
 						</CardContent>

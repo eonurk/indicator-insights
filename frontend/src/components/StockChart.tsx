@@ -38,35 +38,35 @@ import RMIChart from "@/components/RMIChart";
 import RSIChart from "@/components/RSIChart";
 import { stocks } from "@/utils/stocks";
 
-const pulsingPlugin = {
-	id: "pulsing",
-	beforeDraw: function (chart) {
-		const ctx = chart.ctx;
-		const chartArea = chart.chartArea;
+// const pulsingPlugin = {
+// 	id: "pulsing",
+// 	beforeDraw: function (chart) {
+// 		const ctx = chart.ctx;
+// 		const chartArea = chart.chartArea;
 
-		// Save the current state
-		ctx.save();
+// 		// Save the current state
+// 		ctx.save();
 
-		// Calculate pulsing effect (you can customize this)
-		const time = Date.now();
-		const pulse = (Math.sin(time / 200) + 1) / 2; // Oscillates between 0 and 1
+// 		// Calculate pulsing effect (you can customize this)
+// 		const time = Date.now();
+// 		const pulse = (Math.sin(time / 200) + 1) / 2; // Oscillates between 0 and 1
 
-		// Apply the pulsing effect (this example affects the entire chart area)
-		ctx.fillStyle = `rgba(255, 99, 132, ${0.1 + pulse * 0.2})`; // Adjust as needed
-		ctx.fillRect(
-			chartArea.left,
-			chartArea.top,
-			chartArea.right - chartArea.left,
-			chartArea.bottom - chartArea.top
-		);
+// 		// Apply the pulsing effect (this example affects the entire chart area)
+// 		ctx.fillStyle = `rgba(255, 99, 132, ${0.1 + pulse * 0.2})`; // Adjust as needed
+// 		ctx.fillRect(
+// 			chartArea.left,
+// 			chartArea.top,
+// 			chartArea.right - chartArea.left,
+// 			chartArea.bottom - chartArea.top
+// 		);
 
-		// Restore the previous state
-		ctx.restore();
+// 		// Restore the previous state
+// 		ctx.restore();
 
-		// Request the next animation frame
-		chart.draw(); // Continues drawing the chart to create an animation effect
-	},
-};
+// 		// Request the next animation frame
+// 		chart.draw(); // Continues drawing the chart to create an animation effect
+// 	},
+// };
 
 ChartJS.register(
 	CategoryScale,
@@ -93,14 +93,15 @@ function StockChart() {
 	const [period, setPeriod] = useState<string>("1w");
 	const [symbol, setSymbol] = useState<string>("AAPL");
 	const [stockInfo, setStockInfo] = useState<{
+		[key: string]: any; // Include this if you need dynamic keys
 		symbol: string;
 		period: string;
 		volume: string;
 		avgVolume: string;
 		marketCap: string;
-		week52High: Number;
-		week52Low: Number;
-		peRatio: Number;
+		week52High: number;
+		week52Low: number;
+		peRatio: number;
 		currentPrice: string | undefined;
 		priceChangePercentage: string;
 		lineColor: string;
@@ -116,9 +117,13 @@ function StockChart() {
 	const getStockInfo = async (symbol: string, period: string) => {
 		try {
 			const fetchedData = await fetchStockData(symbol, period);
-
+			const stockData = fetchedData[symbol];
+			if (!stockData) {
+				console.error("No data found for symbol:", symbol);
+				return;
+			}
 			// for now fetch only one symbol
-			const history = fetchedData[symbol]["history"];
+			const history = stockData["history"];
 			const dates = Object.keys(history).map((date) => new Date(date));
 			const closingPrices = dates
 				.map((date) => history[format(date, "yyyy-MM-dd HH:mm:ss")]?.Close)
@@ -138,12 +143,12 @@ function StockChart() {
 			setStockInfo({
 				symbol,
 				period,
-				volume: formatNumber(fetchedData[symbol]["volume"]),
-				avgVolume: formatNumber(fetchedData[symbol]["avgVolume"]),
-				marketCap: formatNumber(fetchedData[symbol]["marketCap"]),
-				week52High: fetchedData[symbol]["week52High"],
-				week52Low: fetchedData[symbol]["week52Low"],
-				peRatio: fetchedData[symbol]["peRatio"],
+				volume: formatNumber(stockData["volume"]),
+				avgVolume: formatNumber(stockData["avgVolume"]),
+				marketCap: formatNumber(stockData["marketCap"]),
+				week52High: stockData["week52High"],
+				week52Low: stockData["week52Low"],
+				peRatio: stockData["peRatio"],
 				currentPrice: latestPrice ? latestPrice.toFixed(2) : undefined,
 				priceChangePercentage: priceChangePercentage.toFixed(2),
 				lineColor: lineColor,
