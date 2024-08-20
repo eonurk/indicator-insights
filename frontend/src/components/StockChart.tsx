@@ -37,7 +37,7 @@ import {
 import RMIChart from "@/components/RMIChart";
 import RSIChart from "@/components/RSIChart";
 import { stocks } from "@/utils/stocks";
-
+import { User } from "firebase/auth"; // Import User type
 ChartJS.register(
 	CategoryScale,
 	LinearScale,
@@ -60,7 +60,11 @@ const periodOptions = [
 	{ value: "all", label: "All" },
 ];
 
-function StockChart() {
+interface StockChartProps {
+	user: User | null; // Use User type from firebase/auth
+}
+
+function StockChart({ user }: StockChartProps) {
 	const [period, setPeriod] = useState<string>("1w");
 	const [symbol, setSymbol] = useState<string>("AAPL");
 	const [stockInfo, setStockInfo] = useState<{
@@ -83,6 +87,21 @@ function StockChart() {
 	// indicators
 	const [showRMI, setShowRMI] = useState<boolean>(true);
 	const [showRSI, setShowRSI] = useState<boolean>(false);
+
+	// Define a list of restricted stocks for non-logged-in users
+	const availableStocks = user
+		? stocks
+		: {
+				AAPL: "Apple Inc.",
+				ABNB: "Airbnb, Inc.",
+				AMZN: "Amazon.com, Inc.",
+				EBAY: "eBay Inc.",
+				GOOGL: "Alphabet Inc. (Class A)",
+				META: "Meta Platforms, Inc.",
+				NFLX: "Netflix, Inc.",
+				PLTR: "Palantir Technologies Inc.",
+				ZM: "Zoom Video Communications, Inc.",
+		  };
 
 	const getStockInfo = async (symbol: string, period: string) => {
 		try {
@@ -194,7 +213,7 @@ function StockChart() {
 							<SelectValue placeholder="AAPL" />
 						</SelectTrigger>
 						<SelectContent position="popper">
-							{Object.entries(stocks).map(([id, name]) => (
+							{Object.entries(availableStocks).map(([id, name]) => (
 								<SelectItem key={id} value={id}>
 									{name}
 								</SelectItem>

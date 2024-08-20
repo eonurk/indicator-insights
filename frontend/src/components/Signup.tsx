@@ -9,12 +9,14 @@ import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Icons } from "@/components/icons";
+import { useNavigate } from "react-router-dom"; // Import useNavigate
 
 export function Signup() {
 	const [email, setEmail] = useState("");
 	const [password, setPassword] = useState("");
 	const [error, setError] = useState("");
 	const [loading, setLoading] = useState(false);
+	const navigate = useNavigate();
 
 	const handleSignUp = async (event: React.FormEvent) => {
 		event.preventDefault();
@@ -23,7 +25,7 @@ export function Signup() {
 
 		try {
 			await createUserWithEmailAndPassword(auth, email, password);
-			alert("Sign up successful! You can now log in.");
+			navigate("/");
 		} catch (error: any) {
 			setError(error.message);
 		} finally {
@@ -35,7 +37,7 @@ export function Signup() {
 		const provider = new GoogleAuthProvider();
 		try {
 			await signInWithPopup(auth, provider);
-			alert("Google sign-in successful!");
+			navigate("/");
 		} catch (error: any) {
 			setError(error.message);
 		}

@@ -18,17 +18,19 @@ import { Link } from "react-router-dom";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { useNavigate } from "react-router-dom"; // Import useNavigate
 
 export default function Login() {
 	const [email, setEmail] = useState("");
 	const [password, setPassword] = useState("");
 	const [error, setError] = useState("");
+	const navigate = useNavigate();
 
 	const handleLogin = async (e: React.FormEvent) => {
 		e.preventDefault();
 		try {
 			await signInWithEmailAndPassword(auth, email, password);
-			alert("Login successful!");
+			navigate("/"); // Redirect to the dashboard after login
 		} catch (error: any) {
 			setError(error.message);
 		}
@@ -38,7 +40,7 @@ export default function Login() {
 		const provider = new GoogleAuthProvider();
 		try {
 			await signInWithPopup(auth, provider);
-			alert("Google sign-in successful!");
+			navigate("/");
 		} catch (error: any) {
 			setError(error.message);
 		}

@@ -34,6 +34,7 @@ import { calculateRMIProfit } from "@/components/RMIChart";
 
 import { stocks } from "@/utils/stocks";
 import { fetchStockData } from "@/fetchStockData";
+import { User } from "firebase/auth";
 
 const periodOptions = [
 	{ value: "1d", label: "1 Day" },
@@ -51,8 +52,10 @@ function determineLastSignal(prices: number[], rmiData: number[]): any {
 	// return { profit, buyPoints, sellPoints, latestBuyPrice };
 	return calculateRMIProfit(prices, rmiData);
 }
-
-export default function IndicatorChecker() {
+interface StockChartProps {
+	user: User | null; // Use User type from firebase/auth
+}
+export default function IndicatorChecker({ user }: StockChartProps) {
 	const [buttonDisable, setButtonDisable] = useState(false);
 	const [period, setPeriod] = useState<string>("1w");
 	const [indicator, setIndicator] = useState<string>("RMI");
@@ -62,7 +65,22 @@ export default function IndicatorChecker() {
 		try {
 			setButtonDisable(true);
 			// Assuming chartOptions is an object where keys are symbols and values are options
-			const symbols = Object.keys(stocks);
+
+			const availableStocks = user
+				? stocks
+				: {
+						AAPL: "Apple Inc.",
+						ABNB: "Airbnb, Inc.",
+						AMZN: "Amazon.com, Inc.",
+						EBAY: "eBay Inc.",
+						GOOGL: "Alphabet Inc. (Class A)",
+						META: "Meta Platforms, Inc.",
+						NFLX: "Netflix, Inc.",
+						PLTR: "Palantir Technologies Inc.",
+						ZM: "Zoom Video Communications, Inc.",
+				  };
+
+			const symbols = Object.keys(availableStocks);
 
 			const response = await fetchStockData(symbols.join(","), period, false);
 			const rsiResults = [];
