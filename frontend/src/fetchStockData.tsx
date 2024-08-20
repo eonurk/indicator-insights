@@ -24,13 +24,15 @@ export async function fetchStockData(
 	symbol: string,
 	period: string,
 	getAll: boolean = true
-) {
+): Promise<StockData> {
+	console.log("WE ARE HERE!");
 	try {
 		// send a request to the server and wait for its answer
 		const response = await fetch(
 			`${baseURL}/api/stock/${symbol}?period=${period}&getAll=${getAll}`
 		);
 		const data: StockData = await response.json();
+
 		return data;
 	} catch (error) {
 		console.error("Error fetching stock data:", error);

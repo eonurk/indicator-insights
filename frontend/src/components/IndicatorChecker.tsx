@@ -23,7 +23,6 @@ import {
 import {
 	Table,
 	TableBody,
-	TableCaption,
 	TableCell,
 	TableHead,
 	TableHeader,
@@ -138,7 +137,6 @@ export default function IndicatorChecker() {
 					</Button>
 				</CardFooter>
 			</Card>
-
 			{results.length > 0 && (
 				<div className="mt-4 ">
 					<Card>
@@ -206,18 +204,18 @@ export default function IndicatorChecker() {
 											</TableRow>
 										))}
 									</TableBody>
-
-									<TableCaption>
-										All trading involves risks. <br />
-										This table is not a recommendation of a specific security or
-										investment strategy.
-									</TableCaption>
 								</Table>
 							</ScrollArea>
 						</CardContent>
 					</Card>
 				</div>
 			)}
+
+			<div className="text-sm mt-8 text-slate-400">
+				All trading involves risks. <br />
+				This table is not a recommendation of a specific security or investment
+				strategy.
+			</div>
 		</>
 	);
 }
