@@ -1,13 +1,13 @@
 "use client";
 
-import { Link, useLocation } from "react-router-dom"; // Import necessary hooks from react-router-dom
+import { Link } from "react-router-dom"; // Import necessary hooks from react-router-dom
 // import { siteConfig } from "@/config/site";
 // import { cn } from "@/lib/utils";
 import { Icons } from "@/components/icons";
 
 export function MainNav() {
-	const location = useLocation(); // Use useLocation to get the current pathname
-	const pathname = location.pathname;
+	// const location = useLocation(); // Use useLocation to get the current pathname
+	// const pathname = location.pathname;
 
 	return (
 		<div className="mr-4 hidden md:flex">

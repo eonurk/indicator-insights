@@ -1,6 +1,5 @@
 import StockChart from "@/components/StockChart";
 import IndicatorChecker from "@/components/IndicatorChecker";
-import logo from "@/assets/logo.png";
 
 import { SiteHeader } from "@/components/site-header";
 
