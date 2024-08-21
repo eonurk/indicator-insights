@@ -137,8 +137,8 @@ function StockChart({ user }: StockChartProps) {
 				marketCap: formatNumber(stockData["marketCap"]),
 				week52High: stockData["week52High"],
 				week52Low: stockData["week52Low"],
-				peRatio: stockData["peRatio"],
-				currentPrice: latestPrice ? latestPrice.toFixed(2) : undefined,
+				peRatio: stockData["peRatio"] ? stockData["peRatio"].toFixed(2) : "-",
+				currentPrice: latestPrice ? latestPrice.toFixed(2) : "-",
 				priceChangePercentage: priceChangePercentage.toFixed(2),
 				lineColor: lineColor,
 				cardTitleColor: cardTitleColor,
@@ -196,9 +196,9 @@ function StockChart({ user }: StockChartProps) {
 								<p>Market Cap: {stockInfo?.marketCap}</p>
 							</div>
 							<div className="grid text-slate-400">
-								<p>P/E ratio: {stockInfo?.peRatio.toFixed(2)}</p>
-								<p>52 Wk Low: {stockInfo?.week52Low.toFixed(2)}</p>
-								<p>52 Wk High: {stockInfo?.week52High.toFixed(2)}</p>
+								<p>P/E ratio: {stockInfo?.peRatio}</p>
+								<p>52 Wk Low: {stockInfo?.week52Low}</p>
+								<p>52 Wk High: {stockInfo?.week52High}</p>
 							</div>
 						</div>
 					</CardDescription>

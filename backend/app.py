@@ -46,13 +46,13 @@ def get_stock_data(symbols):
                 # Add full data for this symbol to the result dictionary
                 data[symbol] = {
                     "history": hist.to_dict(orient="index"),
-                    "volume": ticker.info["volume"],
-                    "avgVolume": ticker.info["averageVolume"],
-                    "marketCap": ticker.info["marketCap"],
-                    "week52High": ticker.info["fiftyTwoWeekHigh"],
-                    "week52Low": ticker.info["fiftyTwoWeekLow"],
-                    "peRatio": ticker.info["trailingPE"],
-                    # "dividendYield": ticker.info["dividendYield"]
+                    "volume": ticker.info.get("volume", None),
+                    "avgVolume": ticker.info.get("averageVolume", None),
+                    "marketCap": ticker.info.get("marketCap", None),
+                    "week52High": ticker.info.get("fiftyTwoWeekHigh", None),
+                    "week52Low": ticker.info.get("fiftyTwoWeekLow", None),
+                    "peRatio": ticker.info.get("trailingPE", None),
+                    "dividendYield": ticker.info.get("dividendYield", None)
                 }
             else:
                 # Add only the history to the result dictionary
