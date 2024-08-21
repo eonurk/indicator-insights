@@ -17,7 +17,7 @@ interface StockData {
 const baseURL =
 	window.location.hostname === "localhost"
 		? "http://localhost:5000"
-		: "https://aiheaven.net";
+		: "https://indicatorinsights.co";
 
 // fetches and returns StockData for a symbol and period
 export async function fetchStockData(

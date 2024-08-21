@@ -1,9 +1,9 @@
 export const siteConfig = {
 	name: "Indicator Insights",
-	url: "https://ui.shadcn.com",
+	url: "https://indicatorinsights.co",
 	ogImage: "https://ui.shadcn.com/og.jpg",
 	description:
-		"Beautifully designed components that you can copy and paste into your apps. Accessible. Customizable. Open Source.",
+		"Indicator Insights is the best platform for actionable insights from financial indicators. Unlock powerful tools to simplify data, track trends, and make winning investment decisions.",
 	links: {
 		twitter: "https://twitter.com/shadcn",
 		github: "https://github.com/shadcn-ui/ui",
