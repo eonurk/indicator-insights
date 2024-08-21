@@ -25,6 +25,7 @@ import { chartOptions } from "@/components/chartOptions";
 import {
 	CategoryScale,
 	Chart as ChartJS,
+	BarElement,
 	LinearScale,
 	PointElement,
 	LineElement,
@@ -38,7 +39,12 @@ import RMIChart from "@/components/RMIChart";
 import RSIChart from "@/components/RSIChart";
 import { stocks } from "@/utils/stocks";
 import { User } from "firebase/auth"; // Import User type
+import MACDChart from "./MACD-Chart";
+import EMAChart from "./EMA-Chart";
+
+import BollingerChart from "./BollingerBand-Chart";
 ChartJS.register(
+	BarElement,
 	CategoryScale,
 	LinearScale,
 	PointElement,
@@ -87,7 +93,9 @@ function StockChart({ user }: StockChartProps) {
 	// indicators
 	const [showRMI, setShowRMI] = useState<boolean>(true);
 	const [showRSI, setShowRSI] = useState<boolean>(false);
-
+	const [showEMA, setShowEMA] = useState<boolean>(false);
+	const [showBollinger, setShowBollinger] = useState<boolean>(false);
+	const [showMACD, setShowMACD] = useState<boolean>(false);
 	// Define a list of restricted stocks for non-logged-in users
 	const availableStocks = user
 		? stocks
@@ -180,7 +188,7 @@ function StockChart({ user }: StockChartProps) {
 
 		// Cleanup the interval on component unmount
 		return () => clearInterval(intervalId);
-	}, [symbol, period, showRMI, showRSI]); // Dependencies ensure the effect runs again if symbol or period change
+	}, [symbol, period, showRMI, showRSI, showEMA, showMACD, showBollinger]); // Dependencies ensure the effect runs again if symbol or period change
 
 	return (
 		<Card>
@@ -264,6 +272,42 @@ function StockChart({ user }: StockChartProps) {
 							RSI
 						</label>
 					</div>
+
+					<Checkbox
+						id="EMA"
+						checked={showEMA}
+						onCheckedChange={() => setShowEMA((prev) => !prev)}
+					/>
+					<label
+						className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+						htmlFor="EMA"
+					>
+						EMA
+					</label>
+
+					<Checkbox
+						id="MACD"
+						checked={showMACD}
+						onCheckedChange={() => setShowMACD((prev) => !prev)}
+					/>
+					<label
+						className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+						htmlFor="MACD"
+					>
+						MACD
+					</label>
+
+					<Checkbox
+						id="Bollinger"
+						checked={showBollinger}
+						onCheckedChange={() => setShowBollinger((prev) => !prev)}
+					/>
+					<label
+						className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+						htmlFor="Bollinger"
+					>
+						Bollinger Bands
+					</label>
 				</div>
 			</CardHeader>
 			<CardContent className="">
@@ -286,6 +330,29 @@ function StockChart({ user }: StockChartProps) {
 							<RSIChart
 								formattedData={stockInfo.formattedData}
 								RSIperiod={14} // [TODO]: Allow users to select indicator periods
+								options={stockInfo.chartOptions}
+							/>
+						)}
+
+						{showMACD && (
+							<MACDChart
+								formattedData={stockInfo.formattedData}
+								options={stockInfo.chartOptions}
+							/>
+						)}
+
+						{showEMA && (
+							<EMAChart
+								formattedData={stockInfo.formattedData}
+								period={50} // [TODO]: Allow users to select indicator periods
+								options={stockInfo.chartOptions}
+							/>
+						)}
+
+						{showBollinger && (
+							<BollingerChart
+								formattedData={stockInfo.formattedData}
+								period={20} // [TODO]: Allow users to select indicator periods
 								options={stockInfo.chartOptions}
 							/>
 						)}
