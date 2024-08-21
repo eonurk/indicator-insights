@@ -14,31 +14,43 @@ export function Home({ user }: StockChartProps) {
 	return (
 		<>
 			<SiteHeader />
-			<div className="h-[40rem] flex justify-center items-center px-4">
-				<div className="text-2xl mx-auto font-normal text-neutral-600 dark:text-neutral-400">
-					Would you make profit in the stock market using indicators?
-					<div className="text-4xl motion-safe:animate-bounce">&#8964;</div>
+
+			{!user && (
+				<div className="h-[40rem] flex justify-center items-center px-4">
+					<div className="text-2xl mx-auto font-normal text-neutral-600 dark:text-neutral-400">
+						Would you make profit in the stock market using indicators?
+						<div className="text-4xl motion-safe:animate-bounce">&#8964;</div>
+					</div>
 				</div>
-			</div>
+			)}
+			{user && <div className="m-8"></div>}
 			<StockChart user={user} />
-			<div className="h-[40rem] flex justify-center items-center px-4">
-				<div className="text-2xl mx-auto font-normal text-neutral-600 dark:text-neutral-400">
-					Can you check an indicator for all stocks?
-					<div className="text-4xl motion-safe:animate-bounce">&#8964;</div>
+
+			{!user && (
+				<div className="h-[40rem] flex justify-center items-center px-4">
+					<div className="text-2xl mx-auto font-normal text-neutral-600 dark:text-neutral-400">
+						Can you check an indicator for all stocks?
+						<div className="text-4xl motion-safe:animate-bounce">&#8964;</div>
+					</div>
 				</div>
-			</div>
+			)}
+
+			{user && <div className="m-8"></div>}
 			<div className="h-[40rem]">
 				<IndicatorChecker user={user} />
 			</div>
-			<div className="h-[40rem] flex justify-center items-center px-4">
-				<div className="text-2xl mx-auto font-normal text-neutral-600 dark:text-neutral-400">
-					To check all NASDAQ stocks with more indicators
-					<div className="text-4xl motion-safe:animate-bounce">&#8964;</div>
-					<Button className="text-base p-6 w-64">
-						<Link to="/signup">Sign Up</Link>
-					</Button>
+
+			{!user && (
+				<div className="h-[40rem] flex justify-center items-center px-4">
+					<div className="text-2xl mx-auto font-normal text-neutral-600 dark:text-neutral-400">
+						To check all NASDAQ stocks with more indicators
+						<div className="text-4xl motion-safe:animate-bounce">&#8964;</div>
+						<Button className="text-base p-6 w-64">
+							<Link to="/signup">Sign Up</Link>
+						</Button>
+					</div>
 				</div>
-			</div>
+			)}
 			<SiteFooter />
 		</>
 	);
