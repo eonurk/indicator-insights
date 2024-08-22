@@ -47,9 +47,9 @@ export function Home({ user }: StockChartProps) {
 					<div className="text-2xl mx-auto font-normal text-neutral-600 dark:text-neutral-400">
 						To check all NASDAQ stocks with more indicators
 						<div className="text-4xl motion-safe:animate-bounce">&#8964;</div>
-						<Button className="text-base p-6 w-64">
-							<Link to="/signup">Sign Up</Link>
-						</Button>
+						<Link to="/signup">
+							<Button className="text-base p-6 w-64">Sign Up</Button>
+						</Link>
 					</div>
 				</div>
 			)}
