@@ -11,11 +11,11 @@ export default function AboutPage() {
 			<SiteHeader />
 			<div className="container mx-auto px-4 py-8 space-y-10 md:space-y-12">
 				<section className="text-center space-y-4">
-					<h1 className="text-2xl md:text-2xl font-bold tracking-tight">
+					<h1 className="text-2xl md:text-2xl  font-normal dark:text-neutral-400 tracking-tight">
 						About Indicator Insights
 					</h1>
 
-					<p className=" md:text-lg text-justify text-muted-foreground max-w-2xl mx-auto">
+					<p className=" text-base text-neutral-600 dark:text-neutral-400 text-justify text-muted-foreground max-w-2xl mx-auto">
 						We are a small business started in an apartment by our founder. Like
 						any other amateur hobbyist in the stock market, Onur, lost a
 						considerable amount of money before deciding looking into finance
@@ -23,14 +23,14 @@ export default function AboutPage() {
 						decision-making before buying or selling a stock.
 					</p>
 
-					<p className=" md:text-lg text-justify text-muted-foreground max-w-2xl mx-auto">
+					<p className="text-base text-neutral-600 dark:text-neutral-400 text-justify text-muted-foreground max-w-2xl mx-auto">
 						He decided to give these indicators a shot. He immediately noticed
 						that he could actually do better than random stock exchange, which
 						is usually based on other's opinion, using this new fancy
 						indicators. His main objective was simple yet noble:
 					</p>
 
-					<p className=" md:text-lg text-justify text-muted-foreground max-w-2xl mx-auto">
+					<p className=" text-base text-neutral-600 dark:text-neutral-400 text-justify text-muted-foreground max-w-2xl mx-auto">
 						<blockquote className="my-4 italic">
 							"How much money can I make with this sh*t for a given period?"
 						</blockquote>
@@ -43,12 +43,12 @@ export default function AboutPage() {
 				</section>
 
 				<section className="space-y-4">
-					<h1 className="text-2xl md:text-2xl font-bold tracking-tight">
+					<h1 className="text-2xl md:text-2xl  font-normal dark:text-neutral-400 tracking-tight">
 						Our Mission
 					</h1>
 					<Card>
 						<CardContent className="pt-6">
-							<p className="text-lg md:text-lg text-muted-foreground max-w-2xl mx-auto">
+							<p className="text-base text-neutral-600 dark:text-neutral-400 text-justify text-muted-foreground max-w-2xl mx-auto">
 								To revolutionize financial decision-making by providing
 								cutting-edge analytics and real-time insights, enabling our
 								clients to navigate complex markets with confidence and
@@ -59,7 +59,7 @@ export default function AboutPage() {
 				</section>
 
 				<section className="space-y-6">
-					<h2 className="text-2xl md:text-2xl font-semibold tracking-tight">
+					<h2 className="text-2xl md:text-2xl  font-normal dark:text-neutral-400 tracking-tight">
 						Key Features
 					</h2>
 					<div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
@@ -145,7 +145,7 @@ function TimelineItem({ year, event }) {
 			<div className="text-lg font-bold mb-2 sm:mb-0 sm:w-24 sm:text-right sm:pr-4">
 				{year}
 			</div>
-			<div className="flex-grow pl-0 sm:pl-4 sm:border-l-2 sm:border-primary py-2">
+			<div className="text-base text-neutral-600 dark:text-neutral-400 text-justify text-muted-foreground max-w-2xl mx-auto">
 				<p className="text-base">{event}</p>
 			</div>
 		</div>

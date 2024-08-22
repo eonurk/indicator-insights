@@ -156,84 +156,76 @@ export default function IndicatorChecker({ user }: StockChartProps) {
 				</CardFooter>
 			</Card>
 			{results.length > 0 && (
-				<div className="mt-4 ">
-					<Card>
-						<CardContent className="p-2">
-							<ScrollArea className="h-[300px] mt-2">
-								<Table>
-									<TableHeader>
-										<TableRow>
-											<TableHead className="text-center p-1 pl-2">
-												Stock Symbol
-											</TableHead>
-											<TableHead className="text-center p-1">
-												Last Signal
-											</TableHead>
-											<TableHead className="text-center p-1">
-												Signal Price
-											</TableHead>
-											<TableHead className="text-center p-1">
-												Current Price
-											</TableHead>
-											<TableHead className="text-center p-1">
-												Indicator Profit
-											</TableHead>
-										</TableRow>
-									</TableHeader>
+				<Card className="mt-4">
+					<CardContent className="p-2">
+						<ScrollArea className="h-[250px] mt-2">
+							<Table>
+								<TableHeader>
+									<TableRow>
+										<TableHead className="text-center p-1 pl-2">
+											Stock Symbol
+										</TableHead>
+										<TableHead className="text-center p-1">
+											Last Signal
+										</TableHead>
+										<TableHead className="text-center p-1">
+											Signal Price
+										</TableHead>
+										<TableHead className="text-center p-1">
+											Current Price
+										</TableHead>
+										<TableHead className="text-center p-1">
+											Indicator Profit
+										</TableHead>
+									</TableRow>
+								</TableHeader>
 
-									<TableBody>
-										{results.map((result) => (
-											<TableRow
-												key={result.symbol}
+								<TableBody>
+									{results.map((result) => (
+										<TableRow
+											key={result.symbol}
+											className={
+												// return { profit, buyPoints, sellPoints, latestBuyPrice };
+												result.lastSignal.latestBuyPrice !== null
+													? "text-green-500"
+													: "text-red-500"
+											}
+										>
+											<TableCell className="p-1">{result.symbol}</TableCell>
+											<TableCell className="p-1">
+												{result.lastSignal.latestBuyPrice !== null
+													? "Buy"
+													: "Sell"}
+											</TableCell>
+											<TableCell className="p-1">
+												{result.lastSignal.latestBuyPrice !== null
+													? result.lastSignal.latestBuyPrice.toFixed(2)
+													: result.lastSignal.latestSellPrice !== null
+													? result.lastSignal.latestSellPrice.toFixed(2)
+													: "-"}
+											</TableCell>
+											<TableCell className="p-1">
+												{result.closingPrices[
+													result.closingPrices.length - 1
+												].toFixed(2)}
+											</TableCell>
+											<TableCell
 												className={
-													// return { profit, buyPoints, sellPoints, latestBuyPrice };
-													result.lastSignal.latestBuyPrice !== null
-														? "text-green-500"
-														: "text-red-500"
+													result.lastSignal.profit > 0
+														? "text-green-500 p-1"
+														: "text-red-500 p-1"
 												}
 											>
-												<TableCell className="p-1">{result.symbol}</TableCell>
-												<TableCell className="p-1">
-													{result.lastSignal.latestBuyPrice !== null
-														? "Buy"
-														: "Sell"}
-												</TableCell>
-												<TableCell className="p-1">
-													{result.lastSignal.latestBuyPrice !== null
-														? result.lastSignal.latestBuyPrice.toFixed(2)
-														: result.lastSignal.latestSellPrice !== null
-														? result.lastSignal.latestSellPrice.toFixed(2)
-														: "-"}
-												</TableCell>
-												<TableCell className="p-1">
-													{result.closingPrices[
-														result.closingPrices.length - 1
-													].toFixed(2)}
-												</TableCell>
-												<TableCell
-													className={
-														result.lastSignal.profit > 0
-															? "text-green-500 p-1"
-															: "text-red-500 p-1"
-													}
-												>
-													{result.lastSignal.profit.toFixed(2)}%
-												</TableCell>
-											</TableRow>
-										))}
-									</TableBody>
-								</Table>
-							</ScrollArea>
-						</CardContent>
-					</Card>
-				</div>
+												{result.lastSignal.profit.toFixed(2)}%
+											</TableCell>
+										</TableRow>
+									))}
+								</TableBody>
+							</Table>
+						</ScrollArea>
+					</CardContent>
+				</Card>
 			)}
-
-			<div className="text-sm mt-8 text-slate-400">
-				All trading involves risks. <br />
-				This table is not a recommendation of a specific security or investment
-				strategy.
-			</div>
 		</>
 	);
 }

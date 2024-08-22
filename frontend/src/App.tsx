@@ -5,6 +5,7 @@ import { Home } from "@/pages/Home";
 import { LoginPage } from "@/pages/LoginPage";
 import { SignupPage } from "@/pages/SignupPage";
 import AboutPage from "@/pages/AboutPage";
+import BlogPage from "@/pages/BlogPage";
 import { useEffect, useState } from "react";
 import { getAuth, onAuthStateChanged, User } from "firebase/auth";
 
@@ -25,6 +26,7 @@ function App() {
 				<Routes>
 					<Route path="/" element={<Home user={user} />} />
 					<Route path="/about" element={<AboutPage />} />
+					<Route path="/blog/*" element={<BlogPage />} />
 					<Route path="/login" element={<LoginPage />} />
 					<Route path="/signup" element={<SignupPage />} />
 				</Routes>

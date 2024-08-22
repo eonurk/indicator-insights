@@ -5,17 +5,30 @@ import { Separator } from "@/components/ui/separator";
 export function SiteFooter() {
 	return (
 		<>
-			<Separator />
+			<Separator className="mt-4" />
 			<footer className="py-6 md:px-8 md:py-0">
+				<div className="container text-xs text-justify mt-4 text-slate-400">
+					Disclaimer: Any of the content represented on this site does not
+					constitute a recommendation or endorsement of any specific security,
+					investment strategy, or financial product. The information provided is
+					for educational and informational purposes only and should not be
+					construed as financial advice. Be aware of the financial risks
+					involved in trading and investing, including the potential loss of
+					capital. Always conduct your own research or consult with a qualified
+					financial advisor before making any investment decisions.
+				</div>
+
 				<div className="container flex flex-col items-center justify-between gap-4 md:h-24 md:flex-row">
 					<p className="text-balance text-center text-sm leading-loose text-muted-foreground md:text-left">
 						© 2024 Indicator Insights. All rights reserved.
 					</p>
 
+					<p></p>
+
 					<ul className="flex space-x-4">
 						<li>
 							<a
-								href="https://discord.gg/f6JeCy57bH"
+								href={siteConfig.links.discord}
 								target="_blank"
 								rel="noopener noreferrer"
 								className="text-muted-foreground hover:text-foreground"
