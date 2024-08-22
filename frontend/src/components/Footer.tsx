@@ -55,7 +55,7 @@ export function SiteFooter() {
 						</li>
 						<li>
 							<a
-								href="https://GitHub.com/Celvoxes"
+								href={siteConfig.links.github}
 								target="_blank"
 								rel="noopener noreferrer"
 								className="text-muted-foreground hover:text-foreground"
