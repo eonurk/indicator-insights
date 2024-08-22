@@ -5,8 +5,8 @@ export const siteConfig = {
 	description:
 		"Indicator Insights is the best platform for actionable insights from financial indicators. Unlock powerful tools to simplify data, track trends, and make winning investment decisions.",
 	links: {
-		twitter: "https://twitter.com/shadcn",
-		github: "https://github.com/shadcn-ui/ui",
+		twitter: "https://twitter.com/eonurkara",
+		github: "https://github.com/eonurk/indicator-insights",
 		discord: "https://discord.gg/f6JeCy57bH",
 	},
 };
