@@ -61,13 +61,13 @@ interface RSIChartProps {
 		labels: Date[];
 		datasets: Dataset[];
 	};
-	RSIperiod?: number;
+	period?: number;
 	options?: any;
 }
 
 export default function RSIChart({
 	formattedData,
-	RSIperiod = 14,
+	period = 14,
 	options = {},
 }: RSIChartProps) {
 	// Calculate RSI data using useMemo
@@ -82,8 +82,8 @@ export default function RSIChart({
 		}
 
 		const prices = formattedData.datasets[0].data.map((point) => point.y);
-		return RSI(prices, RSIperiod);
-	}, [formattedData, RSIperiod]);
+		return RSI(prices, period);
+	}, [formattedData, period]);
 
 	if (!rsiData) return null;
 
@@ -149,7 +149,7 @@ export default function RSIChart({
 		<>
 			<CardHeader className="flex items-center gap-2 space-y-0 py-5 sm:flex-row">
 				<div className="grid flex-1 gap-1 text-center sm:text-left">
-					<CardTitle>RSI({RSIperiod})</CardTitle>
+					<CardTitle>RSI({period})</CardTitle>
 					<CardDescription
 						className={`${profit > 0 ? "text-green-500" : "text-red-500"}`}
 					>

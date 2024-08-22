@@ -15,9 +15,7 @@ import {
 	CardDescription,
 	CardHeader,
 	CardTitle,
-	CardFooter,
 } from "@/components/ui/card";
-
 import { Checkbox } from "@/components/ui/checkbox";
 import { Line } from "react-chartjs-2";
 import "chartjs-adapter-date-fns";
@@ -34,17 +32,24 @@ import {
 	Legend,
 	TimeSeriesScale,
 } from "chart.js";
-
 import RMIChart from "@/components/charts/RMIChart";
 import RSIChart from "@/components/charts/RSIChart";
 import { stocks } from "@/utils/stocks";
-import { User } from "firebase/auth"; // Import User type
+import { User } from "firebase/auth";
 import MACDChart from "@/components/charts/MACD-Chart";
 import EMAChart from "@/components/charts/EMA-Chart";
 import BollingerChart from "@/components/charts/BollingerBand-Chart";
-import { Check } from "lucide-react"; // Import Check icon
+import { Check } from "lucide-react";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
-// ...
+import {
+	Dialog,
+	DialogContent,
+	DialogHeader,
+	DialogTitle,
+	DialogFooter,
+} from "@/components/ui/dialog";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 
 // Add this function to generate the class for the checkbox based on its checked state
 const checkboxClasses = (checked: boolean) =>
@@ -83,7 +88,7 @@ const indicators = [
 ];
 
 interface StockChartProps {
-	user: User | null; // Use User type from firebase/auth
+	user: User | null;
 }
 
 function StockChart({ user }: StockChartProps) {
@@ -106,7 +111,6 @@ function StockChart({ user }: StockChartProps) {
 		formattedData: any;
 	} | null>(null);
 
-	// State for selected indicators
 	const [selectedIndicators, setSelectedIndicators] = useState({
 		RMI: true,
 		RSI: false,
@@ -115,16 +119,16 @@ function StockChart({ user }: StockChartProps) {
 		Bollinger: false,
 	});
 
-	// State for indicator periods
 	const [indicatorPeriods, setIndicatorPeriods] = useState({
 		RMI: 14,
 		RSI: 14,
 		EMA: 50,
-		MACD: 12, // Example default values, adjust as needed
+		MACD: 12,
 		Bollinger: 20,
 	});
 
-	// Toggle indicator selection
+	const [editingIndicator, setEditingIndicator] = useState<string | null>(null);
+
 	const toggleIndicator = (key: string) => {
 		setSelectedIndicators((prev) => ({
 			...prev,
@@ -132,7 +136,6 @@ function StockChart({ user }: StockChartProps) {
 		}));
 	};
 
-	// Define a list of restricted stocks for non-logged-in users
 	const availableStocks = user
 		? stocks
 		: {
@@ -170,7 +173,7 @@ function StockChart({ user }: StockChartProps) {
 
 			let customChartOptions = chartOptions(period);
 			customChartOptions = {
-				...customChartOptions, // Correct spread syntax to copy existing options
+				...customChartOptions,
 			};
 
 			setStockInfo({
@@ -214,17 +217,13 @@ function StockChart({ user }: StockChartProps) {
 	};
 
 	useEffect(() => {
-		// Initial fetch when the component mounts
 		getStockInfo(symbol, period);
-
-		// Set up the interval to refresh the chart every 60 seconds
 		const intervalId = setInterval(() => {
 			getStockInfo(symbol, period);
-		}, 60000); // 60000ms = 60 seconds
-
-		// Cleanup the interval on component unmount
+		}, 60000);
+		console.log("Updated period for", ":", indicatorPeriods);
 		return () => clearInterval(intervalId);
-	}, [symbol, period]); // Dependencies ensure the effect runs again if symbol or period change
+	}, [symbol, period, selectedIndicators, indicatorPeriods]);
 
 	return (
 		<Card>
@@ -282,7 +281,6 @@ function StockChart({ user }: StockChartProps) {
 					</Select>
 				</div>
 
-				{/* Add checkboxes for selecting indicators */}
 				<ScrollArea className="w-64 whitespace-nowrap ">
 					<div className="flex gap-2">
 						{Object.keys(selectedIndicators).map((key) => (
@@ -291,10 +289,10 @@ function StockChart({ user }: StockChartProps) {
 									id={key}
 									checked={selectedIndicators[key]}
 									onCheckedChange={() => toggleIndicator(key)}
-									className="hidden" // Hide default checkbox
+									className="hidden"
 								/>
 								<div
-									onClick={() => toggleIndicator(key)} // Toggle on label click
+									onClick={() => toggleIndicator(key)}
 									className={checkboxClasses(selectedIndicators[key])}
 								>
 									{selectedIndicators[key] && <Check className="w-4 h-4" />}
@@ -314,11 +312,13 @@ function StockChart({ user }: StockChartProps) {
 							data={stockInfo.formattedData}
 							options={stockInfo.chartOptions}
 						/>
+						<div className="flex justify-between items-center">
+							<div className="flex gap-2"></div>
+						</div>
 
-						{/* Render dynamic indicator charts */}
 						{Object.keys(selectedIndicators).map((key) =>
 							selectedIndicators[key] ? (
-								<div key={key} className="mt-4 ">
+								<div key={key} className="mt-4">
 									{indicators.map(
 										({
 											key: indicatorKey,
@@ -326,12 +326,23 @@ function StockChart({ user }: StockChartProps) {
 											periodKey,
 										}) =>
 											indicatorKey === key ? (
-												<IndicatorComponent
-													key={indicatorKey}
-													formattedData={stockInfo.formattedData}
-													period={indicatorPeriods[periodKey]}
-													options={stockInfo.chartOptions}
-												/>
+												<>
+													<IndicatorComponent
+														key={indicatorKey}
+														formattedData={stockInfo.formattedData}
+														period={indicatorPeriods[periodKey]}
+														options={stockInfo.chartOptions}
+													/>
+													<Button
+														className=""
+														key={indicatorKey}
+														variant="ghost"
+														size="sm"
+														onClick={() => setEditingIndicator(key)}
+													>
+														⚙️ {indicatorKey} Settings
+													</Button>
+												</>
 											) : null
 									)}
 								</div>
@@ -340,7 +351,69 @@ function StockChart({ user }: StockChartProps) {
 					</>
 				)}
 			</CardContent>
+
+			{editingIndicator && (
+				<IndicatorSettings
+					indicator={editingIndicator}
+					period={indicatorPeriods[editingIndicator]}
+					onClose={() => setEditingIndicator(null)}
+					onSave={(newPeriod) => {
+						setIndicatorPeriods((prev) => ({
+							...prev,
+							[editingIndicator]: newPeriod, // This should properly update the period
+						}));
+						setEditingIndicator(null);
+					}}
+				/>
+			)}
 		</Card>
+	);
+}
+
+interface IndicatorSettingsProps {
+	indicator: string;
+	period: number;
+	onClose: () => void;
+	onSave: (newPeriod: number) => void;
+}
+
+function IndicatorSettings({
+	indicator,
+	period,
+	onClose,
+	onSave,
+}: IndicatorSettingsProps) {
+	const [newPeriod, setNewPeriod] = useState(period);
+
+	return (
+		<Dialog open={true} onOpenChange={onClose}>
+			<DialogContent>
+				<DialogHeader>
+					<DialogTitle>{indicator} Settings</DialogTitle>
+				</DialogHeader>
+				<div className="py-4">
+					<label
+						htmlFor="period"
+						className="block text-sm font-medium text-gray-700"
+					>
+						Period
+					</label>
+					<Input
+						type="number"
+						id="period"
+						value={newPeriod}
+						onChange={(e) => setNewPeriod(parseInt(e.target.value))}
+						className="mt-1"
+					/>
+				</div>
+				<DialogFooter>
+					<Button onClick={onClose} variant="outline">
+						Cancel
+					</Button>
+					<Button onClick={() => onSave(newPeriod)}>Save</Button>
+				</DialogFooter>
+			</DialogContent>
+		</Dialog>
 	);
 }
 

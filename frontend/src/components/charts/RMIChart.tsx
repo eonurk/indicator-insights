@@ -27,7 +27,7 @@ interface RMIChartProps {
 		labels: Date[];
 		datasets: Dataset[];
 	};
-	RMIperiod?: number;
+	period?: number;
 	options?: any;
 }
 
@@ -74,7 +74,7 @@ export function calculateRMIProfit(prices: any[], rmiData: string | any[]) {
 
 export default function RMIChart({
 	formattedData,
-	RMIperiod = 14,
+	period = 14,
 	options = {},
 }: RMIChartProps) {
 	const rmiData = useMemo(() => {
@@ -88,9 +88,9 @@ export default function RMIChart({
 		}
 
 		const prices = formattedData.datasets[0].data.map((point) => point.y);
-		const rmi = RMI(prices, RMIperiod);
+		const rmi = RMI(prices, period);
 		return rmi;
-	}, [formattedData, RMIperiod]);
+	}, [formattedData, period]);
 
 	if (!rmiData) return null;
 
@@ -154,7 +154,7 @@ export default function RMIChart({
 		<>
 			<CardHeader className="flex items-center gap-2 space-y-0 py-5 sm:flex-row">
 				<div className="grid flex-1 gap-1 text-center sm:text-left">
-					<CardTitle>RMI({RMIperiod})</CardTitle>
+					<CardTitle>RMI({period})</CardTitle>
 					<CardDescription
 						className={`${profit > 0 ? "text-green-500" : "text-red-500"}`}
 					>
