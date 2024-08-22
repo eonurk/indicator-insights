@@ -1,6 +1,5 @@
 "use client";
 
-import React from "react";
 import { Separator } from "@/components/ui/separator";
 
 interface BlogEntryProps {
@@ -10,7 +9,7 @@ interface BlogEntryProps {
 	description: string;
 }
 
-export function BlogEntry({ title, date, link, description }: BlogEntryProps) {
+export function JobEntry({ title, date, link, description }: BlogEntryProps) {
 	return (
 		<>
 			<div className="text-2xl mx-auto font-normal text-left text-black dark:text-neutral-400">
@@ -32,4 +31,4 @@ export function BlogEntry({ title, date, link, description }: BlogEntryProps) {
 	);
 }
 
-export default BlogEntry;
+export default JobEntry;

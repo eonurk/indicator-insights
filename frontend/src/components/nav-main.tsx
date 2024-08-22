@@ -110,7 +110,7 @@ export function MainNav() {
 				</Link>
 
 				<Link
-					to="/blog"
+					to="/jobs"
 					className={cn(
 						"transition-colors hover:text-foreground/80",
 						pathname?.startsWith("/colors")
@@ -118,7 +118,7 @@ export function MainNav() {
 							: "text-foreground/60"
 					)}
 				>
-					Blog
+					Jobs (1)
 				</Link>
 			</nav>
 		</div>
