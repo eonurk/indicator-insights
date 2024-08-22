@@ -11,7 +11,7 @@ export default function AboutPage() {
 			<SiteHeader />
 			<div className="container mx-auto px-4 py-8 space-y-10 md:space-y-12">
 				<section className="text-center space-y-4">
-					<h1 className="text-2xl md:text-2xl  font-normal dark:text-neutral-400 tracking-tight">
+					<h1 className="text-2xl md:text-2xl font-bold dark:text-neutral-400 ">
 						About Indicator Insights
 					</h1>
 
@@ -43,7 +43,7 @@ export default function AboutPage() {
 				</section>
 
 				<section className="space-y-4">
-					<h1 className="text-2xl md:text-2xl  font-normal dark:text-neutral-400 tracking-tight">
+					<h1 className="text-2xl md:text-2xl font-bold dark:text-neutral-400 ">
 						Our Mission
 					</h1>
 					<Card>
@@ -59,7 +59,7 @@ export default function AboutPage() {
 				</section>
 
 				<section className="space-y-6">
-					<h2 className="text-2xl md:text-2xl  font-normal dark:text-neutral-400 tracking-tight">
+					<h2 className="text-2xl md:text-2xl font-bold dark:text-neutral-400 ">
 						Key Features
 					</h2>
 					<div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
@@ -86,7 +86,7 @@ export default function AboutPage() {
 				</section>
 
 				<section className="space-y-6">
-					<h2 className="text-2xl md:text-3xl font-semibold tracking-tight">
+					<h2 className="text-2xl md:text-2xl font-bold dark:text-neutral-400">
 						Our Journey
 					</h2>
 					<div className="space-y-6 md:space-y-8">
@@ -104,11 +104,11 @@ export default function AboutPage() {
 				</section>
 
 				<section className="text-center space-y-6">
-					<h2 className="text-2xl md:text-3xl font-semibold tracking-tight">
+					<h2 className="text-2xl md:text-2xl font-bold dark:text-neutral-400 ">
 						Ready to Gain Market Insights?
 					</h2>
 					<p className="text-base md:text-lg text-muted-foreground max-w-2xl mx-auto">
-						Join 2-3? people making data-driven decisions with Indicator
+						Join 2-3 people making data-driven decisions with Indicator
 						Insights.
 					</p>
 					<Button size="lg" className="w-full sm:w-auto">
@@ -145,7 +145,7 @@ function TimelineItem({ year, event }) {
 			<div className="text-lg font-bold mb-2 sm:mb-0 sm:w-24 sm:text-right sm:pr-4">
 				{year}
 			</div>
-			<div className="text-base text-neutral-600 dark:text-neutral-400 text-justify text-muted-foreground max-w-2xl mx-auto">
+			<div className="text-base text-neutral-600 dark:text-neutral-400 text-center text-muted-foreground max-w-2xl mx-auto">
 				<p className="text-base">{event}</p>
 			</div>
 		</div>

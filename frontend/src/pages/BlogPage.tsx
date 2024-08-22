@@ -25,7 +25,7 @@ const blogEntries: Blog[] = [
 		date: "August 15, 2024",
 		link: "blog/another/index.html",
 		description:
-			"Short description of the new blog.asnkldfnasf,asfkljsdfjklsdjlkfsajkldflasdfkljasdfkljslafldsljkfslja",
+			"Short description of the new blog.asnkldfnasf, asfkljsdfjklsdjlkfsajk ldflasdfkljasdfkl jslafldsljkfslja",
 	},
 ];
 
