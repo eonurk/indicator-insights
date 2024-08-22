@@ -46,16 +46,12 @@ export default function AboutPage() {
 					<h1 className="text-2xl md:text-2xl font-bold dark:text-neutral-400 ">
 						Our Mission
 					</h1>
-					<Card>
-						<CardContent className="pt-6">
-							<p className="text-base text-neutral-600 dark:text-neutral-400 text-justify text-muted-foreground max-w-2xl mx-auto">
-								To revolutionize financial decision-making by providing
-								cutting-edge analytics and real-time insights, enabling our
-								clients to navigate complex markets with confidence and
-								precision. Bla bla bla.
-							</p>
-						</CardContent>
-					</Card>
+
+					<p className="text-base text-neutral-600 dark:text-neutral-400 text-justify text-muted-foreground max-w-2xl mx-auto">
+						To revolutionize financial decision-making by providing cutting-edge
+						analytics and real-time insights, enabling our clients to navigate
+						complex markets with confidence and precision. Bla bla bla.
+					</p>
 				</section>
 
 				<section className="space-y-6">
