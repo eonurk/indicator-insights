@@ -137,13 +137,12 @@ function FeatureCard({ icon, title, description }) {
 
 function TimelineItem({ year, event }) {
 	return (
-		<div className="flex flex-col sm:flex-row sm:items-center">
-			<div className="text-lg font-bold mb-2 sm:mb-0 sm:w-24 sm:text-right sm:pr-4">
-				{year}
-			</div>
-			<div className="text-base text-neutral-600 dark:text-neutral-400 text-center text-muted-foreground max-w-2xl mx-auto">
+		<>
+			<div className=" text-neutral-600 dark:text-neutral-400 text-center text-muted-foreground max-w-2xl mx-auto">
+				<p className="text-xl font-bold">{year}</p>
+
 				<p className="text-base">{event}</p>
 			</div>
-		</div>
+		</>
 	);
 }
