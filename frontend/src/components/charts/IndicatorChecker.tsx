@@ -30,7 +30,7 @@ import {
 } from "@/components/ui/table";
 
 import { RMI } from "@/utils/Indicators";
-import { calculateRMIProfit } from "@/components/RMIChart";
+import { calculateRMIProfit } from "@/components/charts/RMIChart";
 
 import { stocks } from "@/utils/stocks";
 import { fetchStockData } from "@/fetchStockData";

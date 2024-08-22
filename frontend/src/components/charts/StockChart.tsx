@@ -21,7 +21,7 @@ import {
 import { Checkbox } from "@/components/ui/checkbox";
 import { Line } from "react-chartjs-2";
 import "chartjs-adapter-date-fns";
-import { chartOptions } from "@/components/chartOptions";
+import { chartOptions } from "@/components/charts/chartOptions";
 import {
 	CategoryScale,
 	Chart as ChartJS,
@@ -35,14 +35,23 @@ import {
 	TimeSeriesScale,
 } from "chart.js";
 
-import RMIChart from "@/components/RMIChart";
-import RSIChart from "@/components/RSIChart";
+import RMIChart from "@/components/charts/RMIChart";
+import RSIChart from "@/components/charts/RSIChart";
 import { stocks } from "@/utils/stocks";
 import { User } from "firebase/auth"; // Import User type
-import MACDChart from "./MACD-Chart";
-import EMAChart from "./EMA-Chart";
+import MACDChart from "@/components/charts/MACD-Chart";
+import EMAChart from "@/components/charts/EMA-Chart";
+import BollingerChart from "@/components/charts/BollingerBand-Chart";
+import { Check } from "lucide-react"; // Import Check icon
+import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
+// ...
 
-import BollingerChart from "./BollingerBand-Chart";
+// Add this function to generate the class for the checkbox based on its checked state
+const checkboxClasses = (checked: boolean) =>
+	`flex items-center p-2 rounded-lg transition-colors duration-300 ${
+		checked ? "bg-blue-600 text-white" : "bg-gray-200 text-gray-700"
+	} hover:bg-blue-500`;
+
 ChartJS.register(
 	BarElement,
 	CategoryScale,
@@ -53,7 +62,6 @@ ChartJS.register(
 	Tooltip,
 	Legend,
 	TimeSeriesScale
-	// pulsingPlugin
 );
 
 const periodOptions = [
@@ -64,6 +72,14 @@ const periodOptions = [
 	{ value: "ytd", label: "Year to Date" },
 	{ value: "1y", label: "1 Year" },
 	{ value: "all", label: "All" },
+];
+
+const indicators = [
+	{ key: "RMI", component: RMIChart, periodKey: "RMI" },
+	{ key: "RSI", component: RSIChart, periodKey: "RSI" },
+	{ key: "EMA", component: EMAChart, periodKey: "EMA" },
+	{ key: "MACD", component: MACDChart, periodKey: "MACD" },
+	{ key: "Bollinger", component: BollingerChart, periodKey: "Bollinger" },
 ];
 
 interface StockChartProps {
@@ -90,12 +106,32 @@ function StockChart({ user }: StockChartProps) {
 		formattedData: any;
 	} | null>(null);
 
-	// indicators
-	const [showRMI, setShowRMI] = useState<boolean>(true);
-	const [showRSI, setShowRSI] = useState<boolean>(false);
-	const [showEMA, setShowEMA] = useState<boolean>(false);
-	const [showBollinger, setShowBollinger] = useState<boolean>(false);
-	const [showMACD, setShowMACD] = useState<boolean>(false);
+	// State for selected indicators
+	const [selectedIndicators, setSelectedIndicators] = useState({
+		RMI: true,
+		RSI: false,
+		EMA: false,
+		MACD: false,
+		Bollinger: false,
+	});
+
+	// State for indicator periods
+	const [indicatorPeriods, setIndicatorPeriods] = useState({
+		RMI: 14,
+		RSI: 14,
+		EMA: 50,
+		MACD: 12, // Example default values, adjust as needed
+		Bollinger: 20,
+	});
+
+	// Toggle indicator selection
+	const toggleIndicator = (key: string) => {
+		setSelectedIndicators((prev) => ({
+			...prev,
+			[key]: !prev[key],
+		}));
+	};
+
 	// Define a list of restricted stocks for non-logged-in users
 	const availableStocks = user
 		? stocks
@@ -119,7 +155,7 @@ function StockChart({ user }: StockChartProps) {
 				console.error("No data found for symbol:", symbol);
 				return;
 			}
-			// for now fetch only one symbol
+
 			const history = stockData["history"];
 			const dates = Object.keys(history).map((date) => new Date(date));
 			const closingPrices = dates
@@ -184,11 +220,11 @@ function StockChart({ user }: StockChartProps) {
 		// Set up the interval to refresh the chart every 60 seconds
 		const intervalId = setInterval(() => {
 			getStockInfo(symbol, period);
-		}, 60000); // 600ms = 60 seconds
+		}, 60000); // 60000ms = 60 seconds
 
 		// Cleanup the interval on component unmount
 		return () => clearInterval(intervalId);
-	}, [symbol, period, showRMI, showRSI, showEMA, showMACD, showBollinger]); // Dependencies ensure the effect runs again if symbol or period change
+	}, [symbol, period]); // Dependencies ensure the effect runs again if symbol or period change
 
 	return (
 		<Card>
@@ -228,90 +264,50 @@ function StockChart({ user }: StockChartProps) {
 							))}
 						</SelectContent>
 					</Select>
+
 					<Select value={period} onValueChange={setPeriod}>
 						<SelectTrigger
 							className="flex min-w-32 rounded-lg sm:ml-auto"
 							aria-label="Select a value"
 						>
-							<SelectValue placeholder="1w" />
+							<SelectValue placeholder="1 Week" />
 						</SelectTrigger>
 						<SelectContent position="popper">
-							{periodOptions.map((option) => (
-								<SelectItem key={option.value} value={option.value}>
-									{option.label}
+							{periodOptions.map(({ value, label }) => (
+								<SelectItem key={value} value={value}>
+									{label}
 								</SelectItem>
 							))}
 						</SelectContent>
 					</Select>
 				</div>
 
-				<div className="flex gap-2">
-					<Checkbox
-						id="RMI"
-						checked={showRMI}
-						onCheckedChange={() => setShowRMI((prev) => !prev)}
-					/>
-					<label
-						className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-						htmlFor="RMI"
-					>
-						RMI
-					</label>
-
-					<Checkbox
-						id="RSI"
-						checked={showRSI}
-						onCheckedChange={() => setShowRSI((prev) => !prev)}
-					/>
-
-					<div className="grid gap-1.5 leading-none">
-						<label
-							htmlFor="RSI"
-							className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-						>
-							RSI
-						</label>
+				{/* Add checkboxes for selecting indicators */}
+				<ScrollArea className="w-64 whitespace-nowrap ">
+					<div className="flex gap-2">
+						{Object.keys(selectedIndicators).map((key) => (
+							<div key={key} className="flex items-center">
+								<Checkbox
+									id={key}
+									checked={selectedIndicators[key]}
+									onCheckedChange={() => toggleIndicator(key)}
+									className="hidden" // Hide default checkbox
+								/>
+								<div
+									onClick={() => toggleIndicator(key)} // Toggle on label click
+									className={checkboxClasses(selectedIndicators[key])}
+								>
+									{selectedIndicators[key] && <Check className="w-4 h-4" />}
+									<span className="ml-2 text-sm font-medium">{key}</span>
+								</div>
+							</div>
+						))}
 					</div>
-
-					<Checkbox
-						id="EMA"
-						checked={showEMA}
-						onCheckedChange={() => setShowEMA((prev) => !prev)}
-					/>
-					<label
-						className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-						htmlFor="EMA"
-					>
-						EMA
-					</label>
-
-					<Checkbox
-						id="MACD"
-						checked={showMACD}
-						onCheckedChange={() => setShowMACD((prev) => !prev)}
-					/>
-					<label
-						className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-						htmlFor="MACD"
-					>
-						MACD
-					</label>
-
-					<Checkbox
-						id="Bollinger"
-						checked={showBollinger}
-						onCheckedChange={() => setShowBollinger((prev) => !prev)}
-					/>
-					<label
-						className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-						htmlFor="Bollinger"
-					>
-						Bollinger Bands
-					</label>
-				</div>
+					<ScrollBar orientation="horizontal" />
+				</ScrollArea>
 			</CardHeader>
-			<CardContent className="">
-				<br />
+
+			<CardContent className="pt-6">
 				{stockInfo && (
 					<>
 						<Line
@@ -319,47 +315,31 @@ function StockChart({ user }: StockChartProps) {
 							options={stockInfo.chartOptions}
 						/>
 
-						{showRMI && (
-							<RMIChart
-								formattedData={stockInfo.formattedData}
-								RMIperiod={14}
-								options={stockInfo.chartOptions}
-							/>
-						)}
-						{showRSI && (
-							<RSIChart
-								formattedData={stockInfo.formattedData}
-								RSIperiod={14} // [TODO]: Allow users to select indicator periods
-								options={stockInfo.chartOptions}
-							/>
-						)}
-
-						{showMACD && (
-							<MACDChart
-								formattedData={stockInfo.formattedData}
-								options={stockInfo.chartOptions}
-							/>
-						)}
-
-						{showEMA && (
-							<EMAChart
-								formattedData={stockInfo.formattedData}
-								period={50} // [TODO]: Allow users to select indicator periods
-								options={stockInfo.chartOptions}
-							/>
-						)}
-
-						{showBollinger && (
-							<BollingerChart
-								formattedData={stockInfo.formattedData}
-								period={20} // [TODO]: Allow users to select indicator periods
-								options={stockInfo.chartOptions}
-							/>
+						{/* Render dynamic indicator charts */}
+						{Object.keys(selectedIndicators).map((key) =>
+							selectedIndicators[key] ? (
+								<div key={key} className="mt-4 ">
+									{indicators.map(
+										({
+											key: indicatorKey,
+											component: IndicatorComponent,
+											periodKey,
+										}) =>
+											indicatorKey === key ? (
+												<IndicatorComponent
+													key={indicatorKey}
+													formattedData={stockInfo.formattedData}
+													period={indicatorPeriods[periodKey]}
+													options={stockInfo.chartOptions}
+												/>
+											) : null
+									)}
+								</div>
+							) : null
 						)}
 					</>
 				)}
 			</CardContent>
-			<CardFooter></CardFooter>
 		</Card>
 	);
 }

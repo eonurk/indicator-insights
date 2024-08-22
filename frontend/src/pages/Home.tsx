@@ -1,5 +1,5 @@
-import StockChart from "@/components/StockChart";
-import IndicatorChecker from "@/components/IndicatorChecker";
+import StockChart from "@/components/charts/StockChart";
+import IndicatorChecker from "@/components/charts/IndicatorChecker";
 import { User } from "firebase/auth"; // Import User type
 import { SiteHeader } from "@/components/site-header";
 import { Button } from "@/components/ui/button";
