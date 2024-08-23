@@ -97,7 +97,7 @@ export default function Login() {
 				</form>
 				<div className="mt-4 text-center text-sm">
 					Don&apos;t have an account?{" "}
-					<Link to="/signup" className="underline">
+					<Link to="/subscribe" className="underline">
 						{" "}
 						{/* Update this to your signup route */}
 						Sign up

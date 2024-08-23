@@ -4,6 +4,7 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { Home } from "@/pages/Home";
 import { LoginPage } from "@/pages/LoginPage";
 import { SignupPage } from "@/pages/SignupPage";
+import TermsAndConditions from "@/pages/TermsPage";
 import AboutPage from "@/pages/AboutPage";
 import BlogPage from "@/pages/Jobs";
 import { useEffect, useState } from "react";
@@ -31,6 +32,7 @@ function App() {
 					<Route path="/subscribe" element={<SubscribePage />} />
 					<Route path="/login" element={<LoginPage />} />
 					<Route path="/signup" element={<SignupPage />} />
+					<Route path="/terms" element={<TermsAndConditions />} />
 				</Routes>
 			</Router>
 		</>
