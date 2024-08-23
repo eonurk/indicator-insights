@@ -5,7 +5,8 @@ import { SiteHeader } from "@/components/site-header";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { SiteFooter } from "@/components/Footer";
-
+import PricingTable from "@/components/PricingTable";
+<script async src="https://js.stripe.com/v3/pricing-table.js"></script>;
 interface StockChartProps {
 	user: User | null; // Use User type from firebase/auth
 }
@@ -48,9 +49,7 @@ export function Home({ user }: StockChartProps) {
 						To check all NASDAQ stocks with more indicators
 						<div className="text-4xl motion-safe:animate-bounce">&#8964;</div>
 						<Link to="/signup">
-							<Button className="bg-blue-500 text-base p-6 w-64">
-								Sign Up
-							</Button>
+							<PricingTable />
 						</Link>
 					</div>
 				</div>

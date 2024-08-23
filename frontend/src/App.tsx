@@ -8,6 +8,7 @@ import AboutPage from "@/pages/AboutPage";
 import BlogPage from "@/pages/Jobs";
 import { useEffect, useState } from "react";
 import { getAuth, onAuthStateChanged, User } from "firebase/auth";
+import SubscribePage from "./pages/SubscribePage";
 
 function App() {
 	const [user, setUser] = useState<User | null>(null); // Use User type from firebase/auth
@@ -27,6 +28,7 @@ function App() {
 					<Route path="/" element={<Home user={user} />} />
 					<Route path="/about" element={<AboutPage />} />
 					<Route path="/jobs/*" element={<BlogPage />} />
+					<Route path="/subscribe" element={<SubscribePage />} />
 					<Route path="/login" element={<LoginPage />} />
 					<Route path="/signup" element={<SignupPage />} />
 				</Routes>

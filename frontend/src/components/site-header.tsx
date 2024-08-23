@@ -40,8 +40,8 @@ export function SiteHeader() {
 							<Link to="/login">
 								<Button variant="outline">Login</Button>
 							</Link>
-							<Link to="/signup">
-								<Button className="bg-blue-500">Sign Up</Button>
+							<Link to="/subscribe">
+								<Button className="bg-blue-600">Get Started</Button>
 							</Link>
 						</>
 					) : (

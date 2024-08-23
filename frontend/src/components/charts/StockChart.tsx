@@ -55,7 +55,7 @@ import { Separator } from "@/components/ui/separator";
 // Add this function to generate the class for the checkbox based on its checked state
 const checkboxClasses = (checked: boolean) =>
 	`flex items-center p-2 rounded-lg transition-colors duration-300 ${
-		checked ? "bg-blue-500 text-white" : "bg-slate-200 text-gray-700"
+		checked ? "bg-blue-600 text-white" : "bg-slate-200 text-gray-700"
 	} hover:bg-blue-500`;
 
 ChartJS.register(
