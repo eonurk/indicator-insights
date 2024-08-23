@@ -80,11 +80,23 @@ const periodOptions = [
 ];
 
 const indicators = [
-	{ key: "RMI", component: RMIChart, periodKey: "RMI" },
-	{ key: "RSI", component: RSIChart, periodKey: "RSI" },
-	{ key: "EMA", component: EMAChart, periodKey: "EMA" },
-	{ key: "MACD", component: MACDChart, periodKey: "MACD" },
-	{ key: "Bollinger", component: BollingerChart, periodKey: "Bollinger" },
+	{ key: "RMI", component: RMIChart, periodKey: "period" },
+	{ key: "RSI", component: RSIChart, periodKey: "period" },
+	{
+		key: "EMA",
+		component: EMAChart,
+		periodKeys: ["period"],
+	},
+	{
+		key: "MACD",
+		component: MACDChart,
+		periodKeys: ["fastPeriod", "slowPeriod", "signalPeriod"],
+	},
+	{
+		key: "Bollinger",
+		component: BollingerChart,
+		periodKeys: ["period", "stdDev"],
+	},
 ];
 
 interface StockChartProps {
@@ -120,11 +132,11 @@ function StockChart({ user }: StockChartProps) {
 	});
 
 	const [indicatorPeriods, setIndicatorPeriods] = useState({
-		RMI: 14,
-		RSI: 14,
-		EMA: 50,
-		MACD: 12,
-		Bollinger: 20,
+		RMI: { period: 14 },
+		RSI: { period: 14 },
+		EMA: { period: 14 },
+		MACD: { fastPeriod: 12, slowPeriod: 26, signalPeriod: 9 },
+		Bollinger: { period: 20, stdDev: 2 },
 	});
 
 	const [editingIndicator, setEditingIndicator] = useState<string | null>(null);
@@ -221,7 +233,7 @@ function StockChart({ user }: StockChartProps) {
 		const intervalId = setInterval(() => {
 			getStockInfo(symbol, period);
 		}, 60000);
-		console.log("Updated period for", ":", indicatorPeriods);
+		console.log("Updated periods:", indicatorPeriods);
 		return () => clearInterval(intervalId);
 	}, [symbol, period, selectedIndicators, indicatorPeriods]);
 
@@ -324,18 +336,19 @@ function StockChart({ user }: StockChartProps) {
 											key: indicatorKey,
 											component: IndicatorComponent,
 											periodKey,
+											periodKeys,
 										}) =>
 											indicatorKey === key ? (
 												<>
 													<IndicatorComponent
 														key={indicatorKey}
 														formattedData={stockInfo.formattedData}
-														period={indicatorPeriods[periodKey]}
+														{...indicatorPeriods[key]}
 														options={stockInfo.chartOptions}
 													/>
 													<Button
 														className=""
-														key={indicatorKey}
+														key={`${indicatorKey}-settings`}
 														variant="ghost"
 														size="sm"
 														onClick={() => setEditingIndicator(key)}
@@ -355,12 +368,12 @@ function StockChart({ user }: StockChartProps) {
 			{editingIndicator && (
 				<IndicatorSettings
 					indicator={editingIndicator}
-					period={indicatorPeriods[editingIndicator]}
+					periods={indicatorPeriods[editingIndicator]}
 					onClose={() => setEditingIndicator(null)}
-					onSave={(newPeriod) => {
+					onSave={(newPeriods) => {
 						setIndicatorPeriods((prev) => ({
 							...prev,
-							[editingIndicator]: newPeriod, // This should properly update the period
+							[editingIndicator]: newPeriods,
 						}));
 						setEditingIndicator(null);
 					}}
@@ -372,18 +385,25 @@ function StockChart({ user }: StockChartProps) {
 
 interface IndicatorSettingsProps {
 	indicator: string;
-	period: number;
+	periods: any;
 	onClose: () => void;
-	onSave: (newPeriod: number) => void;
+	onSave: (newPeriods: any) => void;
 }
 
 function IndicatorSettings({
 	indicator,
-	period,
+	periods,
 	onClose,
 	onSave,
 }: IndicatorSettingsProps) {
-	const [newPeriod, setNewPeriod] = useState(period);
+	const [newPeriods, setNewPeriods] = useState(periods);
+
+	const handleInputChange = (key: string, value: number) => {
+		setNewPeriods((prev: any) => ({
+			...prev,
+			[key]: value,
+		}));
+	};
 
 	return (
 		<Dialog open={true} onOpenChange={onClose}>
@@ -392,25 +412,31 @@ function IndicatorSettings({
 					<DialogTitle>{indicator} Settings</DialogTitle>
 				</DialogHeader>
 				<div className="py-4">
-					<label
-						htmlFor="period"
-						className="block text-sm font-medium text-gray-700"
-					>
-						Period
-					</label>
-					<Input
-						type="number"
-						id="period"
-						value={newPeriod}
-						onChange={(e) => setNewPeriod(parseInt(e.target.value))}
-						className="mt-1"
-					/>
+					{Object.entries(periods).map(([key, value]) => (
+						<div key={key} className="mb-4">
+							<label
+								htmlFor={key}
+								className="block text-sm font-medium text-gray-700"
+							>
+								{key.charAt(0).toUpperCase() + key.slice(1)}
+							</label>
+							<Input
+								type="number"
+								id={key}
+								value={newPeriods[key]}
+								onChange={(e) =>
+									handleInputChange(key, parseInt(e.target.value))
+								}
+								className="mt-1"
+							/>
+						</div>
+					))}
 				</div>
 				<DialogFooter>
 					<Button onClick={onClose} variant="outline">
 						Cancel
 					</Button>
-					<Button onClick={() => onSave(newPeriod)}>Save</Button>
+					<Button onClick={() => onSave(newPeriods)}>Save</Button>
 				</DialogFooter>
 			</DialogContent>
 		</Dialog>
