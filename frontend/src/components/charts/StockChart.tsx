@@ -50,11 +50,12 @@ import {
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { Separator } from "@/components/ui/separator";
 
 // Add this function to generate the class for the checkbox based on its checked state
 const checkboxClasses = (checked: boolean) =>
 	`flex items-center p-2 rounded-lg transition-colors duration-300 ${
-		checked ? "bg-blue-600 text-white" : "bg-gray-200 text-gray-700"
+		checked ? "bg-blue-500 text-white" : "bg-slate-200 text-gray-700"
 	} hover:bg-blue-500`;
 
 ChartJS.register(
@@ -293,7 +294,7 @@ function StockChart({ user }: StockChartProps) {
 					</Select>
 				</div>
 
-				<ScrollArea className="w-64 whitespace-nowrap ">
+				<ScrollArea className="w-64 whitespace-nowrap">
 					<div className="flex gap-2">
 						{Object.keys(selectedIndicators).map((key) => (
 							<div key={key} className="flex items-center">
@@ -347,7 +348,6 @@ function StockChart({ user }: StockChartProps) {
 														options={stockInfo.chartOptions}
 													/>
 													<Button
-														className=""
 														key={`${indicatorKey}-settings`}
 														variant="ghost"
 														size="sm"
@@ -355,6 +355,7 @@ function StockChart({ user }: StockChartProps) {
 													>
 														⚙️ {indicatorKey} Settings
 													</Button>
+													<Separator />
 												</>
 											) : null
 									)}
