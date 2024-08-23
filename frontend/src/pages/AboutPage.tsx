@@ -11,51 +11,52 @@ export default function AboutPage() {
 			<SiteHeader />
 			<div className="container mx-auto px-4 py-8 space-y-10 md:space-y-12">
 				<section className="text-center space-y-4">
-					<h1 className="text-2xl md:text-2xl font-bold dark:text-neutral-400 ">
+					<h1 className="text-2xl md:text-2xl font-bold dark:text-neutral-400">
 						About Indicator Insights
 					</h1>
-
-					<p className=" text-base text-neutral-600 dark:text-neutral-400 text-justify text-muted-foreground max-w-2xl mx-auto">
-						We are a small business started in an apartment by our founder. Like
-						any other amateur hobbyist in the stock market, Onur, lost a
-						considerable amount of money before deciding looking into finance
-						forums. There, he learned about indicators, which are used for
-						decision-making before buying or selling a stock.
+					<p className="text-base text-neutral-600 dark:text-neutral-400 text-justify max-w-2xl mx-auto">
+						Indicator Insights began as a passion project, founded by Onur in
+						his apartment. Like many who venture into the stock market, Onur
+						initially faced significant losses. However, his curiosity led him
+						to finance forums, where he discovered the power of indicators—tools
+						designed to assist in making informed decisions about buying and
+						selling stocks.
 					</p>
-
-					<p className="text-base text-neutral-600 dark:text-neutral-400 text-justify text-muted-foreground max-w-2xl mx-auto">
-						He decided to give these indicators a shot. He immediately noticed
-						that he could actually do better than random stock exchange, which
-						is usually based on other's opinion, using this new fancy
-						indicators. His main objective was simple yet noble:
+					<p className="text-base text-neutral-600 dark:text-neutral-400 text-justify max-w-2xl mx-auto">
+						Motivated by the potential of these indicators, Onur quickly
+						realized their ability to outperform random stock market strategies,
+						which often rely heavily on the opinions of others. With a clear
+						goal in mind, he embarked on a journey to answer a simple yet
+						profound question:
 					</p>
-
-					<p className=" text-base text-neutral-600 dark:text-neutral-400 text-justify text-muted-foreground max-w-2xl mx-auto">
+					<p className="text-base text-neutral-600 dark:text-neutral-400 text-justify max-w-2xl mx-auto">
 						<blockquote className="my-4 italic">
-							"How much money can I make with this sh*t for a given period?"
+							"How much profit can I generate over a given period using these
+							indicators?"
 						</blockquote>
-						This turned out to be non-existent for most analytic tools, at least
-						for bulk-analysis. Given his analytical nature and his non-existent
-						background in writing web applications along with his naive
-						optimism, he embarked on a quest to make this hobby a torture, and
-						decided to create Indicator Insights.
+						Recognizing a gap in existing analytical tools—especially those
+						capable of bulk analysis—Onur, driven by his analytical mindset and
+						despite having no prior experience in web development, decided to
+						turn this hobby into a mission, leading to the creation of Indicator
+						Insights.
 					</p>
 				</section>
 
 				<section className="space-y-4">
-					<h1 className="text-2xl md:text-2xl font-bold dark:text-neutral-400 ">
+					<h1 className="text-2xl md:text-2xl font-bold dark:text-neutral-400">
 						Our Mission
 					</h1>
-
-					<p className="text-base text-neutral-600 dark:text-neutral-400 text-justify text-muted-foreground max-w-2xl mx-auto">
-						To revolutionize financial decision-making by providing cutting-edge
-						analytics and real-time insights, enabling our clients to navigate
-						complex markets with confidence and precision. Bla bla bla.
+					<p className="text-base text-neutral-600 dark:text-neutral-400 text-justify max-w-2xl mx-auto">
+						Our mission is to revolutionize financial decision-making by
+						providing cutting-edge analytics and real-time insights. We empower
+						our clients to navigate complex markets with confidence and
+						precision, leveraging the best in financial technology and data
+						science.
 					</p>
 				</section>
 
 				<section className="space-y-6">
-					<h2 className="text-2xl md:text-2xl font-bold dark:text-neutral-400 ">
+					<h2 className="text-2xl md:text-2xl font-bold dark:text-neutral-400">
 						Key Features
 					</h2>
 					<div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
@@ -64,19 +65,19 @@ export default function AboutPage() {
 								<BarChart3Icon className="h-5 w-5 md:h-6 md:w-6 text-primary" />
 							}
 							title="Advanced Analytics"
-							description="(AI and sh*t) Uncover hidden patterns and trends in financial data with our sophisticated algorithms."
+							description="Discover hidden patterns and trends in financial data with our advanced algorithms."
 						/>
 						<FeatureCard
 							icon={
 								<TrendingUpIcon className="h-5 w-5 md:h-6 md:w-6 text-primary" />
 							}
 							title="Real-time Insights"
-							description="(Non-existent but when implemented money will be asked) Stay ahead with real-time data processing and instant notifications on market shifts."
+							description="Stay ahead with real-time data processing and instant notifications on market shifts."
 						/>
 						<FeatureCard
 							icon={<ZapIcon className="h-5 w-5 md:h-6 md:w-6 text-primary" />}
 							title="Customizable Dashboards"
-							description="(No dashboard, just bam) Tailor your analytics experience with flexible and intuitive dashboard tools."
+							description="Tailor your analytics experience with our flexible and intuitive dashboard tools."
 						/>
 					</div>
 				</section>
@@ -86,28 +87,27 @@ export default function AboutPage() {
 						Our Journey
 					</h2>
 					<div className="space-y-6 md:space-y-8">
-						<TimelineItem year="2018" event="-" />
-						<TimelineItem year="2019" event="Onur lost money in crypto. How?" />
 						<TimelineItem
-							year="2021"
-							event="Lost more money on the stock market..."
+							year="2023"
+							event="The idea of Indicator Insights is conceived."
 						/>
+
 						<TimelineItem
 							year="2024"
-							event="F*ck this. Indicator Insights officially launched."
+							event="Indicator Insights officially launches, transforming a personal challenge into a powerful financial tool."
 						/>
 					</div>
 				</section>
 
 				<section className="text-center space-y-6">
-					<h2 className="text-2xl md:text-2xl font-bold dark:text-neutral-400 ">
+					<h2 className="text-2xl md:text-2xl font-bold dark:text-neutral-400">
 						Ready to Gain Market Insights?
 					</h2>
 					<p className="text-base md:text-lg text-muted-foreground max-w-2xl mx-auto">
-						Join 2-3 people making data-driven decisions with Indicator
-						Insights.
+						Join our growing community of data-driven investors using Indicator
+						Insights to navigate the markets.
 					</p>
-					<Button size="lg" className="w-full sm:w-auto">
+					<Button size="lg" className="bg-blue-500 w-full sm:w-auto">
 						<Link to="/signup">Get Started Now</Link>
 					</Button>
 				</section>
@@ -120,8 +120,8 @@ export default function AboutPage() {
 function FeatureCard({ icon, title, description }) {
 	return (
 		<Card>
-			<CardHeader className="items-center ">
-				<CardTitle className="flex items-center  gap-2 text-lg md:text-xl">
+			<CardHeader className="items-center">
+				<CardTitle className="flex items-center gap-2 text-lg md:text-xl">
 					{icon}
 					<span>{title}</span>
 				</CardTitle>
@@ -137,12 +137,9 @@ function FeatureCard({ icon, title, description }) {
 
 function TimelineItem({ year, event }) {
 	return (
-		<>
-			<div className=" text-neutral-600 dark:text-neutral-400 text-center text-muted-foreground max-w-2xl mx-auto">
-				<p className="text-xl font-bold">{year}</p>
-
-				<p className="text-base">{event}</p>
-			</div>
-		</>
+		<div className="text-neutral-600 dark:text-neutral-400 text-center max-w-2xl mx-auto">
+			<p className="text-xl font-bold">{year}</p>
+			<p className="text-base">{event}</p>
+		</div>
 	);
 }
