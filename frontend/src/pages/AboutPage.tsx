@@ -107,9 +107,12 @@ export default function AboutPage() {
 						Join our growing community of data-driven investors using Indicator
 						Insights to navigate the markets.
 					</p>
-					<Button size="lg" className="bg-blue-500 w-full sm:w-auto">
-						<Link to="/signup">Get Started Now</Link>
-					</Button>
+
+					<Link to="/signup">
+						<Button size="lg" className="bg-blue-500 w-full sm:w-auto">
+							Get Started Now
+						</Button>
+					</Link>
 				</section>
 			</div>
 			<SiteFooter />

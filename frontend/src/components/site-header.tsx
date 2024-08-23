@@ -37,12 +37,12 @@ export function SiteHeader() {
 					{/* Conditionally render buttons based on user authentication state */}
 					{!user ? (
 						<>
-							<Button variant="outline">
-								<Link to="/login">Login</Link>
-							</Button>
-							<Button className="bg-blue-500">
-								<Link to="/signup">Sign Up</Link>
-							</Button>
+							<Link to="/login">
+								<Button variant="outline">Login</Button>
+							</Link>
+							<Link to="/signup">
+								<Button className="bg-blue-500">Sign Up</Button>
+							</Link>
 						</>
 					) : (
 						<Button variant="outline" onClick={handleLogout}>
