@@ -234,7 +234,6 @@ function StockChart({ user }: StockChartProps) {
 		const intervalId = setInterval(() => {
 			getStockInfo(symbol, period);
 		}, 60000);
-		console.log("Updated periods:", indicatorPeriods);
 		return () => clearInterval(intervalId);
 	}, [symbol, period, selectedIndicators, indicatorPeriods]);
 

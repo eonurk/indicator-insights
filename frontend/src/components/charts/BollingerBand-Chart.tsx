@@ -67,13 +67,17 @@ export default function BollingerChart({
 			return null;
 		}
 
-		const prices = formattedData.datasets[0].data.map((point) => point.y);
+		const prices = formattedData.datasets[0].data.map(
+			(point: { y: any }) => point.y
+		);
 		return BollingerBands(prices, period, stdDev);
 	}, [formattedData, period, stdDev]);
 
 	if (!bandsData) return null;
 
-	const prices = formattedData.datasets[0].data.map((point) => point.y);
+	const prices = formattedData.datasets[0].data.map(
+		(point: { y: any }) => point.y
+	);
 	const upperBand = bandsData.map((band) => band.upper);
 	const lowerBand = bandsData.map((band) => band.lower);
 	const middleBand = bandsData.map((band) => band.middle);
@@ -87,7 +91,7 @@ export default function BollingerChart({
 		datasets: [
 			{
 				label: "Price",
-				data: prices.map((value, index) => ({
+				data: prices.map((value: any, index: string | number) => ({
 					x: formattedData.labels[index],
 					y: value,
 				})),

@@ -61,13 +61,17 @@ export default function EMAChart({
 			return null;
 		}
 
-		const prices = formattedData.datasets[0].data.map((point) => point.y);
+		const prices = formattedData.datasets[0].data.map(
+			(point: { y: any }) => point.y
+		);
 		return EMA(prices, period);
 	}, [formattedData, period]);
 
 	if (!emaData) return null;
 
-	const prices = formattedData.datasets[0].data.map((point) => point.y);
+	const prices = formattedData.datasets[0].data.map(
+		(point: { y: any }) => point.y
+	);
 
 	const { profit, buyPoints, sellPoints } = useMemo(() => {
 		return calculateEMAProfit(prices, emaData);
@@ -78,7 +82,7 @@ export default function EMAChart({
 		datasets: [
 			{
 				label: "Price",
-				data: prices.map((value, index) => ({
+				data: prices.map((value: any, index: string | number) => ({
 					x: formattedData.labels[index],
 					y: value,
 				})),
