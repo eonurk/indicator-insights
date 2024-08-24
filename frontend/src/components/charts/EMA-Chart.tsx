@@ -104,7 +104,7 @@ export default function EMAChart({
 				})),
 				backgroundColor: "green",
 				borderColor: "green",
-				pointRadius: 3,
+				pointRadius: 5,
 				showLine: false,
 			},
 			{
@@ -115,7 +115,7 @@ export default function EMAChart({
 				})),
 				backgroundColor: "red",
 				borderColor: "red",
-				pointRadius: 3,
+				pointRadius: 5,
 				showLine: false,
 			},
 		],

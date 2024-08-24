@@ -3,15 +3,19 @@ import { Line } from "react-chartjs-2";
 import { MACD } from "@/utils/Indicators";
 import { CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 
+interface Dataset {
+	data: { y: number }[];
+}
+
 function calculateMACDProfit(
 	prices: number[],
 	macdData: number[],
 	signalData: number[]
 ) {
 	let capital = 100; // Start with an initial capital
-	let latestBuyPrice = null;
-	const buyPoints = [];
-	const sellPoints = [];
+	let latestBuyPrice: number | null = null;
+	const buyPoints: { x: number; y: number }[] = [];
+	const sellPoints: { x: number; y: number }[] = [];
 
 	for (let i = 1; i < macdData.length; i++) {
 		// Buy signal: MACD crosses above Signal line
@@ -53,6 +57,7 @@ interface MACDChartProps {
 	signalPeriod?: number;
 	options?: any;
 }
+
 export default function MACDChart({
 	formattedData,
 	fastPeriod = 12,
@@ -96,7 +101,7 @@ export default function MACDChart({
 				})),
 				backgroundColor: "green",
 				borderColor: "green",
-				pointRadius: 3,
+				pointRadius: 5,
 				showLine: false,
 			},
 			{
@@ -107,12 +112,34 @@ export default function MACDChart({
 				})),
 				backgroundColor: "red",
 				borderColor: "red",
-				pointRadius: 3,
+				pointRadius: 5,
 				showLine: false,
 			},
 			{
+				label: "MACD Line",
+				data: macdLine.map((value, index) => ({
+					x: formattedData.labels[index],
+					y: value,
+				})),
+				fill: false,
+				borderColor: "grey",
+				borderWidth: 1,
+				tension: 0.1,
+			},
+			{
+				label: "Signal Line",
+				data: signalLine.map((value, index) => ({
+					x: formattedData.labels[index],
+					y: value,
+				})),
+				borderColor: "blue",
+				borderWidth: 1,
+				fill: false,
+				tension: 0.1,
+			},
+			{
 				label: "Histogram",
-				type: "bar",
+				type: "bar" as const,
 				data: histogram.map((value, index) => ({
 					x: formattedData.labels[index],
 					y: value,
