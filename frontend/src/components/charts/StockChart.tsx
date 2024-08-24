@@ -105,7 +105,7 @@ interface StockChartProps {
 }
 
 function StockChart({ user }: StockChartProps) {
-	const [period, setPeriod] = useState<string>("1w");
+	const [period, setPeriod] = useState<string>("1m");
 	const [symbol, setSymbol] = useState<string>("AAPL");
 	const [stockInfo, setStockInfo] = useState<{
 		symbol: string;
@@ -126,10 +126,10 @@ function StockChart({ user }: StockChartProps) {
 
 	const [selectedIndicators, setSelectedIndicators] = useState({
 		RMI: true,
-		RSI: false,
-		EMA: false,
-		MACD: false,
-		Bollinger: false,
+		RSI: true,
+		EMA: true,
+		MACD: true,
+		Bollinger: true,
 	});
 
 	const [indicatorPeriods, setIndicatorPeriods] = useState({

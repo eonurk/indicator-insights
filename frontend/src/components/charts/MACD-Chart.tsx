@@ -53,7 +53,6 @@ interface MACDChartProps {
 	signalPeriod?: number;
 	options?: any;
 }
-
 export default function MACDChart({
 	formattedData,
 	fastPeriod = 12,
@@ -61,23 +60,25 @@ export default function MACDChart({
 	signalPeriod = 9,
 	options = {},
 }: MACDChartProps) {
-	const macdResults = useMemo(() => {
+	const prices = useMemo(() => {
 		if (
 			!formattedData ||
 			!formattedData.datasets ||
 			formattedData.datasets.length === 0
 		) {
 			console.error("Invalid data structure provided to MACDChart");
-			return null;
+			return [];
 		}
+		return formattedData.datasets[0].data.map((point) => point.y);
+	}, [formattedData]);
 
-		const prices = formattedData.datasets[0].data.map((point) => point.y);
+	const macdResults = useMemo(() => {
+		if (prices.length === 0) return null;
 		return MACD(prices, fastPeriod, slowPeriod, signalPeriod);
-	}, [formattedData, fastPeriod, slowPeriod, signalPeriod]);
+	}, [prices, fastPeriod, slowPeriod, signalPeriod]);
 
-	if (!macdResults) return null;
+	if (!macdResults) return <div>No valid MACD data available.</div>;
 
-	const prices = formattedData.datasets[0].data.map((point) => point.y);
 	const { macdLine, signalLine, histogram } = macdResults;
 
 	const { profit, buyPoints, sellPoints } = useMemo(() => {
@@ -87,27 +88,6 @@ export default function MACDChart({
 	const chartData = {
 		labels: formattedData.labels,
 		datasets: [
-			// {
-			// 	label: "MACD Line",
-			// 	data: macdLine.map((value, index) => ({
-			// 		x: formattedData.labels[index],
-			// 		y: value,
-			// 	})),
-			// 	borderColor: "blue",
-			// 	borderWidth: 2,
-			// 	fill: false,
-			// },
-			// {
-			// 	label: "Signal Line",
-			// 	data: signalLine.map((value, index) => ({
-			// 		x: formattedData.labels[index],
-			// 		y: value,
-			// 	})),
-			// 	borderColor: "orange",
-			// 	borderWidth: 2,
-			// 	fill: false,
-			// },
-
 			{
 				label: "Buy Points",
 				data: buyPoints.map((point) => ({
@@ -137,9 +117,10 @@ export default function MACDChart({
 					x: formattedData.labels[index],
 					y: value,
 				})),
-				backgroundColor: (value: { y: number }) =>
-					value.y > 0 ? "gray" : "gray",
-				barThickness: 2,
+				backgroundColor: histogram.map((value) =>
+					value > 0 ? "green" : "red"
+				),
+				barThickness: 1,
 			},
 		],
 	};
@@ -156,8 +137,12 @@ export default function MACDChart({
 						MACD ({fastPeriod},{slowPeriod},{signalPeriod})
 					</CardTitle>
 					<CardDescription
-						className={`${
-							profit > 0 ? "text-base text-green-500" : "text-base text-red-500"
+						className={`text-base ${
+							profit > 0
+								? "text-green-500"
+								: profit < 0
+								? "text-red-500"
+								: "text-neutral-500"
 						}`}
 					>
 						Potential Profit: {profit.toFixed(2)}%
