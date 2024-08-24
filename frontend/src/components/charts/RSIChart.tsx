@@ -151,9 +151,11 @@ export default function RSIChart({
 				<div className="grid flex-1 gap-1 text-center sm:text-left">
 					<CardTitle>RSI({period})</CardTitle>
 					<CardDescription
-						className={`${profit > 0 ? "text-green-500" : "text-red-500"}`}
+						className={`${
+							profit > 0 ? "text-base text-green-500" : "text-base text-red-500"
+						}`}
 					>
-						Total Profit: {profit.toFixed(2)}%
+						Potential Profit: {profit.toFixed(2)}%
 					</CardDescription>
 				</div>
 			</CardHeader>

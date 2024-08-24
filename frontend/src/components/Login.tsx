@@ -100,7 +100,7 @@ export default function Login() {
 					<Link to="/subscribe" className="underline">
 						{" "}
 						{/* Update this to your signup route */}
-						Get Started Here.
+						Get Started Here
 					</Link>
 				</div>
 			</CardContent>

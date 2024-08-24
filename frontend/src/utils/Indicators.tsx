@@ -5,99 +5,106 @@
  * @param RSIperiod - The period over which to calculate RSI (typically 14).
  * @returns RSI values for each period.
  */
+
 export function RSI(closingPrices: number[], RSIperiod: number = 14): number[] {
 	if (closingPrices.length < RSIperiod) {
 		throw new Error("Insufficient data to calculate RSI");
 	}
 
-	const gains: number[] = [];
-	const losses: number[] = [];
-
-	// Calculate gains and losses
-	for (let i = 1; i < closingPrices.length; i++) {
-		const change = closingPrices[i] - closingPrices[i - 1];
-		if (change > 0) {
-			gains.push(change);
-			losses.push(0);
-		} else {
-			gains.push(0);
-			losses.push(-change);
-		}
-	}
-
-	// Calculate average gains and losses
-	const avgGains: number[] = [];
-	const avgLosses: number[] = [];
-
-	for (let i = 0; i < gains.length; i++) {
-		if (i >= RSIperiod - 1) {
-			const periodGains = gains.slice(i + 1 - RSIperiod, i + 1);
-			const periodLosses = losses.slice(i + 1 - RSIperiod, i + 1);
-
-			const averageGain = periodGains.reduce((a, b) => a + b, 0) / RSIperiod;
-			const averageLoss = periodLosses.reduce((a, b) => a + b, 0) / RSIperiod;
-
-			avgGains.push(averageGain);
-			avgLosses.push(averageLoss);
-		}
-	}
-
-	// Calculate RSI
+	let gains = 0;
+	let losses = 0;
 	const rsi: number[] = [];
 
-	for (let i = 0; i < avgGains.length; i++) {
-		const rs = avgGains[i] / avgLosses[i];
-		const rsiValue = 100 - 100 / (1 + rs);
+	// Calculate initial average gain/loss for the first RSI period
+	for (let i = 1; i < RSIperiod; i++) {
+		const change = closingPrices[i] - closingPrices[i - 1];
+		if (change > 0) {
+			gains += change;
+		} else {
+			losses -= change;
+		}
+	}
+
+	let avgGain = gains / (RSIperiod - 1);
+	let avgLoss = losses / (RSIperiod - 1);
+
+	// Calculate the RSI for each subsequent period
+	for (let i = RSIperiod; i < closingPrices.length; i++) {
+		const change = closingPrices[i] - closingPrices[i - 1];
+		if (change > 0) {
+			gains = change;
+			losses = 0;
+		} else {
+			gains = 0;
+			losses = -change;
+		}
+
+		avgGain = (avgGain * (RSIperiod - 1) + gains) / RSIperiod;
+		avgLoss = (avgLoss * (RSIperiod - 1) + losses) / RSIperiod;
+
+		const rs = avgLoss === 0 ? 100 : avgGain / avgLoss;
+		const rsiValue = avgLoss === 0 ? 100 : 100 - 100 / (1 + rs);
 		rsi.push(rsiValue);
 	}
 
-	// Pad the beginning of the RSI array with nulls to match the length of closingPrices
 	return [...Array(RSIperiod - 1).fill(null), ...rsi];
 }
-
-// rmiCalculator.tsx
-
-/**
- * Calculate the RMI (Relative Momentum Index) for a given dataset.
- * @param closingPrices - Array of closing prices.
- * @param RMIperiod - The period over which to calculate RMI (typically 14).
- * @returns RMI values for each period.
- */
 export function RMI(closingPrices: number[], RMIperiod: number = 14): number[] {
 	if (closingPrices.length < RMIperiod) {
 		throw new Error("Insufficient data to calculate RMI");
 	}
 
-	const momentum: number[] = [];
+	let gains = 0;
+	let losses = 0;
+	const rmi: number[] = [];
 
-	// Calculate momentum
-	for (let i = RMIperiod; i < closingPrices.length; i++) {
-		momentum.push(closingPrices[i] - closingPrices[i - RMIperiod]);
+	// Calculate initial average gain/loss for the first RMI period
+	for (let i = RMIperiod; i < 2 * RMIperiod; i++) {
+		const change = closingPrices[i] - closingPrices[i - RMIperiod];
+		if (change > 0) {
+			gains += change;
+		} else {
+			losses -= change;
+		}
 	}
 
-	// Calculate average momentum
-	const avgMomentum: number[] = [];
-	for (let i = 0; i < momentum.length; i++) {
-		const periodMomentum = momentum.slice(i, i + RMIperiod);
-		const averageMomentum =
-			periodMomentum.reduce((a, b) => a + b, 0) / RMIperiod;
-		avgMomentum.push(averageMomentum);
+	let avgGain = gains / (RMIperiod - 1);
+	let avgLoss = losses / (RMIperiod - 1);
+
+	// Calculate the RMI for each subsequent period
+	for (let i = 2 * RMIperiod; i < closingPrices.length; i++) {
+		const change = closingPrices[i] - closingPrices[i - RMIperiod];
+		if (change > 0) {
+			gains = change;
+			losses = 0;
+		} else {
+			gains = 0;
+			losses = -change;
+		}
+
+		avgGain = (avgGain * (RMIperiod - 1) + gains) / RMIperiod;
+		avgLoss = (avgLoss * (RMIperiod - 1) + losses) / RMIperiod;
+
+		const rs = avgLoss === 0 ? 100 : avgGain / avgLoss;
+		const rmiValue = avgLoss === 0 ? 100 : 100 - 100 / (1 + rs);
+		rmi.push(rmiValue);
 	}
 
-	// Normalize the RMI
-	const rmi: number[] = avgMomentum.map((val) => 100 / (1 + Math.exp(-val)));
-
-	// Pad the beginning of the RMI array with nulls to match the length of closingPrices
 	return [...Array(RMIperiod - 1).fill(null), ...rmi];
 }
 
-export function EMA(prices: number[], period = 14) {
+export function EMA(prices: number[], period = 14): number[] {
 	const multiplier = 2 / (period + 1);
-	return prices.map((price, index) => {
-		if (index === 0) return price; // First value is just the price
-		const previousEMA = prices[index - 1];
-		return (price - previousEMA) * multiplier + previousEMA;
-	});
+	let previousEMA = prices[0]; // Start with the first price as the initial EMA
+	const ema: number[] = [previousEMA];
+
+	for (let i = 1; i < prices.length; i++) {
+		const currentEMA = (prices[i] - previousEMA) * multiplier + previousEMA;
+		ema.push(currentEMA);
+		previousEMA = currentEMA;
+	}
+
+	return ema;
 }
 
 export function MACD(
