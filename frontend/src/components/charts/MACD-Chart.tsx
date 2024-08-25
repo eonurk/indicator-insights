@@ -3,24 +3,26 @@ import { Line } from "react-chartjs-2";
 import { MACD } from "@/utils/Indicators";
 import { CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 
-// Utility function to calculate MACD profit and identify buy/sell points
 export function calculateMACDProfit(
 	prices: number[],
 	macdData: number[],
 	signalData: number[]
 ) {
-	let capital = 100; // Start with an initial capital
-	let latestBuyPrice: number | null = null;
+	let capital = 100; // Initial capital
+	let latestBuyPrice,
+		latestSellPrice: number | null = null;
 	const buyPoints: { x: number; y: number }[] = [];
 	const sellPoints: { x: number; y: number }[] = [];
 
 	for (let i = 1; i < macdData.length; i++) {
 		// Buy signal: MACD crosses above Signal line
 		if (macdData[i - 1] < signalData[i - 1] && macdData[i] > signalData[i]) {
-			if (latestBuyPrice === null) {
-				// Ensure we don't already have a buy
+			if (latestSellPrice === null) {
+				// Calculate profit/loss for this trade and update capital
+				capital *= 1 + (prices[i] - latestBuyPrice) / latestBuyPrice;
 				latestBuyPrice = prices[i];
-				buyPoints.push({ x: i, y: macdData[i] });
+				latestSellPrice = null;
+				sellPoints.push({ x: i, y: macdData[i] });
 			}
 		}
 		// Sell signal: MACD crosses below Signal line
@@ -29,22 +31,20 @@ export function calculateMACDProfit(
 			macdData[i] < signalData[i] &&
 			latestBuyPrice !== null
 		) {
-			// Calculate profit/loss for this trade and update capital
-			capital *= 1 + (prices[i] - latestBuyPrice) / latestBuyPrice;
-			sellPoints.push({ x: i, y: macdData[i] });
-			latestBuyPrice = null;
+			buyPoints.push({ x: i, y: macdData[i] });
+			latestBuyPrice = prices[i]; // Reset after selling
+			latestSellPrice = null;
 		}
 	}
 
-	// Close any open position at the end
-	if (latestBuyPrice !== null && prices.length > 0) {
+	// Close any open position at the end using the latest price
+	if (latestBuyPrice !== null) {
 		capital *=
 			1 + (prices[prices.length - 1] - latestBuyPrice) / latestBuyPrice;
-		latestBuyPrice = null; // Reset after final calculation
 	}
 
 	const profit = capital - 100;
-	return { profit, buyPoints, sellPoints, latestBuyPrice };
+	return { profit, buyPoints, sellPoints, latestBuyPrice, latestSellPrice };
 }
 
 // MACD Chart component
