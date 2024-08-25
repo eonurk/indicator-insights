@@ -26,7 +26,7 @@ export function Home({ user }: StockChartProps) {
 
 			{user && <div className="m-8"></div>}
 			<div className="h-[40rem]">
-				<NotificationBoard />
+				<NotificationBoard user={user} />
 			</div>
 			{!user && (
 				<div className="h-[40rem] flex justify-center items-center px-4">

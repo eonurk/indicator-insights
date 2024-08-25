@@ -21,6 +21,8 @@ import {
 	PopoverContent,
 } from "@/components/ui/popover";
 import { Button } from "@/components/ui/button";
+import { stocks } from "@/utils/stocks";
+import { User } from "firebase/auth";
 
 interface Notification {
 	id: string;
@@ -65,7 +67,11 @@ const indicators = [
 
 const validKeys = ["RMI", "RSI"]; // Define valid keys for initial state
 
-const NotificationBoard: React.FC = () => {
+interface NotificationBoardProps {
+	user: User | null;
+}
+
+const NotificationBoard: React.FC<NotificationBoardProps> = ({ user }) => {
 	const [notifications, setNotifications] = useState<Notification[]>([]);
 	const [lastUpdateTime, setLastUpdateTime] = useState<Date | null>(new Date());
 	const [selectedPeriod, setSelectedPeriod] = useState<string>("1w");
@@ -86,25 +92,29 @@ const NotificationBoard: React.FC = () => {
 
 	useEffect(() => {
 		const checkForSignals = async () => {
-			const stocks = [
-				"AAPL",
-				"ABNB",
-				"AMZN",
-				"EBAY",
-				"GOOGL",
-				"META",
-				"NFLX",
-				"PLTR",
-				"ZM",
-			];
+			const availableStocks = user
+				? stocks
+				: {
+						AAPL: "Apple Inc.",
+						ABNB: "Airbnb, Inc.",
+						AMZN: "Amazon.com, Inc.",
+						EBAY: "eBay Inc.",
+						GOOGL: "Alphabet Inc. (Class A)",
+						META: "Meta Platforms, Inc.",
+						NFLX: "Netflix, Inc.",
+						PLTR: "Palantir Technologies Inc.",
+						ZM: "Zoom Video Communications, Inc.",
+				  };
+
+			const symbols = Object.keys(availableStocks);
 			const period = selectedPeriod;
 			const newNotifications: Notification[] = [];
 			const currentTime = new Date();
 
 			try {
-				const response = await fetchStockData(stocks.join(","), period, false);
+				const response = await fetchStockData(symbols.join(","), period, false);
 
-				for (let symbol of stocks) {
+				for (let symbol of symbols) {
 					const history = response[symbol].history;
 					const dates = Object.keys(history).map((date) => new Date(date));
 					const closingPrices = dates
@@ -128,7 +138,7 @@ const NotificationBoard: React.FC = () => {
 										signal: "buy",
 										price: latestBuyPrice,
 										timestamp: buyTimestamp,
-										isNew: buyTimestamp > lastUpdateTime!,
+										isNew: buyTimestamp > (lastUpdateTime || new Date(0)),
 									});
 								}
 							} else if (latestSellPrice !== null && sellPoints.length > 0) {
@@ -145,7 +155,7 @@ const NotificationBoard: React.FC = () => {
 										signal: "sell",
 										price: latestSellPrice,
 										timestamp: sellTimestamp,
-										isNew: sellTimestamp > lastUpdateTime!,
+										isNew: sellTimestamp > (lastUpdateTime || new Date(0)),
 									});
 								}
 							}
@@ -173,7 +183,7 @@ const NotificationBoard: React.FC = () => {
 		}, 60000);
 
 		return () => clearInterval(intervalId);
-	}, [selectedPeriod, enabledIndicators, lastUpdateTime]);
+	}, [selectedPeriod, enabledIndicators, lastUpdateTime, user]);
 
 	return (
 		<Card className="mt-4">
@@ -183,7 +193,7 @@ const NotificationBoard: React.FC = () => {
 					<div className="flex items-center justify-center text-sm text-gray-500">
 						<span className="bg-green-500 h-3 w-3 rounded-full animate-pulse"></span>
 						<span className="ml-2">
-							Last updated: {format(lastUpdateTime, "yyyy-MM-dd HH:mm:ss")}
+							Last updated: {format(lastUpdateTime, "yyyy-MM-dd HH:mm")}
 						</span>
 					</div>
 				)}
@@ -245,7 +255,7 @@ const NotificationBoard: React.FC = () => {
 									</span>{" "}
 									signal at ${notification.price.toFixed(2)}
 									<span className="text-sm text-gray-500 ml-2">
-										{format(notification.timestamp, "yyyy-MM-dd HH:mm:ss")}
+										{format(notification.timestamp, "yyyy-MM-dd HH:mm")}
 									</span>
 								</li>
 							))}
