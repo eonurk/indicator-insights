@@ -234,7 +234,7 @@ const NotificationBoard: React.FC<NotificationBoardProps> = ({ user }) => {
 				<ScrollArea className="h-[300px] mt-2">
 					<CardContent>
 						{notifications.length === 0 ? (
-							<p>No new signals</p>
+							<p>Loading...</p>
 						) : (
 							<ul>
 								{notifications.map((notification) => (

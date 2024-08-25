@@ -36,6 +36,7 @@ export function Home({ user }: StockChartProps) {
 			)}
 
 			{user && <div className="m-8"></div>}
+
 			<div id="notification-board" className="h-[40rem]">
 				<NotificationBoard user={user} />
 			</div>
