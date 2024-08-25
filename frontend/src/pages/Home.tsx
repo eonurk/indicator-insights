@@ -15,7 +15,19 @@ export function Home({ user }: StockChartProps) {
 	return (
 		<>
 			<SiteHeader />
+			{!user && (
+				<div className="h-[40rem] flex justify-center items-center px-4">
+					<div className="text-2xl mx-auto font-normal text-neutral-600 dark:text-neutral-400">
+						Get real-time insights with your favorite indicator
+						<div className="text-4xl motion-safe:animate-bounce">&#8964;</div>
+					</div>
+				</div>
+			)}
 
+			{user && <div className="m-8"></div>}
+			<div className="h-[40rem]">
+				<NotificationBoard />
+			</div>
 			{!user && (
 				<div className="h-[40rem] flex justify-center items-center px-4">
 					<div className="text-2xl mx-auto font-normal text-neutral-600 dark:text-neutral-400">
@@ -41,19 +53,6 @@ export function Home({ user }: StockChartProps) {
 			{user && <div className="m-8"></div>}
 			<div className="h-[40rem]">
 				<IndicatorChecker user={user} />
-			</div>
-
-			{!user && (
-				<div className="h-[40rem] flex justify-center items-center px-4">
-					<div className="text-2xl mx-auto font-normal text-neutral-600 dark:text-neutral-400">
-						Get real-time insights with your favorite indicator
-						<div className="text-4xl motion-safe:animate-bounce">&#8964;</div>
-					</div>
-				</div>
-			)}
-			{user && <div className="m-8"></div>}
-			<div className="h-[40rem]">
-				<NotificationBoard />
 			</div>
 
 			{!user && (

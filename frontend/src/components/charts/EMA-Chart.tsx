@@ -6,6 +6,7 @@ import { CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 function calculateEMAProfit(prices: number[], emaData: number[]) {
 	let capital = 100;
 	let latestBuyPrice = null;
+	let latestSellPrice = null;
 	const buyPoints = [];
 	const sellPoints = [];
 
@@ -13,6 +14,7 @@ function calculateEMAProfit(prices: number[], emaData: number[]) {
 		// Buy signal: Price crosses above EMA
 		if (prices[i - 1] < emaData[i - 1] && prices[i] > emaData[i]) {
 			latestBuyPrice = prices[i];
+			latestSellPrice = null;
 			buyPoints.push({ x: i, y: prices[i] });
 		}
 		// Sell signal: Price crosses below EMA
@@ -24,6 +26,7 @@ function calculateEMAProfit(prices: number[], emaData: number[]) {
 			capital = capital * (1 + (prices[i] - latestBuyPrice) / latestBuyPrice);
 			sellPoints.push({ x: i, y: prices[i] });
 			latestBuyPrice = null;
+			latestSellPrice = prices[i];
 		}
 	}
 
@@ -34,7 +37,7 @@ function calculateEMAProfit(prices: number[], emaData: number[]) {
 	}
 
 	const profit = capital - 100;
-	return { profit, buyPoints, sellPoints };
+	return { profit, buyPoints, sellPoints, latestBuyPrice, latestSellPrice };
 }
 
 interface EMAChartProps {

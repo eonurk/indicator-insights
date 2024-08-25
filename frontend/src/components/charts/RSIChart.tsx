@@ -3,9 +3,11 @@ import { Line } from "react-chartjs-2";
 import { RSI } from "@/utils/Indicators";
 import { CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 
-function calculateRSIProfit(prices: number[], rsiData: number[]) {
+export function calculateRSIProfit(prices: number[], rsiData: number[]) {
 	let capital = 100; // Start with an initial capital (can be any arbitrary value)
-	let latestBuyPrice = null;
+	let latestBuyPrice,
+		latestSellPrice = null;
+
 	const buyPoints = [];
 	const sellPoints = [];
 
@@ -13,6 +15,7 @@ function calculateRSIProfit(prices: number[], rsiData: number[]) {
 		// Buy signal: RSI crosses above 30
 		if (rsiData[i - 1] < 30 && rsiData[i] > 30 && rsiData[i - 1] != null) {
 			latestBuyPrice = prices[i];
+			latestSellPrice = null;
 			buyPoints.push({ x: i, y: rsiData[i] });
 		}
 		// Sell signal: RSI crosses below 70
@@ -22,8 +25,10 @@ function calculateRSIProfit(prices: number[], rsiData: number[]) {
 			latestBuyPrice !== null
 		) {
 			// Calculate profit/loss for this trade and update capital
+
 			capital = capital * (1 + (prices[i] - latestBuyPrice) / latestBuyPrice);
 			sellPoints.push({ x: i, y: rsiData[i] });
+			latestSellPrice = prices[i];
 			latestBuyPrice = null; // Reset after tracking the latest sell
 		}
 	}
@@ -38,7 +43,7 @@ function calculateRSIProfit(prices: number[], rsiData: number[]) {
 	// Compound profit/loss is the difference between the final capital and initial capital
 	const profit = capital - 100;
 
-	return { profit, buyPoints, sellPoints };
+	return { profit, buyPoints, sellPoints, latestBuyPrice, latestSellPrice };
 }
 
 interface DataPoint {

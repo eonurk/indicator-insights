@@ -7,13 +7,14 @@ interface Dataset {
 	data: { y: number }[];
 }
 
-function calculateMACDProfit(
+export function calculateMACDProfit(
 	prices: number[],
 	macdData: number[],
 	signalData: number[]
 ) {
 	let capital = 100; // Start with an initial capital
-	let latestBuyPrice: number | null = null;
+	let latestBuyPrice,
+		latestSellPrice: number | null = null;
 	const buyPoints: { x: number; y: number }[] = [];
 	const sellPoints: { x: number; y: number }[] = [];
 
@@ -21,6 +22,7 @@ function calculateMACDProfit(
 		// Buy signal: MACD crosses above Signal line
 		if (macdData[i - 1] < signalData[i - 1] && macdData[i] > signalData[i]) {
 			latestBuyPrice = prices[i];
+			latestSellPrice = null;
 			buyPoints.push({ x: i, y: macdData[i] });
 		}
 		// Sell signal: MACD crosses below Signal line
@@ -33,6 +35,7 @@ function calculateMACDProfit(
 			capital = capital * (1 + (prices[i] - latestBuyPrice) / latestBuyPrice);
 			sellPoints.push({ x: i, y: macdData[i] });
 			latestBuyPrice = null;
+			latestSellPrice = prices[i];
 		}
 	}
 
@@ -44,7 +47,7 @@ function calculateMACDProfit(
 	}
 
 	const profit = capital - 100;
-	return { profit, buyPoints, sellPoints };
+	return { profit, buyPoints, sellPoints, latestBuyPrice, latestSellPrice };
 }
 
 interface MACDChartProps {
