@@ -20,7 +20,6 @@ export function calculateMACDProfit(
 			if (latestBuyPrice === null) {
 				latestBuyPrice = prices[i]; // Set buy price
 				buyPoints.push({ x: i, y: macdData[i] });
-				console.log(`Buying at index ${i}: ${latestBuyPrice}`);
 			}
 		}
 		// Sell signal: MACD crosses below Signal line
@@ -33,9 +32,7 @@ export function calculateMACDProfit(
 			// Calculate profit only when selling
 			capital *= 1 + (latestSellPrice - latestBuyPrice) / latestBuyPrice;
 			sellPoints.push({ x: i, y: macdData[i] });
-			console.log(
-				`Selling at index ${i}: ${latestSellPrice}, New capital: ${capital}`
-			);
+
 			latestBuyPrice = null; // Reset buy price after selling
 		}
 	}
@@ -44,9 +41,6 @@ export function calculateMACDProfit(
 	if (latestBuyPrice !== null) {
 		latestSellPrice = prices[prices.length - 1]; // Close at the last price
 		capital *= 1 + (latestSellPrice - latestBuyPrice) / latestBuyPrice;
-		console.log(
-			`Closing position at end: ${latestBuyPrice}. Final capital: ${capital}`
-		);
 	}
 
 	const profit = capital - 100; // Calculate profit based on initial capital
@@ -88,7 +82,7 @@ export default function MACDChart({
 			console.error("Invalid data structure provided to MACDChart");
 			return [];
 		}
-		return formattedData.datasets[0].data.map((point) => point.y);
+		return formattedData.datasets[0].data.map((point: { y: any }) => point.y);
 	}, [formattedData]);
 
 	// Calculate MACD, Signal Line, and Histogram
