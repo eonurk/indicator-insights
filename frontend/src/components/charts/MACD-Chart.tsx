@@ -3,27 +3,25 @@ import { Line } from "react-chartjs-2";
 import { MACD } from "@/utils/Indicators";
 import { CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 
-interface Dataset {
-	data: { y: number }[];
-}
-
+// Utility function to calculate MACD profit and identify buy/sell points
 export function calculateMACDProfit(
 	prices: number[],
 	macdData: number[],
 	signalData: number[]
 ) {
 	let capital = 100; // Start with an initial capital
-	let latestBuyPrice,
-		latestSellPrice: number | null = null;
+	let latestBuyPrice: number | null = null;
 	const buyPoints: { x: number; y: number }[] = [];
 	const sellPoints: { x: number; y: number }[] = [];
 
 	for (let i = 1; i < macdData.length; i++) {
 		// Buy signal: MACD crosses above Signal line
 		if (macdData[i - 1] < signalData[i - 1] && macdData[i] > signalData[i]) {
-			latestBuyPrice = prices[i];
-			latestSellPrice = null;
-			buyPoints.push({ x: i, y: macdData[i] });
+			if (latestBuyPrice === null) {
+				// Ensure we don't already have a buy
+				latestBuyPrice = prices[i];
+				buyPoints.push({ x: i, y: macdData[i] });
+			}
 		}
 		// Sell signal: MACD crosses below Signal line
 		else if (
@@ -32,24 +30,24 @@ export function calculateMACDProfit(
 			latestBuyPrice !== null
 		) {
 			// Calculate profit/loss for this trade and update capital
-			capital = capital * (1 + (prices[i] - latestBuyPrice) / latestBuyPrice);
+			capital *= 1 + (prices[i] - latestBuyPrice) / latestBuyPrice;
 			sellPoints.push({ x: i, y: macdData[i] });
 			latestBuyPrice = null;
-			latestSellPrice = prices[i];
 		}
 	}
 
-	// Close open position at the end
-	if (latestBuyPrice !== null) {
-		capital =
-			capital *
-			(1 + (prices[prices.length - 1] - latestBuyPrice) / latestBuyPrice);
+	// Close any open position at the end
+	if (latestBuyPrice !== null && prices.length > 0) {
+		capital *=
+			1 + (prices[prices.length - 1] - latestBuyPrice) / latestBuyPrice;
+		latestBuyPrice = null; // Reset after final calculation
 	}
 
 	const profit = capital - 100;
-	return { profit, buyPoints, sellPoints, latestBuyPrice, latestSellPrice };
+	return { profit, buyPoints, sellPoints, latestBuyPrice };
 }
 
+// MACD Chart component
 interface MACDChartProps {
 	formattedData: {
 		labels: Date[];
@@ -68,6 +66,7 @@ export default function MACDChart({
 	signalPeriod = 9,
 	options = {},
 }: MACDChartProps) {
+	// Extract prices from the formatted data
 	const prices = useMemo(() => {
 		if (
 			!formattedData ||
@@ -80,6 +79,7 @@ export default function MACDChart({
 		return formattedData.datasets[0].data.map((point) => point.y);
 	}, [formattedData]);
 
+	// Calculate MACD, Signal Line, and Histogram
 	const macdResults = useMemo(() => {
 		if (prices.length === 0) return null;
 		return MACD(prices, fastPeriod, slowPeriod, signalPeriod);
@@ -89,10 +89,12 @@ export default function MACDChart({
 
 	const { macdLine, signalLine, histogram } = macdResults;
 
+	// Calculate potential profit and identify buy/sell points
 	const { profit, buyPoints, sellPoints } = useMemo(() => {
 		return calculateMACDProfit(prices, macdLine, signalLine);
 	}, [prices, macdLine, signalLine]);
 
+	// Prepare data for chart rendering
 	const chartData = {
 		labels: formattedData.labels,
 		datasets: [
@@ -102,7 +104,7 @@ export default function MACDChart({
 					x: formattedData.labels[point.x],
 					y: point.y,
 				})),
-				backgroundColor: "green",
+				backgroundColor: "green", // Green for Buy
 				borderColor: "green",
 				pointRadius: 5,
 				showLine: false,
@@ -113,7 +115,7 @@ export default function MACDChart({
 					x: formattedData.labels[point.x],
 					y: point.y,
 				})),
-				backgroundColor: "red",
+				backgroundColor: "red", // Red for Sell
 				borderColor: "red",
 				pointRadius: 5,
 				showLine: false,
@@ -159,6 +161,7 @@ export default function MACDChart({
 		...options,
 	};
 
+	// Render the MACD chart along with potential profit
 	return (
 		<>
 			<CardHeader className="flex items-center gap-2 space-y-0 py-5 sm:flex-row">
