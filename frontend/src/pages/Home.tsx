@@ -11,21 +11,32 @@ interface StockChartProps {
 	user: User | null; // Use User type from firebase/auth
 }
 
+const handleScroll = () => {
+	// Using `document.getElementById` to find the scroll target
+	const section = document.getElementById("notification-board");
+	if (section) {
+		// Scroll smoothly to the target section
+		section.scrollIntoView({ behavior: "smooth" });
+	}
+};
+
 export function Home({ user }: StockChartProps) {
 	return (
 		<>
 			<SiteHeader />
 			{!user && (
-				<div className="h-[40rem] flex justify-center items-center px-4">
-					<div className="text-2xl mx-auto font-normal text-neutral-600 dark:text-neutral-400">
-						Get real-time insights with your favorite indicator
-						<div className="text-4xl motion-safe:animate-bounce">&#8964;</div>
+				<a onClick={handleScroll}>
+					<div className="h-[40rem] flex justify-center items-center px-4">
+						<div className="text-2xl mx-auto font-normal text-neutral-600 dark:text-neutral-400">
+							Get real-time insights with your favorite indicator
+							<div className="text-4xl motion-safe:animate-bounce">&#8964;</div>
+						</div>
 					</div>
-				</div>
+				</a>
 			)}
 
 			{user && <div className="m-8"></div>}
-			<div className="h-[40rem]">
+			<div id="notification-board" className="h-[40rem]">
 				<NotificationBoard user={user} />
 			</div>
 			{!user && (
