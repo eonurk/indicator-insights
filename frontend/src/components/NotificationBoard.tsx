@@ -231,7 +231,7 @@ const NotificationBoard: React.FC<NotificationBoardProps> = ({ user }) => {
 						</Popover>
 					</div>
 				</CardHeader>
-				<ScrollArea className="h-[300px] mt-2">
+				<ScrollArea className="h-[400px] mt-2">
 					<CardContent>
 						{notifications.length === 0 ? (
 							<p>Loading...</p>

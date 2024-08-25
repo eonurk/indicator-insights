@@ -106,21 +106,26 @@ export function EMA(prices: number[], period = 14): number[] {
 
 	return ema;
 }
-
 export function MACD(
 	prices: number[],
 	fastPeriod = 12,
 	slowPeriod = 26,
 	signalPeriod = 9
 ) {
+	// Calculate fast and slow EMAs
 	const emaFast = EMA(prices, fastPeriod);
 	const emaSlow = EMA(prices, slowPeriod);
 
+	// Calculate MACD Line
 	const macdLine = emaFast.map((fast, index) => fast - emaSlow[index]);
-	const signalLine = EMA(macdLine.slice(slowPeriod - fastPeriod), signalPeriod);
+
+	// Calculate Signal Line, ensuring we only take relevant MACD values
+	const signalLine = EMA(macdLine.slice(slowPeriod - 1), signalPeriod);
+
+	// Calculate Histogram
 	const histogram = macdLine
-		.slice(slowPeriod - fastPeriod)
-		.map((macd, index) => macd - signalLine[index]);
+		.slice(slowPeriod - 1, macdLine.length - signalPeriod + 1)
+		.map((macd, index) => macd - (signalLine[index] || 0)); // Ensure we handle undefined signalLine
 
 	return { macdLine, signalLine, histogram };
 }

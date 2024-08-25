@@ -2,20 +2,18 @@ import { useMemo } from "react";
 import { Line } from "react-chartjs-2";
 import { RSI } from "@/utils/Indicators";
 import { CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-
 export function calculateRSIProfit(prices: number[], rsiData: number[]) {
-	let capital = 100; // Start with an initial capital (can be any arbitrary value)
-	let latestBuyPrice,
-		latestSellPrice = null;
+	let capital = 100; // Start with an initial capital
+	let latestBuyPrice = null;
+	let latestSellPrice = null;
 
 	const buyPoints = [];
 	const sellPoints = [];
 
 	for (let i = 1; i < rsiData.length; i++) {
 		// Buy signal: RSI crosses above 30
-		if (rsiData[i - 1] < 30 && rsiData[i] > 30 && rsiData[i - 1] != null) {
+		if (rsiData[i - 1] < 30 && rsiData[i] > 30) {
 			latestBuyPrice = prices[i];
-			latestSellPrice = null;
 			buyPoints.push({ x: i, y: rsiData[i] });
 		}
 		// Sell signal: RSI crosses below 70
@@ -24,26 +22,33 @@ export function calculateRSIProfit(prices: number[], rsiData: number[]) {
 			rsiData[i] < 70 &&
 			latestBuyPrice !== null
 		) {
-			// Calculate profit/loss for this trade and update capital
-
-			capital = capital * (1 + (prices[i] - latestBuyPrice) / latestBuyPrice);
+			if (latestBuyPrice > 0) {
+				latestSellPrice = prices[i]; // Capture the sell price
+				capital *= 1 + (latestSellPrice - latestBuyPrice) / latestBuyPrice;
+			} else {
+				console.warn(
+					`Attempted to sell but latestBuyPrice was ${latestBuyPrice}`
+				);
+			}
 			sellPoints.push({ x: i, y: rsiData[i] });
-			latestSellPrice = prices[i];
-			latestBuyPrice = null; // Reset after tracking the latest sell
+			latestBuyPrice = null; // Reset after selling
 		}
 	}
 
-	// If there's an open position at the end, close it using the last price
-	if (latestBuyPrice !== null) {
-		capital =
-			capital *
-			(1 + (prices[prices.length - 1] - latestBuyPrice) / latestBuyPrice);
+	// Close any open position at the end
+	if (latestBuyPrice !== null && latestBuyPrice > 0) {
+		latestSellPrice = prices[prices.length - 1]; // Close at the last price
+		capital *= 1 + (latestSellPrice - latestBuyPrice) / latestBuyPrice;
 	}
 
-	// Compound profit/loss is the difference between the final capital and initial capital
-	const profit = capital - 100;
+	const profit = capital - 100; // Calculate profit based on initial capital
 
-	return { profit, buyPoints, sellPoints, latestBuyPrice, latestSellPrice };
+	// Guard against NaN
+	if (isNaN(profit)) {
+		console.error("Profit calculation resulted in NaN");
+	}
+
+	return { profit, buyPoints, sellPoints, latestBuyPrice, latestSellPrice }; // Return both buy and sell prices
 }
 
 interface DataPoint {

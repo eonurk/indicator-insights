@@ -2,27 +2,25 @@ import { useMemo } from "react";
 import { Line } from "react-chartjs-2";
 import { MACD } from "@/utils/Indicators";
 import { CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-
 export function calculateMACDProfit(
 	prices: number[],
 	macdData: number[],
 	signalData: number[]
 ) {
 	let capital = 100; // Initial capital
-	let latestBuyPrice,
-		latestSellPrice: number | null = null;
+	let latestBuyPrice: number | null = null; // Initialize as null
+	let latestSellPrice: number | null = null; // Initialize as null
 	const buyPoints: { x: number; y: number }[] = [];
 	const sellPoints: { x: number; y: number }[] = [];
 
 	for (let i = 1; i < macdData.length; i++) {
 		// Buy signal: MACD crosses above Signal line
 		if (macdData[i - 1] < signalData[i - 1] && macdData[i] > signalData[i]) {
-			if (latestSellPrice === null) {
-				// Calculate profit/loss for this trade and update capital
-				capital *= 1 + (prices[i] - latestBuyPrice) / latestBuyPrice;
-				latestBuyPrice = prices[i];
-				latestSellPrice = null;
-				sellPoints.push({ x: i, y: macdData[i] });
+			// Only buy if we don't have an existing buy position
+			if (latestBuyPrice === null) {
+				latestBuyPrice = prices[i]; // Set buy price
+				buyPoints.push({ x: i, y: macdData[i] });
+				console.log(`Buying at index ${i}: ${latestBuyPrice}`);
 			}
 		}
 		// Sell signal: MACD crosses below Signal line
@@ -31,19 +29,33 @@ export function calculateMACDProfit(
 			macdData[i] < signalData[i] &&
 			latestBuyPrice !== null
 		) {
-			buyPoints.push({ x: i, y: macdData[i] });
-			latestBuyPrice = prices[i]; // Reset after selling
-			latestSellPrice = null;
+			latestSellPrice = prices[i]; // Set sell price
+			// Calculate profit only when selling
+			capital *= 1 + (latestSellPrice - latestBuyPrice) / latestBuyPrice;
+			sellPoints.push({ x: i, y: macdData[i] });
+			console.log(
+				`Selling at index ${i}: ${latestSellPrice}, New capital: ${capital}`
+			);
+			latestBuyPrice = null; // Reset buy price after selling
 		}
 	}
 
 	// Close any open position at the end using the latest price
 	if (latestBuyPrice !== null) {
-		capital *=
-			1 + (prices[prices.length - 1] - latestBuyPrice) / latestBuyPrice;
+		latestSellPrice = prices[prices.length - 1]; // Close at the last price
+		capital *= 1 + (latestSellPrice - latestBuyPrice) / latestBuyPrice;
+		console.log(
+			`Closing position at end: ${latestBuyPrice}. Final capital: ${capital}`
+		);
 	}
 
-	const profit = capital - 100;
+	const profit = capital - 100; // Calculate profit based on initial capital
+
+	// Guard against NaN
+	if (isNaN(profit)) {
+		console.error("Profit calculation resulted in NaN");
+	}
+
 	return { profit, buyPoints, sellPoints, latestBuyPrice, latestSellPrice };
 }
 
