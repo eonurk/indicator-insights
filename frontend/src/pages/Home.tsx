@@ -5,6 +5,7 @@ import { SiteHeader } from "@/components/site-header";
 import { Link } from "react-router-dom";
 import { SiteFooter } from "@/components/Footer";
 import PricingTable from "@/components/PricingTable";
+import NotificationBoard from "@/components/NotificationBoard";
 <script async src="https://js.stripe.com/v3/pricing-table.js"></script>;
 interface StockChartProps {
 	user: User | null; // Use User type from firebase/auth
@@ -45,6 +46,19 @@ export function Home({ user }: StockChartProps) {
 			{!user && (
 				<div className="h-[40rem] flex justify-center items-center px-4">
 					<div className="text-2xl mx-auto font-normal text-neutral-600 dark:text-neutral-400">
+						Get real-time insights with your favorite indicator
+						<div className="text-4xl motion-safe:animate-bounce">&#8964;</div>
+					</div>
+				</div>
+			)}
+			{user && <div className="m-8"></div>}
+			<div className="h-[40rem]">
+				<NotificationBoard />
+			</div>
+
+			{!user && (
+				<div className="h-[40rem] flex justify-center items-center px-4">
+					<div className="text-2xl mx-auto font-normal text-neutral-600 dark:text-neutral-400">
 						To check all NASDAQ stocks with more indicators
 						<div className="text-4xl motion-safe:animate-bounce">&#8964;</div>
 						<Link to="/signup">
@@ -53,6 +67,7 @@ export function Home({ user }: StockChartProps) {
 					</div>
 				</div>
 			)}
+
 			<SiteFooter />
 		</>
 	);

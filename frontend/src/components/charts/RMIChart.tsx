@@ -154,7 +154,7 @@ export default function RMIChart({
 		<>
 			<CardHeader className="flex items-center gap-2 space-y-0 py-5 sm:flex-row">
 				<div className="grid flex-1 gap-1 text-center sm:text-left">
-					<CardTitle>RMI({period})</CardTitle>
+					<CardTitle className="text-xl">RMI({period})</CardTitle>
 					<CardDescription
 						className={`${
 							profit > 0 ? "text-base text-green-500" : "text-base text-red-500"

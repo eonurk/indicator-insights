@@ -162,7 +162,7 @@ export default function BollingerChart({
 		<>
 			<CardHeader className="flex items-center gap-2 space-y-0 py-5 sm:flex-row">
 				<div className="grid flex-1 gap-1 text-center sm:text-left">
-					<CardTitle>
+					<CardTitle className="text-xl">
 						Bollinger Bands ({period},{stdDev})
 					</CardTitle>
 					<CardDescription
