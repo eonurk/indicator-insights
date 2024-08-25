@@ -23,6 +23,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { stocks } from "@/utils/stocks";
 import { User } from "firebase/auth";
+import { Skeleton } from "@/components/ui/skeleton";
 
 interface Notification {
 	id: string;
@@ -186,84 +187,86 @@ const NotificationBoard: React.FC<NotificationBoardProps> = ({ user }) => {
 	}, [selectedPeriod, enabledIndicators, lastUpdateTime, user]);
 
 	return (
-		<Card className="mt-4">
-			<CardHeader className="flex flex-wrap justify-between items-center">
-				<CardTitle>Real-time Notifications</CardTitle>
-				{lastUpdateTime && (
-					<div className="flex items-center justify-center text-sm text-gray-500">
-						<span className="bg-green-500 h-3 w-3 rounded-full animate-pulse"></span>
-						<span className="ml-2">
-							Last updated: {format(lastUpdateTime, "yyyy-MM-dd HH:mm")}
-						</span>
-					</div>
-				)}
-				<div className="flex gap-2">
-					<Select value={selectedPeriod} onValueChange={setSelectedPeriod}>
-						<SelectTrigger className="min-w-[120px]">
-							<SelectValue placeholder="1 Month" />
-						</SelectTrigger>
-						<SelectContent>
-							{periodOptions.map(({ value, label }) => (
-								<SelectItem key={value} value={value}>
-									{label}
-								</SelectItem>
-							))}
-						</SelectContent>
-					</Select>
-					<Popover>
-						<PopoverTrigger asChild>
-							<Button variant="outline">Select Indicators</Button>
-						</PopoverTrigger>
-						<PopoverContent className="w-56">
-							{indicators.map(({ key, label }) => (
-								<div key={key} className="flex items-center space-x-2">
-									<Checkbox
-										id={key}
-										checked={enabledIndicators[key]}
-										onCheckedChange={() => toggleIndicator(key)}
-									/>
-									<label htmlFor={key}>{label}</label>
-								</div>
-							))}
-						</PopoverContent>
-					</Popover>
-				</div>
-			</CardHeader>
-			<ScrollArea className="h-[300px] mt-2">
-				<CardContent>
-					{notifications.length === 0 ? (
-						<p>No new signals</p>
-					) : (
-						<ul>
-							{notifications.map((notification) => (
-								<li
-									key={notification.id}
-									className={`mb-2 p-2 rounded ${
-										notification.isNew ? "bg-green-100 border" : "bg-gray-100"
-									}`}
-								>
-									<span className="font-bold">{notification.stock}</span>{" "}
-									{notification.indicator} gives a{" "}
-									<span
-										className={
-											notification.signal === "buy"
-												? "text-green-500"
-												: "text-red-500"
-										}
-									>
-										{notification.signal}
-									</span>{" "}
-									signal at ${notification.price.toFixed(2)}
-									<span className="text-sm text-gray-500 ml-2">
-										{format(notification.timestamp, "yyyy-MM-dd HH:mm")}
-									</span>
-								</li>
-							))}
-						</ul>
+		<>
+			<Card className="mt-4">
+				<CardHeader className="flex flex-wrap justify-between items-center">
+					<CardTitle>Real-time Notifications</CardTitle>
+					{lastUpdateTime && (
+						<div className="flex items-center justify-center text-sm text-gray-500">
+							<span className="bg-green-500 h-3 w-3 rounded-full animate-pulse"></span>
+							<span className="ml-2">
+								Last updated: {format(lastUpdateTime, "yyyy-MM-dd HH:mm")}
+							</span>
+						</div>
 					)}
-				</CardContent>
-			</ScrollArea>
-		</Card>
+					<div className="flex gap-2">
+						<Select value={selectedPeriod} onValueChange={setSelectedPeriod}>
+							<SelectTrigger className="min-w-[120px]">
+								<SelectValue placeholder="1 Month" />
+							</SelectTrigger>
+							<SelectContent>
+								{periodOptions.map(({ value, label }) => (
+									<SelectItem key={value} value={value}>
+										{label}
+									</SelectItem>
+								))}
+							</SelectContent>
+						</Select>
+						<Popover>
+							<PopoverTrigger asChild>
+								<Button variant="outline">Select Indicators</Button>
+							</PopoverTrigger>
+							<PopoverContent className="w-56">
+								{indicators.map(({ key, label }) => (
+									<div key={key} className="flex items-center space-x-2">
+										<Checkbox
+											id={key}
+											checked={enabledIndicators[key]}
+											onCheckedChange={() => toggleIndicator(key)}
+										/>
+										<label htmlFor={key}>{label}</label>
+									</div>
+								))}
+							</PopoverContent>
+						</Popover>
+					</div>
+				</CardHeader>
+				<ScrollArea className="h-[300px] mt-2">
+					<CardContent>
+						{notifications.length === 0 ? (
+							<p>No new signals</p>
+						) : (
+							<ul>
+								{notifications.map((notification) => (
+									<li
+										key={notification.id}
+										className={`mb-2 p-2 rounded ${
+											notification.isNew ? "bg-green-100 border" : "bg-gray-100"
+										}`}
+									>
+										<span className="font-bold">{notification.stock}</span>{" "}
+										{notification.indicator} gives a{" "}
+										<span
+											className={
+												notification.signal === "buy"
+													? "text-green-500"
+													: "text-red-500"
+											}
+										>
+											{notification.signal}
+										</span>{" "}
+										signal at ${notification.price.toFixed(2)}
+										<span className="text-sm text-gray-500 ml-2">
+											{format(notification.timestamp, "yyyy-MM-dd HH:mm")}
+										</span>
+									</li>
+								))}
+							</ul>
+						)}
+					</CardContent>
+				</ScrollArea>
+			</Card>
+		</>
 	);
 };
 
