@@ -68,7 +68,7 @@ const validKeys = ["RMI", "RSI"]; // Define valid keys for initial state
 const NotificationBoard: React.FC = () => {
 	const [notifications, setNotifications] = useState<Notification[]>([]);
 	const [lastUpdateTime, setLastUpdateTime] = useState<Date | null>(new Date());
-	const [selectedPeriod, setSelectedPeriod] = useState<string>("1m");
+	const [selectedPeriod, setSelectedPeriod] = useState<string>("1w");
 	const [enabledIndicators, setEnabledIndicators] = useState<{
 		[key: string]: boolean;
 	}>(
@@ -128,7 +128,7 @@ const NotificationBoard: React.FC = () => {
 										signal: "buy",
 										price: latestBuyPrice,
 										timestamp: buyTimestamp,
-										isNew: buyTimestamp > lastUpdateTime,
+										isNew: buyTimestamp > lastUpdateTime!,
 									});
 								}
 							} else if (latestSellPrice !== null && sellPoints.length > 0) {
@@ -145,7 +145,7 @@ const NotificationBoard: React.FC = () => {
 										signal: "sell",
 										price: latestSellPrice,
 										timestamp: sellTimestamp,
-										isNew: sellTimestamp > lastUpdateTime,
+										isNew: sellTimestamp > lastUpdateTime!,
 									});
 								}
 							}
@@ -165,8 +165,12 @@ const NotificationBoard: React.FC = () => {
 			}
 		};
 
-		checkForSignals();
-		const intervalId = setInterval(checkForSignals, 60000);
+		// Check for signals every 60 seconds
+		checkForSignals(); // Initial call to populate the notifications
+		const intervalId = setInterval(() => {
+			checkForSignals();
+			setLastUpdateTime(new Date()); // Update last update time every 60 seconds
+		}, 60000);
 
 		return () => clearInterval(intervalId);
 	}, [selectedPeriod, enabledIndicators, lastUpdateTime]);
@@ -175,6 +179,14 @@ const NotificationBoard: React.FC = () => {
 		<Card className="mt-4">
 			<CardHeader className="flex flex-wrap justify-between items-center">
 				<CardTitle>Real-time Notifications</CardTitle>
+				{lastUpdateTime && (
+					<div className="flex items-center justify-center text-sm text-gray-500">
+						<span className="bg-green-500 h-3 w-3 rounded-full animate-pulse"></span>
+						<span className="ml-2">
+							Last updated: {format(lastUpdateTime, "yyyy-MM-dd HH:mm:ss")}
+						</span>
+					</div>
+				)}
 				<div className="flex gap-2">
 					<Select value={selectedPeriod} onValueChange={setSelectedPeriod}>
 						<SelectTrigger className="min-w-[120px]">
@@ -206,11 +218,6 @@ const NotificationBoard: React.FC = () => {
 						</PopoverContent>
 					</Popover>
 				</div>
-				{lastUpdateTime && (
-					<div className="text-sm text-gray-500">
-						Last updated: {lastUpdateTime?.toLocaleTimeString()}
-					</div>
-				)}
 			</CardHeader>
 			<ScrollArea className="h-[300px] mt-2">
 				<CardContent>
@@ -238,7 +245,7 @@ const NotificationBoard: React.FC = () => {
 									</span>{" "}
 									signal at ${notification.price.toFixed(2)}
 									<span className="text-sm text-gray-500 ml-2">
-										{notification.timestamp.toLocaleDateString()}
+										{format(notification.timestamp, "yyyy-MM-dd HH:mm:ss")}
 									</span>
 								</li>
 							))}
