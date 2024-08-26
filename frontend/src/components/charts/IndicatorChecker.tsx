@@ -82,7 +82,9 @@ export default function IndicatorChecker({ user }: StockChartProps) {
 
 			const symbols = Object.keys(availableStocks);
 
-			const response = await fetchStockData(symbols.join(","), period, false);
+			const response = await fetchStockData(symbols.join(","), period, false, [
+				"Close",
+			]);
 			const rsiResults = [];
 
 			for (let symbol of symbols) {
