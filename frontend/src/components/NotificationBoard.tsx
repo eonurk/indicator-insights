@@ -84,117 +84,108 @@ const NotificationBoard: React.FC<NotificationBoardProps> = ({ user }) => {
 		}));
 	};
 
-	useEffect(() => {
-		const checkForSignals = async () => {
-			const availableStocks = user
-				? stocks
-				: {
-						AAPL: "Apple Inc.",
-						ABNB: "Airbnb, Inc.",
-						AMZN: "Amazon.com, Inc.",
-						EBAY: "eBay Inc.",
-						GOOGL: "Alphabet Inc. (Class A)",
-						META: "Meta Platforms, Inc.",
-						NFLX: "Netflix, Inc.",
-						PLTR: "Palantir Technologies Inc.",
-						ZM: "Zoom Video Communications, Inc.",
-				  };
+	const checkForSignals = async () => {
+		const availableStocks = user
+			? stocks
+			: {
+					AAPL: "Apple Inc.",
+					ABNB: "Airbnb, Inc.",
+					AMZN: "Amazon.com, Inc.",
+					EBAY: "eBay Inc.",
+					GOOGL: "Alphabet Inc. (Class A)",
+					META: "Meta Platforms, Inc.",
+					NFLX: "Netflix, Inc.",
+					PLTR: "Palantir Technologies Inc.",
+					ZM: "Zoom Video Communications, Inc.",
+			  };
 
-			const symbols = Object.keys(availableStocks);
-			const newNotifications: Notification[] = [];
-			const currentTime = new Date();
+		const symbols = Object.keys(availableStocks);
+		const newNotifications: Notification[] = [];
+		const currentTime = new Date();
 
-			try {
-				const response = await fetchStockData(
-					symbols.join(","),
-					selectedPeriod,
-					false
-				);
+		try {
+			const response = await fetchStockData(
+				symbols.join(","),
+				selectedPeriod,
+				false,
+				["Close"]
+			);
 
-				for (let symbol of symbols) {
-					const history = response[symbol].history;
-					const dates = Object.keys(history).map((date) => new Date(date));
-					const closingPrices = dates
-						.map((date) => history[format(date, "yyyy-MM-dd HH:mm:ss")]?.Close)
-						.filter((price) => price !== undefined) as number[];
+			for (let symbol of symbols) {
+				const history = response[symbol].history;
+				const dates = Object.keys(history).map((date) => new Date(date));
+				const closingPrices = dates
+					.map((date) => history[format(date, "yyyy-MM-dd HH:mm:ss")]?.Close)
+					.filter((price) => price !== undefined) as number[];
 
-					for (const indicator of indicators) {
-						if (enabledIndicators[indicator.key]) {
-							let indicatorValues, macdLine, signalLine;
+				for (const indicator of indicators) {
+					if (enabledIndicators[indicator.key]) {
+						let indicatorValues, macdLine, signalLine;
 
-							if (indicator.key === "MACD") {
-								({ macdLine, signalLine } = indicator.calculate(closingPrices));
-							} else {
-								indicatorValues = indicator.calculate(closingPrices);
+						if (indicator.key === "MACD") {
+							({ macdLine, signalLine } = indicator.calculate(closingPrices));
+						} else {
+							indicatorValues = indicator.calculate(closingPrices);
+						}
+
+						const { buyPoints, sellPoints, latestBuyPrice, latestSellPrice } =
+							indicator.key === "MACD"
+								? indicator.calculateProfit(closingPrices, macdLine, signalLine)
+								: indicator.calculateProfit(closingPrices, indicatorValues);
+
+						const addNotification = (
+							signal: "buy" | "sell",
+							price: number,
+							timestamp: Date
+						) => {
+							newNotifications.push({
+								id: `${symbol}-${indicator.key}-${signal}-${Date.now()}`,
+								stock: symbol,
+								indicator: indicator.key,
+								signal,
+								price,
+								timestamp,
+								isNew: timestamp > (lastUpdateTime || new Date(0)),
+							});
+						};
+
+						if (latestBuyPrice !== null && buyPoints.length > 0) {
+							const latestBuyPoint = buyPoints[buyPoints.length - 1];
+							if (latestBuyPoint && typeof latestBuyPoint.x !== "undefined") {
+								addNotification("buy", latestBuyPrice, dates[latestBuyPoint.x]);
 							}
-
-							const { buyPoints, sellPoints, latestBuyPrice, latestSellPrice } =
-								indicator.key === "MACD"
-									? indicator.calculateProfit(
-											closingPrices,
-											macdLine,
-											signalLine
-									  )
-									: indicator.calculateProfit(closingPrices, indicatorValues);
-
-							const addNotification = (
-								signal: "buy" | "sell",
-								price: number,
-								timestamp: Date
-							) => {
-								newNotifications.push({
-									id: `${symbol}-${indicator.key}-${signal}-${Date.now()}`,
-									stock: symbol,
-									indicator: indicator.key,
-									signal,
-									price,
-									timestamp,
-									isNew: timestamp > (lastUpdateTime || new Date(0)),
-								});
-							};
-
-							if (latestBuyPrice !== null && buyPoints.length > 0) {
-								const latestBuyPoint = buyPoints[buyPoints.length - 1];
-								if (latestBuyPoint && typeof latestBuyPoint.x !== "undefined") {
-									addNotification(
-										"buy",
-										latestBuyPrice,
-										dates[latestBuyPoint.x]
-									);
-								}
-							} else if (latestSellPrice !== null && sellPoints.length > 0) {
-								const latestSellPoint = sellPoints[sellPoints.length - 1];
-								if (
-									latestSellPoint &&
-									typeof latestSellPoint.x !== "undefined"
-								) {
-									addNotification(
-										"sell",
-										latestSellPrice,
-										dates[latestSellPoint.x]
-									);
-								}
+						} else if (latestSellPrice !== null && sellPoints.length > 0) {
+							const latestSellPoint = sellPoints[sellPoints.length - 1];
+							if (latestSellPoint && typeof latestSellPoint.x !== "undefined") {
+								addNotification(
+									"sell",
+									latestSellPrice,
+									dates[latestSellPoint.x]
+								);
 							}
 						}
 					}
 				}
-
-				setNotifications(
-					newNotifications.sort(
-						(a, b) => b.timestamp.getTime() - a.timestamp.getTime()
-					)
-				);
-				setLastUpdateTime(currentTime);
-			} catch (error) {
-				console.error("Error fetching stock data:", error);
 			}
-		};
 
-		checkForSignals();
-		const intervalId = setInterval(checkForSignals, 60000);
+			setNotifications(
+				newNotifications.sort(
+					(a, b) => b.timestamp.getTime() - a.timestamp.getTime()
+				)
+			);
+			setLastUpdateTime(currentTime);
+		} catch (error) {
+			console.error("Error fetching stock data:", error);
+		}
+	};
 
-		return () => clearInterval(intervalId);
-	}, [selectedPeriod, enabledIndicators, lastUpdateTime, user]);
+	useEffect(() => {
+		checkForSignals(); // Fetch immediately on mount
+
+		const intervalId = setInterval(checkForSignals, 60000); // Fetch every 60 seconds
+
+		return () => clearInterval(intervalId); // Cleanup the interval on unmount
+	}, [selectedPeriod, enabledIndicators, user]);
 
 	return (
 		<Card className="mt-4">

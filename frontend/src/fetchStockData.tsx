@@ -23,13 +23,21 @@ const baseURL =
 export async function fetchStockData(
 	symbol: string,
 	period: string,
-	getAll: boolean = true
+	getAll: boolean = true,
+	index?: string[] // Optional parameter to specify the columns to retrieve
 ): Promise<StockData> {
 	try {
-		// send a request to the server and wait for its answer
-		const response = await fetch(
-			`${baseURL}/api/stock/${symbol}?period=${period}&getAll=${getAll}`
-		);
+		// Build the URL with the necessary query parameters
+		let url = `${baseURL}/api/stock/${symbol}?period=${period}&getAll=${getAll}`;
+
+		// If the index parameter is provided, add it to the query string
+		if (index && index.length > 0) {
+			const indexParam = index.join(","); // Convert array to comma-separated string
+			url += `&index=${indexParam}`;
+		}
+
+		// Send a request to the server and wait for its response
+		const response = await fetch(url);
 		const data: StockData = await response.json();
 
 		return data;
@@ -38,6 +46,7 @@ export async function fetchStockData(
 		throw new Error("Failed to fetch stock data"); // or return an empty object
 	}
 }
+
 // returns the percent change of a stock
 export function getPercentChange(closingPrices: number[]) {
 	if (closingPrices.length < 2) {

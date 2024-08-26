@@ -16,7 +16,6 @@ period_interval_map = {
     "all": ("max", "1mo")
 }
 
-
 @app.route('/api/stock/<symbols>', methods=['GET'])
 def get_stock_data(symbols):
     try:
@@ -31,6 +30,13 @@ def get_stock_data(symbols):
         # Get the 'getAll' parameter from the query string, defaulting to 'true'
         getAll = request.args.get('getAll', 'true').lower() == 'true'
 
+        # Get the 'index' parameter from the query string, defaulting to None
+        index_columns = request.args.get('index', None)
+
+        # Convert index parameter to a list if provided
+        if index_columns:
+            index_columns = index_columns.split(',')
+
         # Initialize the Tickers object with the list of symbols
         tickers = yf.Tickers(symbols.replace(',', ' '))  # yfinance Tickers expects space-separated symbols
 
@@ -41,6 +47,10 @@ def get_stock_data(symbols):
             hist = ticker.history(period=period, interval=interval)
             # Convert the DataFrame index (Timestamps) to strings
             hist.index = hist.index.strftime('%Y-%m-%d %H:%M:%S')
+
+            if index_columns:
+                # Filter to include only specified columns
+                hist = hist[index_columns]
 
             if getAll:
                 # Add full data for this symbol to the result dictionary
