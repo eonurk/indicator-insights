@@ -21,7 +21,7 @@ const PricingTable: React.FC = () => {
 		<div>
 			<Card>
 				<stripe-pricing-table
-					pricing-table-id="prctbl_1PqxbC05acc8x5qbwuTIkqVS"
+					pricing-table-id="prctbl_1PrzWV05acc8x5qb3qymRxun"
 					publishable-key="pk_live_51Pqesh05acc8x5qbvuGdHGMryklOCrziyyNFk8MtHVj7VRFDmoy67vUBP8fEEPxYDw655DWARocCpQxwL9vDDy8Z00gx4D3kTB"
 				></stripe-pricing-table>
 			</Card>
