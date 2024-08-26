@@ -235,7 +235,7 @@ function StockChart({ user }: StockChartProps) {
 			getStockInfo(symbol, period);
 		}, 60000);
 		return () => clearInterval(intervalId);
-	}, [symbol, period, selectedIndicators, indicatorPeriods]);
+	}, [symbol, period]);
 
 	return (
 		<Card>
