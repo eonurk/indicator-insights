@@ -102,11 +102,15 @@ const indicators = [
 
 interface StockChartProps {
 	user: User | null;
+	selectedStock: string;
+	selectedPeriod: string;
+	selectedIndicators: { [key: string]: boolean };
 }
 
-function StockChart({ user }: StockChartProps) {
-	const [period, setPeriod] = useState<string>("1m");
-	const [symbol, setSymbol] = useState<string>("AAPL");
+function StockChart({ user, selectedStock, selectedPeriod }: StockChartProps) {
+	const [symbol, setSymbol] = useState(selectedStock);
+	const [period, setPeriod] = useState(selectedPeriod);
+
 	const [stockInfo, setStockInfo] = useState<{
 		symbol: string;
 		period: string;
@@ -236,6 +240,11 @@ function StockChart({ user }: StockChartProps) {
 		}, 60000);
 		return () => clearInterval(intervalId);
 	}, [symbol, period]);
+
+	useEffect(() => {
+		setSymbol(selectedStock);
+		setPeriod(selectedPeriod);
+	}, [selectedStock, selectedPeriod]);
 
 	return (
 		<Card>

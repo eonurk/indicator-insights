@@ -67,9 +67,17 @@ const indicators = [
 
 interface NotificationBoardProps {
 	user: User | null;
+	onNotificationClick: (
+		stock: string,
+		period: string,
+		indicator: string
+	) => void;
 }
 
-const NotificationBoard: React.FC<NotificationBoardProps> = ({ user }) => {
+const NotificationBoard: React.FC<NotificationBoardProps> = ({
+	user,
+	onNotificationClick,
+}) => {
 	const [notifications, setNotifications] = useState<Notification[]>([]);
 	const [lastUpdateTime, setLastUpdateTime] = useState<Date | null>(new Date());
 	const [selectedPeriod, setSelectedPeriod] = useState<string>("1w");
@@ -82,6 +90,14 @@ const NotificationBoard: React.FC<NotificationBoardProps> = ({ user }) => {
 			...prev,
 			[indicator]: !prev[indicator],
 		}));
+	};
+
+	const handleNotificationClick = (notification: Notification) => {
+		onNotificationClick(
+			notification.stock,
+			selectedPeriod,
+			notification.indicator
+		);
 	};
 
 	const checkForSignals = async () => {
@@ -243,6 +259,7 @@ const NotificationBoard: React.FC<NotificationBoardProps> = ({ user }) => {
 									className={`mb-2 p-2 rounded ${
 										notification.isNew ? "bg-green-100 border" : "bg-gray-100"
 									}`}
+									onClick={() => handleNotificationClick(notification)}
 								>
 									<span className="font-bold">{notification.stock}</span>{" "}
 									{notification.indicator} gives a{" "}
