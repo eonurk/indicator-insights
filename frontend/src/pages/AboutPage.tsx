@@ -108,7 +108,7 @@ export default function AboutPage() {
 						Insights to navigate the markets.
 					</p>
 
-					<Link to="/signup">
+					<Link to="/subscribe">
 						<Button size="lg" className="bg-blue-500 w-full sm:w-auto">
 							Get Started Now
 						</Button>
