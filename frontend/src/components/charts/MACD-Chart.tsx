@@ -67,8 +67,8 @@ interface MACDChartProps {
 
 export default function MACDChart({
 	formattedData,
-	fastPeriod = 12,
-	slowPeriod = 26,
+	fastPeriod = 26,
+	slowPeriod = 12,
 	signalPeriod = 9,
 	options = {},
 }: MACDChartProps) {

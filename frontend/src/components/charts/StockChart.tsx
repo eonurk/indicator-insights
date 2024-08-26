@@ -133,14 +133,14 @@ function StockChart({ user, selectedStock, selectedPeriod }: StockChartProps) {
 		RSI: true,
 		EMA: true,
 		MACD: true,
-		Bollinger: true,
+		Bollinger: false,
 	});
 
 	const [indicatorPeriods, setIndicatorPeriods] = useState({
 		RMI: { period: 14 },
 		RSI: { period: 14 },
 		EMA: { period: 14 },
-		MACD: { fastPeriod: 12, slowPeriod: 26, signalPeriod: 9 },
+		MACD: { fastPeriod: 26, slowPeriod: 12, signalPeriod: 9 },
 		Bollinger: { period: 20, stdDev: 2 },
 	});
 
