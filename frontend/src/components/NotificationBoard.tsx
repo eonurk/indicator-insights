@@ -83,7 +83,7 @@ const NotificationBoard: React.FC<NotificationBoardProps> = ({
 	const [selectedPeriod, setSelectedPeriod] = useState<string>("1w");
 	const [enabledIndicators, setEnabledIndicators] = useState<{
 		[key: string]: boolean;
-	}>(Object.fromEntries(indicators.map((ind) => [ind.key, true])));
+	}>(Object.fromEntries(indicators.map((ind) => [ind.key, ind.key == "RMI"])));
 
 	const toggleIndicator = (indicator: string) => {
 		setEnabledIndicators((prev) => ({
