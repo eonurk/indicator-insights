@@ -373,7 +373,7 @@ function UMAPChart({ user }: UMAPChartProps) {
 	return (
 		<Card className="w-full md:w-1/2 md:mx-auto">
 			<CardHeader>
-				<CardTitle>Wholistic Stock Visualization</CardTitle>
+				<CardTitle>Holistic Stock Visualization</CardTitle>
 				<p className="text-sm text-muted-foreground">
 					This chart uses UMAP (Uniform Manifold Approximation and Projection)
 					to visualize stock similarities based on price movements.
