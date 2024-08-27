@@ -110,7 +110,7 @@ export default function IndicatorChecker({ user }: StockChartProps) {
 
 	return (
 		<>
-			<Card>
+			<Card className="w-full md:w-2/3 md:mx-auto">
 				<CardHeader>
 					<CardTitle>Backtest Indicator</CardTitle>
 					<CardDescription>
@@ -162,7 +162,7 @@ export default function IndicatorChecker({ user }: StockChartProps) {
 				</CardFooter>
 			</Card>
 			{results.length > 0 && (
-				<Card className="mt-4">
+				<Card className="mt-4 w-full md:w-2/3 md:mx-auto">
 					<CardContent className="p-2">
 						<ScrollArea className="h-[250px] mt-2">
 							<Table>

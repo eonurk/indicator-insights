@@ -371,7 +371,7 @@ function UMAPChart({ user }: UMAPChartProps) {
 	};
 
 	return (
-		<Card className="w-full md:w-1/2 md:mx-auto">
+		<Card className="w-full md:w-2/3 md:mx-auto">
 			<CardHeader>
 				<CardTitle>Holistic Stock Visualization</CardTitle>
 				<p className="text-sm text-muted-foreground">
@@ -382,7 +382,9 @@ function UMAPChart({ user }: UMAPChartProps) {
 			<CardContent className="flex flex-col items-center justify-center md:w-1/2 md:mx-auto">
 				<Accordion type="single" collapsible className="w-full mb-4">
 					<AccordionItem value="item-1">
-						<AccordionTrigger>Tips</AccordionTrigger>
+						<AccordionTrigger className="text-sm text-muted-foreground">
+							Tips
+						</AccordionTrigger>
 						<AccordionContent>
 							<ul className="list-disc space-y-1 text-sm pl-5 text-justify">
 								<li className="pl-1">

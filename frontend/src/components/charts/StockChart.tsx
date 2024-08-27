@@ -250,7 +250,7 @@ function StockChart({ user, selectedStock, selectedPeriod }: StockChartProps) {
 	}, [selectedStock, selectedPeriod]);
 
 	return (
-		<Card>
+		<Card className="w-full md:w-2/3 md:mx-auto">
 			<CardHeader className="items-center gap-2 space-y-0 border-b py-5 sm:flex-row">
 				<div className="flex-1 gap-1 text-center sm:text-left">
 					<CardTitle>{stockInfo?.symbol}</CardTitle>

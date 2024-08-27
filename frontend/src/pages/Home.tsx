@@ -89,7 +89,7 @@ export function Home({ user }: StockChartProps) {
 			</div>
 			{!user && (
 				<div className="h-[40rem] flex justify-center items-center px-4">
-					<div className="text-2xl mx-auto font-normal text-neutral-600 dark:text-neutral-400">
+					<div className="text-2xl md:w-2/3 mx-auto font-normal text-neutral-600 dark:text-neutral-400">
 						Analyze stock performance with powerful indicators to spot
 						<span className="text-green-500">
 							{" "}

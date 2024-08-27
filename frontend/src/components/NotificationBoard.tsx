@@ -204,7 +204,7 @@ const NotificationBoard: React.FC<NotificationBoardProps> = ({
 	}, [selectedPeriod, enabledIndicators, user]);
 
 	return (
-		<Card className="mt-4">
+		<Card className="mt-4 w-full md:w-2/3 md:mx-auto">
 			<CardHeader className="flex flex-wrap justify-between items-center">
 				<CardTitle>Real-time Notifications</CardTitle>
 				{lastUpdateTime && (
