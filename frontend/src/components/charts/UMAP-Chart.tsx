@@ -104,10 +104,11 @@ function UMAPChart({ user }: UMAPChartProps) {
 					{
 						label: "Stocks",
 						data: data,
-						backgroundColor: data.map(
-							(point) => point.color || "rgba(0, 122, 255, 0.6)"
-						),
-						pointRadius: 10,
+						backgroundColor: data.map((point) => {
+							const typedPoint = point as { color?: string };
+							return typedPoint.color || "rgba(0, 122, 255, 0.6)";
+						}),
+						pointRadius: user ? 6 : 10,
 					},
 				],
 			},
