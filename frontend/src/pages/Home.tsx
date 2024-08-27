@@ -126,15 +126,13 @@ export function Home({ user }: StockChartProps) {
 			</div>
 			{user && <div className="m-8"></div>}
 			{!user && (
-				<div className="h-[40rem] flex justify-center items-center px-4 my-8">
+				<div className=" flex justify-center items-center px-4 my-8">
 					<div className="text-2xl mx-auto font-normal text-neutral-600 dark:text-neutral-400">
 						Get access to more indicators and features
 						<div className="text-4xl motion-safe:animate-bounce my-4">
 							&#8964;
 						</div>
-						<Link to="/signup">
-							<PricingTable />
-						</Link>
+						<PricingTable />
 					</div>
 				</div>
 			)}
