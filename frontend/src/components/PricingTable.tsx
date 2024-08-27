@@ -28,7 +28,7 @@ const PricingTable: React.FC = () => {
 
 	return (
 		<Card className="max-w-md mx-auto">
-			<div className="p-12">
+			<div className="p-10">
 				<h2 className="text-xl font-medium mb-2 text-left">
 					Indicator Insight Pro
 				</h2>
