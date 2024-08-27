@@ -49,8 +49,21 @@ export function Home({ user }: StockChartProps) {
 	return (
 		<>
 			<SiteHeader />
+			{!user && (
+				<div onClick={() => handleScroll("umap-board")}>
+					<div className="h-[40rem] flex justify-center items-center px-4">
+						<div className="text-2xl mx-auto font-normal text-neutral-600 dark:text-neutral-400">
+							Introducing Wholistic Stock Vizualization
+							<div className="text-4xl motion-safe:animate-bounce">&#8964;</div>
+						</div>
+					</div>
+				</div>
+			)}
 
-			<UMAPChart user={user} />
+			<div id="umap-board">
+				<UMAPChart user={user} />
+			</div>
+
 			{!user && (
 				<div onClick={() => handleScroll("notification-board")}>
 					<div className="h-[40rem] flex justify-center items-center px-4">
@@ -77,9 +90,13 @@ export function Home({ user }: StockChartProps) {
 			{!user && (
 				<div className="h-[40rem] flex justify-center items-center px-4">
 					<div className="text-2xl mx-auto font-normal text-neutral-600 dark:text-neutral-400">
-						Would you make <span className="text-green-500">profit</span> or{" "}
-						<span className="text-red-500">loss</span> in the stock market using
-						indicators?
+						Analyze stock performance with powerful indicators to spot
+						<span className="text-green-500">
+							{" "}
+							profitable opportunities
+						</span>{" "}
+						and
+						<span className="text-red-500"> potential risks</span>
 						<div className="text-4xl motion-safe:animate-bounce">&#8964;</div>
 					</div>
 				</div>
@@ -97,7 +114,7 @@ export function Home({ user }: StockChartProps) {
 			{!user && (
 				<div className="h-[40rem] flex justify-center items-center px-4">
 					<div className="text-2xl mx-auto font-normal text-neutral-600 dark:text-neutral-400">
-						Can you check an indicator for all stocks?
+						Check an indicator for all stocks
 						<div className="text-4xl motion-safe:animate-bounce">&#8964;</div>
 					</div>
 				</div>
@@ -111,7 +128,7 @@ export function Home({ user }: StockChartProps) {
 			{!user && (
 				<div className="h-[40rem] flex justify-center items-center px-4">
 					<div className="text-2xl mx-auto font-normal text-neutral-600 dark:text-neutral-400">
-						To check all NASDAQ stocks with more indicators
+						Get access to more indicators and features
 						<div className="text-4xl motion-safe:animate-bounce">&#8964;</div>
 						<Link to="/signup">
 							<PricingTable />
