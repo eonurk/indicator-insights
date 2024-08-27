@@ -48,7 +48,6 @@ const PricingTable: React.FC = () => {
 					<span className="text-4xl font-bold">€9.99</span>
 					<span className="text-sm text-gray-500 ml-2 flex flex-col items-start leading-tight">
 						<span>per</span>
-						<br />
 						<span>month</span>
 					</span>
 				</div>
