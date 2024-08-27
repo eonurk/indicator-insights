@@ -32,6 +32,8 @@ import {
 	Legend,
 	TimeSeriesScale,
 } from "chart.js";
+import { ChartOptions, ChartData } from "chart.js";
+
 import RMIChart from "@/components/charts/RMIChart";
 import RSIChart from "@/components/charts/RSIChart";
 import { stocks } from "@/utils/stocks";
@@ -124,8 +126,8 @@ function StockChart({ user, selectedStock, selectedPeriod }: StockChartProps) {
 		priceChangePercentage: string;
 		lineColor: string;
 		cardTitleColor: string;
-		chartOptions: any;
-		formattedData: any;
+		chartOptions: ChartOptions;
+		formattedData: ChartData;
 	} | null>(null);
 
 	const [selectedIndicators, setSelectedIndicators] = useState({
@@ -149,7 +151,8 @@ function StockChart({ user, selectedStock, selectedPeriod }: StockChartProps) {
 	const toggleIndicator = (key: string) => {
 		setSelectedIndicators((prev) => ({
 			...prev,
-			[key]: !prev[key],
+			[key as keyof typeof selectedIndicators]:
+				!prev[key as keyof typeof selectedIndicators],
 		}));
 	};
 
@@ -223,7 +226,7 @@ function StockChart({ user, selectedStock, selectedPeriod }: StockChartProps) {
 						},
 					],
 				},
-				chartOptions: customChartOptions,
+				chartOptions: customChartOptions as ChartOptions,
 			});
 		} catch (error) {
 			console.error("Error fetching stock info:", error);
@@ -308,15 +311,21 @@ function StockChart({ user, selectedStock, selectedPeriod }: StockChartProps) {
 							<div key={key} className="flex items-center">
 								<Checkbox
 									id={key}
-									checked={selectedIndicators[key]}
+									checked={
+										selectedIndicators[key as keyof typeof selectedIndicators]
+									}
 									onCheckedChange={() => toggleIndicator(key)}
 									className="hidden"
 								/>
 								<div
 									onClick={() => toggleIndicator(key)}
-									className={checkboxClasses(selectedIndicators[key])}
+									className={checkboxClasses(
+										selectedIndicators[key as keyof typeof selectedIndicators]
+									)}
 								>
-									{selectedIndicators[key] && <Check className="w-4 h-4" />}
+									{selectedIndicators[
+										key as keyof typeof selectedIndicators
+									] && <Check className="w-4 h-4" />}
 									<span className="ml-2 text-sm font-medium">{key}</span>
 								</div>
 							</div>
@@ -330,29 +339,28 @@ function StockChart({ user, selectedStock, selectedPeriod }: StockChartProps) {
 				{stockInfo && (
 					<>
 						<Line
-							data={stockInfo.formattedData}
-							options={stockInfo.chartOptions}
+							data={stockInfo.formattedData as ChartData<"line">}
+							options={stockInfo.chartOptions as ChartOptions<"line">}
 						/>
 						<div className="flex justify-between items-center">
 							<div className="flex gap-2"></div>
 						</div>
 
 						{Object.keys(selectedIndicators).map((key) =>
-							selectedIndicators[key] ? (
+							selectedIndicators[key as keyof typeof selectedIndicators] ? (
 								<div key={key} className="mt-4">
 									{indicators.map(
-										({
-											key: indicatorKey,
-											component: IndicatorComponent,
-											periodKey,
-											periodKeys,
-										}) =>
+										({ key: indicatorKey, component: IndicatorComponent }) =>
 											indicatorKey === key ? (
 												<>
 													<IndicatorComponent
 														key={indicatorKey}
-														formattedData={stockInfo.formattedData}
-														{...indicatorPeriods[key]}
+														formattedData={
+															stockInfo.formattedData as ChartData<"line">
+														}
+														{...indicatorPeriods[
+															key as keyof typeof indicatorPeriods
+														]}
 														options={stockInfo.chartOptions}
 													/>
 													<Button
@@ -377,7 +385,9 @@ function StockChart({ user, selectedStock, selectedPeriod }: StockChartProps) {
 			{editingIndicator && (
 				<IndicatorSettings
 					indicator={editingIndicator}
-					periods={indicatorPeriods[editingIndicator]}
+					periods={
+						indicatorPeriods[editingIndicator as keyof typeof indicatorPeriods]
+					}
 					onClose={() => setEditingIndicator(null)}
 					onSave={(newPeriods) => {
 						setIndicatorPeriods((prev) => ({
@@ -394,9 +404,9 @@ function StockChart({ user, selectedStock, selectedPeriod }: StockChartProps) {
 
 interface IndicatorSettingsProps {
 	indicator: string;
-	periods: any;
+	periods: { [key: string]: number };
 	onClose: () => void;
-	onSave: (newPeriods: any) => void;
+	onSave: (newPeriods: { [key: string]: number }) => void;
 }
 
 function IndicatorSettings({
@@ -408,7 +418,7 @@ function IndicatorSettings({
 	const [newPeriods, setNewPeriods] = useState(periods);
 
 	const handleInputChange = (key: string, value: number) => {
-		setNewPeriods((prev: any) => ({
+		setNewPeriods((prev: { [key: string]: number }) => ({
 			...prev,
 			[key]: value,
 		}));
@@ -421,7 +431,7 @@ function IndicatorSettings({
 					<DialogTitle>{indicator} Settings</DialogTitle>
 				</DialogHeader>
 				<div className="py-4">
-					{Object.entries(periods).map(([key, value]) => (
+					{Object.entries(periods).map(([key]) => (
 						<div key={key} className="mb-4">
 							<label
 								htmlFor={key}
