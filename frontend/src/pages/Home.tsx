@@ -53,7 +53,7 @@ export function Home({ user }: StockChartProps) {
 				<div onClick={() => handleScroll("umap-board")}>
 					<div className="h-[40rem] flex justify-center items-center px-4">
 						<div className="text-2xl mx-auto font-normal text-neutral-600 dark:text-neutral-400">
-							Introducing Wholistic Stock Vizualization
+							Introducing Holistic Stock Vizualization
 							<div className="text-4xl motion-safe:animate-bounce">&#8964;</div>
 						</div>
 					</div>
