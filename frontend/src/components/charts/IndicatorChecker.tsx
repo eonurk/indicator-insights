@@ -148,9 +148,8 @@ export default function IndicatorChecker({ user }: StockChartProps) {
 					</form>
 				</CardContent>
 				<CardFooter className="flex justify-between">
-					<Button variant="outline">Cancel</Button>
 					<Button
-						className="bg-blue-600 w-24"
+						className="w-full flex-1"
 						onClick={handleStart}
 						disabled={buttonDisable}
 					>
