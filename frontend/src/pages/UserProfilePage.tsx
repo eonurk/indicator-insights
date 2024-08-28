@@ -103,7 +103,7 @@ const UserProfile: React.FC = () => {
 	return (
 		<>
 			<SiteHeader />
-			<div className="dashboard-container p-8 min-h-screen">
+			<div className="dashboard-container min-h-screen">
 				<h1 className="text-3xl font-bold mb-8 text-center">User Dashboard</h1>
 				<Card className="max-w-md mx-auto">
 					<div className="p-8">
