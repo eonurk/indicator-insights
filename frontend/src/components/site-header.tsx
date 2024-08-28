@@ -4,6 +4,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { MainNav } from "@/components/nav-main";
 import { MobileNav } from "@/components/nav-mobile";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 export function SiteHeader() {
 	const [user, setUser] = useState<User | null>(null);
@@ -33,7 +34,7 @@ export function SiteHeader() {
 				<MainNav />
 				<MobileNav />
 
-				<div className="flex flex-1 space-x-2 justify-end md:justify-end">
+				<div className="flex flex-1 space-x-2 justify-end md:justify-end items-center">
 					{/* Conditionally render buttons based on user authentication state */}
 					{!user ? (
 						<>
@@ -45,9 +46,19 @@ export function SiteHeader() {
 							</Link>
 						</>
 					) : (
-						<Button variant="outline" onClick={handleLogout}>
-							Logout
-						</Button>
+						<>
+							<Link to="/profile">
+								<Avatar className="h-8 w-8">
+									<AvatarImage src={user.photoURL || undefined} alt="Profile" />
+									<AvatarFallback>
+										{user.email?.charAt(0).toUpperCase()}
+									</AvatarFallback>
+								</Avatar>
+							</Link>
+							<Button variant="outline" onClick={handleLogout}>
+								Logout
+							</Button>
+						</>
 					)}
 				</div>
 			</div>
