@@ -48,93 +48,107 @@ export function Home({ user }: StockChartProps) {
 	return (
 		<>
 			<SiteHeader />
-			{!user && (
-				<div onClick={() => handleScroll("umap-board")}>
-					<div className="h-[40rem] flex justify-center items-center px-4">
-						<div className="text-2xl mx-auto font-normal text-neutral-600 dark:text-neutral-400">
-							Introducing Holistic Stock Vizualization
-							<div className="text-4xl motion-safe:animate-bounce">&#8964;</div>
-						</div>
-					</div>
-				</div>
-			)}
 
-			<div id="umap-board">
-				<UMAPChart user={user} />
-			</div>
-
-			{!user && (
-				<div onClick={() => handleScroll("notification-board")}>
-					<div className="h-[40rem] flex justify-center items-center px-4">
-						<div className="text-2xl mx-auto font-normal text-neutral-600 dark:text-neutral-400">
+			<div className="container mx-auto px-4">
+				{!user && (
+					<section
+						className="py-20 text-center"
+						onClick={() => handleScroll("notification-board")}
+					>
+						<h2 className="text-2xl font-normal text-neutral-600 dark:text-neutral-400">
 							Get real-time insights with your favorite indicator
-							<div className="text-4xl motion-safe:animate-bounce">&#8964;</div>
+						</h2>
+						<div className="text-4xl motion-safe:animate-bounce mt-4">
+							&#8964;
 						</div>
-					</div>
-				</div>
-			)}
+					</section>
+				)}
 
-			{user && <div className="m-8"></div>}
+				<section
+					id="notification-board"
+					className="py-20"
+					onClick={() => handleScroll("stock-chart")}
+				>
+					<NotificationBoard
+						user={user}
+						onNotificationClick={handleNotificationClick}
+					/>
+				</section>
 
-			<div
-				id="notification-board"
-				className="h-[40rem]"
-				onClick={() => handleScroll("stock-chart")}
-			>
-				<NotificationBoard
-					user={user}
-					onNotificationClick={handleNotificationClick}
-				/>{" "}
-			</div>
-			{!user && (
-				<div className="h-[40rem] flex justify-center items-center px-4">
-					<div className="text-2xl md:w-2/3 mx-auto font-normal text-neutral-600 dark:text-neutral-400">
-						Analyze stock performance with powerful indicators to spot
-						<span className="text-green-500">
-							{" "}
-							profitable opportunities
-						</span>{" "}
-						and
-						<span className="text-red-500"> potential risks</span>
-						<div className="text-4xl motion-safe:animate-bounce">&#8964;</div>
-					</div>
-				</div>
-			)}
-			{user && <div className="m-8"></div>}
-			<div id="stock-chart">
-				<StockChart
-					user={user}
-					selectedStock={selectedStock}
-					selectedPeriod={selectedPeriod}
-					selectedIndicators={selectedIndicators}
-				/>
-			</div>
+				{!user && (
+					<section className="py-20 text-center">
+						<h2 className="text-2xl md:w-2/3 mx-auto font-normal text-neutral-600 dark:text-neutral-400">
+							Analyze stock performance with powerful indicators to spot
+							<span className="text-green-500">
+								{" "}
+								profitable opportunities
+							</span>{" "}
+							and
+							<span className="text-red-500"> potential risks</span>
+						</h2>
+						<div className="text-4xl motion-safe:animate-bounce mt-4">
+							&#8964;
+						</div>
+					</section>
+				)}
 
-			{!user && (
-				<div className="h-[40rem] flex justify-center items-center px-4">
-					<div className="text-2xl mx-auto font-normal text-neutral-600 dark:text-neutral-400">
-						Check an indicator for all stocks
-						<div className="text-4xl motion-safe:animate-bounce">&#8964;</div>
-					</div>
-				</div>
-			)}
+				<section id="stock-chart" className="py-20">
+					<StockChart
+						user={user}
+						selectedStock={selectedStock}
+						selectedPeriod={selectedPeriod}
+						selectedIndicators={selectedIndicators}
+					/>
+				</section>
 
-			{user && <div className="m-8"></div>}
-			<div className="h-[40rem]">
-				<IndicatorChecker user={user} />
-			</div>
-			{user && <div className="m-8"></div>}
-			{!user && (
-				<div className=" flex justify-center items-center px-4 my-8">
-					<div className="text-2xl mx-auto font-normal text-neutral-600 dark:text-neutral-400">
-						Get access to more indicators and features
-						<div className="text-4xl motion-safe:animate-bounce my-4">
+				{!user && (
+					<section className="py-20 text-center">
+						<h2 className="text-2xl font-normal text-neutral-600 dark:text-neutral-400">
+							Check an indicator for all stocks
+						</h2>
+						<div className="text-4xl motion-safe:animate-bounce mt-4">
+							&#8964;
+						</div>
+					</section>
+				)}
+
+				<section className="py-20">
+					<IndicatorChecker user={user} />
+				</section>
+
+				{!user && (
+					<section
+						className="py-20 text-center"
+						onClick={() => handleScroll("umap-board")}
+					>
+						<h2 className="text-2xl font-normal text-neutral-600 dark:text-neutral-400">
+							Visualize the entire market at a glance <br />
+							<span className="text-blue-500 bg-blue-100 dark:bg-blue-900 px-2 py-1 rounded-full text-xs font-semibold inline-block align-middle mt-2">
+								NEW
+							</span>
+						</h2>
+						<div className="text-4xl motion-safe:animate-bounce mt-4">
+							&#8964;
+						</div>
+					</section>
+				)}
+
+				<section id="umap-board" className="py-20">
+					<UMAPChart user={user} />
+				</section>
+
+				{!user && (
+					<section className="py-20 text-center">
+						<h2 className="text-2xl font-normal text-neutral-600 dark:text-neutral-400 mb-4">
+							Get access to more indicators and features
+						</h2>
+						<div className="text-4xl motion-safe:animate-bounce mb-8">
 							&#8964;
 						</div>
 						<PricingTable />
-					</div>
-				</div>
-			)}
+					</section>
+				)}
+			</div>
 
 			<SiteFooter />
 		</>

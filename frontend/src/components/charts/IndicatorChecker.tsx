@@ -149,14 +149,26 @@ export default function IndicatorChecker({ user }: StockChartProps) {
 				</CardContent>
 				<CardFooter className="flex justify-between">
 					<Button
-						className="w-full flex-1"
+						className={`
+							w-full flex-1 relative overflow-hidden
+							transition-all duration-300 ease-in-out
+							bg-gradient-to-r from-gray-700 via-gray-800 to-gray-700
+							${
+								!user && !buttonDisable
+									? "bg-[length:200%_100%] animate-[gradient_3s_ease-in-out_infinite]"
+									: ""
+							}
+							${buttonDisable ? "opacity-50" : "hover:shadow-lg hover:brightness-110"}
+						`}
 						onClick={handleStart}
 						disabled={buttonDisable}
 					>
 						{buttonDisable && (
 							<ReloadIcon className="mr-2 h-4 w-4 animate-spin" />
 						)}
-						Start
+						<span className={!user && !buttonDisable ? "animate-pulse" : ""}>
+							Start
+						</span>
 					</Button>
 				</CardFooter>
 			</Card>
