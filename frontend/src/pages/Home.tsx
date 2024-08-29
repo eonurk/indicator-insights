@@ -199,7 +199,7 @@ export function Home({ user }: StockChartProps) {
 									<AccordionTrigger className="text-left">
 										What indicators are available?
 									</AccordionTrigger>
-									<AccordionContent className="text-left pl-4">
+									<AccordionContent className="text-left">
 										We offer a range of popular indicators including RMI, RSI,
 										EMA, MACD, and Bollinger Bands. We will add new indicators
 										regularly.
@@ -209,7 +209,7 @@ export function Home({ user }: StockChartProps) {
 									<AccordionTrigger className="text-left">
 										How often is the data updated?
 									</AccordionTrigger>
-									<AccordionContent className="text-left pl-4">
+									<AccordionContent className="text-left">
 										Our data is updated in real-time during market hours,
 										ensuring you always have the latest information for your
 										analysis.
@@ -219,7 +219,7 @@ export function Home({ user }: StockChartProps) {
 									<AccordionTrigger className="text-left">
 										Can I use this for any stock market?
 									</AccordionTrigger>
-									<AccordionContent className="text-left pl-4">
+									<AccordionContent className="text-left">
 										Currently, we support major US stock exchanges. We're
 										working on expanding our coverage to include international
 										markets in the future.
@@ -229,7 +229,7 @@ export function Home({ user }: StockChartProps) {
 									<AccordionTrigger className="text-left">
 										What's the difference between free and premium plans?
 									</AccordionTrigger>
-									<AccordionContent className="text-left pl-4">
+									<AccordionContent className="text-left">
 										Premium plans offer access to more indicators, longer
 										historical data, custom alerts, and priority customer
 										support. Check our pricing table for a detailed comparison.
