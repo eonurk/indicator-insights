@@ -9,44 +9,76 @@ export default function AboutPage() {
 	return (
 		<>
 			<SiteHeader />
-			<div className="container mx-auto px-4 py-8 space-y-10 md:space-y-12">
-				<section className="text-center space-y-4">
-					<h1 className="text-2xl md:text-2xl font-bold dark:text-neutral-400">
+			<div className="container mx-auto px-4 py-8 space-y-12 md:space-y-16">
+				<section className="space-y-6 max-w-3xl mx-auto">
+					<h1 className="text-3xl md:text-4xl font-bold text-primary">
 						About Indicator Insights
 					</h1>
-					<p className="text-base text-neutral-600 dark:text-neutral-400 text-justify max-w-2xl mx-auto">
-						Indicator Insights began as a passion project, founded by Onur in
-						his apartment. Like many who venture into the stock market, Onur
-						initially faced significant losses. However, his curiosity led him
-						to finance forums, where he discovered the power of indicators—tools
-						designed to assist in making informed decisions about buying and
-						selling stocks.
-					</p>
-					<p className="text-base text-neutral-600 dark:text-neutral-400 text-justify max-w-2xl mx-auto">
-						Motivated by the potential of these indicators, Onur quickly
-						realized their ability to outperform random stock market strategies,
-						which often rely heavily on the opinions of others. With a clear
-						goal in mind, he embarked on a journey to answer a simple yet
-						profound question:
-					</p>
-					<p className="text-base text-neutral-600 dark:text-neutral-400 text-justify max-w-2xl mx-auto">
-						<blockquote className="my-4 italic">
-							"How much profit can I generate over a given period using these
-							indicators?"
+					<div className="space-y-4 text-base text-neutral-600 dark:text-neutral-400">
+						<p className="text-justify">
+							Indicator Insights was born from a shared experience many
+							investors face: the rollercoaster of early market ventures. Our
+							founder, like countless others, initially encountered significant
+							losses when stepping into the world of stock trading. It was a
+							humbling experience that sparked a relentless curiosity and drive
+							to understand the market's underlying mechanics.
+						</p>
+						<p className="text-justify">
+							This journey led to countless hours spent in finance forums,
+							poring over market analyses, and diving deep into the world of
+							technical indicators. It was here that a revelation occurred:
+							these indicators, often overlooked by casual traders, held the
+							potential to transform gut feelings into data-driven decisions.
+						</p>
+						<p className="text-justify">
+							As the power of these tools became apparent, so did a stark
+							realization: many trading strategies relied heavily on following
+							others' opinions or chasing market trends, often leading to
+							disappointing results. This insight fueled a burning question that
+							would become the cornerstone of our mission:
+						</p>
+						<blockquote className="my-4 pl-4 border-l-4 border-primary italic">
+							"How can we harness the power of indicators to consistently
+							generate profit over time, regardless of market conditions?"
 						</blockquote>
-						Recognizing a gap in existing analytical tools—especially those
-						capable of bulk analysis—Onur, driven by his analytical mindset and
-						despite having no prior experience in web development, decided to
-						turn this hobby into a mission, leading to the creation of Indicator
-						Insights.
-					</p>
+						<p className="text-justify">
+							This question wasn't just about personal gain; it represented a
+							desire to empower every investor with the tools and knowledge to
+							make informed decisions. We recognized a significant gap in the
+							market: while individual indicators were widely available, there
+							was a lack of comprehensive tools that could perform bulk analysis
+							across multiple stocks and timeframes.
+						</p>
+						<p className="text-justify">
+							Driven by an analytical mindset and a passion for problem-solving,
+							our team embarked on a challenging journey. Despite having limited
+							experience in web development, we were determined to turn this
+							vision into reality. Countless late nights, debugging sessions,
+							and iterations later, Indicator Insights began to take shape.
+						</p>
+						<p className="text-justify">
+							What started as a personal project to navigate the complexities of
+							the stock market has evolved into a powerful platform designed to
+							democratize advanced financial analysis. Our goal is to level the
+							playing field, giving individual investors access to the same
+							caliber of tools and insights traditionally reserved for large
+							financial institutions.
+						</p>
+						<p className="text-justify">
+							Today, Indicator Insights stands as a testament to the power of
+							curiosity, perseverance, and the belief that data-driven decisions
+							can transform the way we approach investing. We're more than just
+							a tool; we're a community of like-minded individuals who believe
+							in the power of informed decision-making in the financial markets.
+						</p>
+					</div>
 				</section>
 
-				<section className="space-y-4">
-					<h1 className="text-2xl md:text-2xl font-bold dark:text-neutral-400">
+				<section className="space-y-6 max-w-3xl mx-auto">
+					<h2 className="text-2xl md:text-3xl font-bold text-primary">
 						Our Mission
-					</h1>
-					<p className="text-base text-neutral-600 dark:text-neutral-400 text-justify max-w-2xl mx-auto">
+					</h2>
+					<p className="text-base text-neutral-600 dark:text-neutral-400 text-justify">
 						Our mission is to revolutionize financial decision-making by
 						providing cutting-edge analytics and real-time insights. We empower
 						our clients to navigate complex markets with confidence and
@@ -56,60 +88,70 @@ export default function AboutPage() {
 				</section>
 
 				<section className="space-y-6">
-					<h2 className="text-2xl md:text-2xl font-bold dark:text-neutral-400">
+					<h2 className="text-2xl md:text-3xl font-bold text-primary max-w-3xl mx-auto">
 						Key Features
 					</h2>
 					<div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
 						<FeatureCard
-							icon={
-								<BarChart3Icon className="h-5 w-5 md:h-6 md:w-6 text-primary" />
-							}
+							icon={<BarChart3Icon className="h-6 w-6 text-primary" />}
 							title="Advanced Analytics"
 							description="Discover hidden patterns and trends in financial data with our advanced algorithms."
 						/>
 						<FeatureCard
-							icon={
-								<TrendingUpIcon className="h-5 w-5 md:h-6 md:w-6 text-primary" />
-							}
+							icon={<TrendingUpIcon className="h-6 w-6 text-primary" />}
 							title="Real-time Insights"
 							description="Stay ahead with real-time data processing and instant notifications on market shifts."
 						/>
 						<FeatureCard
-							icon={<ZapIcon className="h-5 w-5 md:h-6 md:w-6 text-primary" />}
+							icon={<ZapIcon className="h-6 w-6 text-primary" />}
 							title="Customizable Dashboards"
 							description="Tailor your analytics experience with our flexible and intuitive dashboard tools."
 						/>
 					</div>
 				</section>
 
-				<section className="space-y-6">
-					<h2 className="text-2xl md:text-2xl font-bold dark:text-neutral-400">
+				<section className="space-y-6 max-w-3xl mx-auto">
+					<h2 className="text-2xl md:text-3xl font-bold text-primary">
 						Our Journey
 					</h2>
-					<div className="space-y-6 md:space-y-8">
+					<div className="relative border-l border-gray-200 dark:border-gray-700 pl-4">
 						<TimelineItem
-							year="2023"
-							event="The idea of Indicator Insights is conceived."
+							date="May 2024"
+							title="Inception"
+							description="The idea of Indicator Insights is conceived during a market analysis session."
 						/>
-
 						<TimelineItem
-							year="2024"
-							event="Indicator Insights officially launches, transforming a personal challenge into a powerful financial tool."
+							date="June 2024"
+							title="Development Begins"
+							description="Work starts on the core analytics engine and user interface."
+						/>
+						<TimelineItem
+							date="July 2024"
+							title="Beta Testing"
+							description="Early access version released to a small group of testers."
+						/>
+						<TimelineItem
+							date="August 2024"
+							title="Official Launch"
+							description="Indicator Insights goes live, offering powerful insights to investors."
 						/>
 					</div>
 				</section>
 
-				<section className="text-center space-y-6">
-					<h2 className="text-2xl md:text-2xl font-bold dark:text-neutral-400">
+				<section className="space-y-6 max-w-3xl mx-auto">
+					<h2 className="text-2xl md:text-3xl font-bold text-primary">
 						Ready to Gain Market Insights?
 					</h2>
-					<p className="text-base md:text-lg text-muted-foreground max-w-2xl mx-auto">
+					<p className="text-base md:text-lg text-muted-foreground">
 						Join our growing community of data-driven investors using Indicator
 						Insights to navigate the markets.
 					</p>
 
 					<Link to="/subscribe">
-						<Button size="lg" className="bg-blue-500 w-full sm:w-auto">
+						<Button
+							size="lg"
+							className="bg-primary w-full sm:w-auto mt-4 bg-blue-600"
+						>
 							Get Started Now
 						</Button>
 					</Link>
@@ -138,11 +180,29 @@ function FeatureCard({ icon, title, description }) {
 	);
 }
 
-function TimelineItem({ year, event }) {
+function TimelineItem({ date, title, description }) {
 	return (
-		<div className="text-neutral-600 dark:text-neutral-400 text-center max-w-2xl mx-auto">
-			<p className="text-xl font-bold">{year}</p>
-			<p className="text-base">{event}</p>
+		<div className="mb-10 ml-6">
+			<span className="absolute flex items-center justify-center w-6 h-6 bg-blue-100 rounded-full -left-3 ring-8 ring-white dark:ring-gray-900 dark:bg-blue-900">
+				<svg
+					className="w-2.5 h-2.5 text-blue-800 dark:text-blue-300"
+					aria-hidden="true"
+					xmlns="http://www.w3.org/2000/svg"
+					fill="currentColor"
+					viewBox="0 0 20 20"
+				>
+					<path d="M20 4a2 2 0 0 0-2-2h-2V1a1 1 0 0 0-2 0v1h-3V1a1 1 0 0 0-2 0v1H6V1a1 1 0 0 0-2 0v1H2a2 2 0 0 0-2 2v2h20V4ZM0 18a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8H0v10Zm5-8h10a1 1 0 0 1 0 2H5a1 1 0 0 1 0-2Z" />
+				</svg>
+			</span>
+			<h3 className="flex items-center mb-1 text-lg font-semibold text-gray-900 dark:text-white">
+				{title}
+			</h3>
+			<time className="block mb-2 text-sm font-normal leading-none text-gray-400 dark:text-gray-500">
+				{date}
+			</time>
+			<p className="mb-4 text-base font-normal text-gray-500 dark:text-gray-400">
+				{description}
+			</p>
 		</div>
 	);
 }
