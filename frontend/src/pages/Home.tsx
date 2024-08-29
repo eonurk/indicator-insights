@@ -67,6 +67,7 @@ export function Home({ user }: StockChartProps) {
 								Empower your investment decisions with real-time stock analysis,
 								advanced indicators, and market-wide visualizations.
 							</p>
+
 							<div className="flex justify-center space-x-4">
 								<Button asChild>
 									<Link to="/subscribe">Get Started</Link>
@@ -77,6 +78,20 @@ export function Home({ user }: StockChartProps) {
 								>
 									Learn More
 								</Button>
+							</div>
+							<div className="mt-4">
+								<a
+									href="https://www.producthunt.com/posts/indicator-insights?embed=true&utm_source=badge-featured&utm_medium=badge&utm_souce=badge-indicator&#0045;insights"
+									target="_blank"
+									className="flex items-center justify-center"
+								>
+									<img
+										src="https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=485019&theme=dark"
+										alt="Indicator Insights - Buy, Sell, Why? Know what you're doing. | Product Hunt"
+										width={230}
+										height={50}
+									/>
+								</a>
 							</div>
 						</div>
 					</div>
