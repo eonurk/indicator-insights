@@ -7,7 +7,7 @@ const PrivacyPolicyPage: React.FC = () => {
 	return (
 		<>
 			<SiteHeader />
-			<div className="container mx-auto px-4 py-8 md:max-w-3xl">
+			<div className="container mx-auto px-0 py-8 md:max-w-3xl">
 				<Card>
 					<CardHeader>
 						<CardTitle className="text-2xl font-bold">Privacy Policy</CardTitle>
