@@ -52,7 +52,7 @@ export function Home({ user }: StockChartProps) {
 			<div className="container mx-auto px-0">
 				{!user && (
 					<section
-						className="pt-20 text-center"
+						className="mt-[20em] text-center"
 						onClick={() => handleScroll("notification-board")}
 					>
 						<h2 className="text-2xl font-normal text-neutral-600 dark:text-neutral-400">
@@ -145,7 +145,7 @@ export function Home({ user }: StockChartProps) {
 						<div className="text-4xl motion-safe:animate-bounce mb-8">
 							&#8964;
 						</div>
-						<div className="flex pb-20">
+						<div className="flex pb-10">
 							<PricingTable />
 						</div>
 					</section>
