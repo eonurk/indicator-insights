@@ -54,15 +54,6 @@ export function MainNav() {
 				>
 					Contact
 				</Link>
-				<Link
-					to="/faq"
-					className={cn(
-						"transition-colors hover:text-foreground/80",
-						pathname === "/faq" ? "text-foreground" : "text-foreground/60"
-					)}
-				>
-					FAQ
-				</Link>
 			</nav>
 		</div>
 	);

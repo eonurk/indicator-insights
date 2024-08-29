@@ -38,6 +38,13 @@ export function SiteFooter() {
 							>
 								Contact
 							</Link>
+
+							<Link
+								to="/faq"
+								className="text-sm text-muted-foreground hover:text-foreground"
+							>
+								FAQ
+							</Link>
 							<Link
 								to="/privacy"
 								className="text-sm text-muted-foreground hover:text-foreground"
