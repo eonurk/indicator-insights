@@ -1,5 +1,6 @@
 import Login from "@/components/Login";
 import { SiteHeader } from "@/components/site-header";
+import { SiteFooter } from "@/components/Footer";
 
 export function LoginPage() {
 	return (
@@ -10,6 +11,7 @@ export function LoginPage() {
 					<Login />
 				</div>
 			</div>
+			<SiteFooter />
 		</>
 	);
 }

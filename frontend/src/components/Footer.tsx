@@ -2,6 +2,7 @@
 
 import { siteConfig } from "@/config/site";
 import { Separator } from "@/components/ui/separator";
+import { Link } from "react-router-dom";
 
 export function SiteFooter() {
 	return (
@@ -20,11 +21,37 @@ export function SiteFooter() {
 				</div>
 
 				<div className="container flex flex-col items-center justify-between gap-4 md:h-24 md:flex-row">
-					<p className="text-balance text-center text-sm leading-loose text-muted-foreground md:text-left">
-						© 2024 Indicator Insights. All rights reserved.
-					</p>
-
-					<p></p>
+					<div className="flex flex-col items-center md:items-start mt-1">
+						<p className="text-balance text-center text-sm leading-loose text-muted-foreground md:text-left">
+							© 2024 Indicator Insights. All rights reserved.
+						</p>
+						<nav className="flex space-x-4 mt-1">
+							<Link
+								to="/about"
+								className="text-sm text-muted-foreground hover:text-foreground"
+							>
+								About
+							</Link>
+							<Link
+								to="/contact"
+								className="text-sm text-muted-foreground hover:text-foreground"
+							>
+								Contact
+							</Link>
+							<Link
+								to="/privacy"
+								className="text-sm text-muted-foreground hover:text-foreground"
+							>
+								Privacy
+							</Link>
+							<Link
+								to="/terms"
+								className="text-sm text-muted-foreground hover:text-foreground"
+							>
+								Terms
+							</Link>
+						</nav>
+					</div>
 
 					<ul className="flex space-x-4">
 						<li>

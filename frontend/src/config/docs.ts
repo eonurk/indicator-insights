@@ -20,26 +20,14 @@ export const docsConfig: DocsConfig = {
 			title: "Jobs (1)",
 			href: "/jobs",
 		},
-		// {
-		// 	title: "Blocks",
-		// 	href: "/blocks",
-		// },
-		// {
-		// 	title: "Charts",
-		// 	href: "/charts",
-		// },
-		// {
-		// 	title: "Themes",
-		// 	href: "/themes",
-		// },
-		// {
-		// 	title: "Examples",
-		// 	href: "/examples",
-		// },
-		// {
-		// 	title: "Colors",
-		// 	href: "/colors",
-		// },
+		{
+			title: "Contact",
+			href: "/contact",
+		},
+		{
+			title: "FAQ",
+			href: "/faq",
+		},
 	],
 	sidebarNav: [
 		// {
@@ -344,5 +332,7 @@ export const docsConfig: DocsConfig = {
 		// 	],
 		// },
 	],
-	chartsNav: [],
+	chartsNav: [
+		// ... existing chartsNav items ...
+	],
 };

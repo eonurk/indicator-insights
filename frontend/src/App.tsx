@@ -9,6 +9,10 @@ import AboutPage from "@/pages/AboutPage";
 import BlogPage from "@/pages/Jobs";
 import SubscribePage from "@/pages/SubscribePage";
 import UserProfile from "@/pages/UserProfilePage";
+import PrivacyPolicyPage from "@/pages/PrivacyPolicyPage";
+import NotFoundPage from "@/pages/NotFoundPage";
+import ContactPage from "@/pages/ContactPage";
+import FAQPage from "@/pages/FAQPage";
 import { useEffect, useState } from "react";
 import { getAuth, onAuthStateChanged, User } from "firebase/auth";
 import { Toaster } from "@/components/ui/toaster";
@@ -37,6 +41,10 @@ function App() {
 					<Route path="/signup" element={<SignupPage />} />
 					<Route path="/profile" element={<UserProfile />} />
 					<Route path="/terms" element={<TermsAndConditions />} />
+					<Route path="/privacy" element={<PrivacyPolicyPage />} />
+					<Route path="/contact" element={<ContactPage />} />
+					<Route path="/faq" element={<FAQPage />} />
+					<Route path="*" element={<NotFoundPage />} />
 				</Routes>
 			</Router>
 		</>
