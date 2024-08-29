@@ -52,7 +52,7 @@ export function Home({ user }: StockChartProps) {
 			<div className="container mx-auto px-0">
 				{!user && (
 					<section
-						className="py-20 text-center"
+						className="pt-20 text-center"
 						onClick={() => handleScroll("notification-board")}
 					>
 						<h2 className="text-2xl font-normal text-neutral-600 dark:text-neutral-400">
@@ -66,7 +66,7 @@ export function Home({ user }: StockChartProps) {
 
 				<section
 					id="notification-board"
-					className="py-20"
+					className="pb-20 pt-10 "
 					onClick={() => handleScroll("stock-chart")}
 				>
 					<NotificationBoard
@@ -76,7 +76,7 @@ export function Home({ user }: StockChartProps) {
 				</section>
 
 				{!user && (
-					<section className="py-20 text-center">
+					<section className="pt-20 text-center">
 						<h2 className="text-2xl md:w-2/3 mx-auto font-normal text-neutral-600 dark:text-neutral-400">
 							Analyze stock performance with powerful indicators to spot
 							<span className="text-green-500">
@@ -92,7 +92,7 @@ export function Home({ user }: StockChartProps) {
 					</section>
 				)}
 
-				<section id="stock-chart" className="py-20">
+				<section id="stock-chart" className="pb-20 pt-10 ">
 					<StockChart
 						user={user}
 						selectedStock={selectedStock}
@@ -102,7 +102,7 @@ export function Home({ user }: StockChartProps) {
 				</section>
 
 				{!user && (
-					<section className="py-20 text-center">
+					<section className="pt-20 text-center">
 						<h2 className="text-2xl font-normal text-neutral-600 dark:text-neutral-400">
 							Check an indicator for all stocks
 						</h2>
@@ -112,13 +112,13 @@ export function Home({ user }: StockChartProps) {
 					</section>
 				)}
 
-				<section className="py-20">
+				<section className="pb-20 pt-10 ">
 					<IndicatorChecker user={user} />
 				</section>
 
 				{!user && (
 					<section
-						className="py-20 text-center"
+						className="pt-20 text-center"
 						onClick={() => handleScroll("umap-board")}
 					>
 						<h2 className="text-2xl font-normal text-neutral-600 dark:text-neutral-400">
@@ -133,19 +133,21 @@ export function Home({ user }: StockChartProps) {
 					</section>
 				)}
 
-				<section id="umap-board" className="py-20">
+				<section id="umap-board" className="pb-20 pt-10 ">
 					<UMAPChart user={user} />
 				</section>
 
 				{!user && (
-					<section className="py-20 text-center">
+					<section className="pt-20 text-center">
 						<h2 className="text-2xl font-normal text-neutral-600 dark:text-neutral-400 mb-4">
 							Get access to more indicators and features
 						</h2>
 						<div className="text-4xl motion-safe:animate-bounce mb-8">
 							&#8964;
 						</div>
-						<PricingTable />
+						<div className="flex pb-20">
+							<PricingTable />
+						</div>
 					</section>
 				)}
 			</div>
