@@ -58,7 +58,7 @@ export function Home({ user }: StockChartProps) {
 			<SiteHeader />
 			{!user && (
 				<section className="py-20 bg-background">
-					<div className="container mx-auto px-4">
+					<div className="container mx-auto px-0">
 						<div className="max-w-3xl mx-auto text-center">
 							<h1 className="text-4xl md:text-5xl font-bold mb-6 text-foreground">
 								Smart Investing with Indicator Insights
