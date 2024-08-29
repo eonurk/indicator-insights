@@ -196,40 +196,40 @@ export function Home({ user }: StockChartProps) {
 								className="max-w-2xl mx-auto"
 							>
 								<AccordionItem value="item-1">
-									<AccordionTrigger>
+									<AccordionTrigger className="text-left">
 										What indicators are available?
 									</AccordionTrigger>
-									<AccordionContent>
+									<AccordionContent className="text-left pl-4">
 										We offer a range of popular indicators including RMI, RSI,
 										EMA, MACD, and Bollinger Bands. We will add new indicators
 										regularly.
 									</AccordionContent>
 								</AccordionItem>
 								<AccordionItem value="item-2">
-									<AccordionTrigger>
+									<AccordionTrigger className="text-left">
 										How often is the data updated?
 									</AccordionTrigger>
-									<AccordionContent>
+									<AccordionContent className="text-left pl-4">
 										Our data is updated in real-time during market hours,
 										ensuring you always have the latest information for your
 										analysis.
 									</AccordionContent>
 								</AccordionItem>
 								<AccordionItem value="item-3">
-									<AccordionTrigger>
+									<AccordionTrigger className="text-left">
 										Can I use this for any stock market?
 									</AccordionTrigger>
-									<AccordionContent>
+									<AccordionContent className="text-left pl-4">
 										Currently, we support major US stock exchanges. We're
 										working on expanding our coverage to include international
 										markets in the future.
 									</AccordionContent>
 								</AccordionItem>
 								<AccordionItem value="item-4">
-									<AccordionTrigger>
+									<AccordionTrigger className="text-left">
 										What's the difference between free and premium plans?
 									</AccordionTrigger>
-									<AccordionContent>
+									<AccordionContent className="text-left pl-4">
 										Premium plans offer access to more indicators, longer
 										historical data, custom alerts, and priority customer
 										support. Check our pricing table for a detailed comparison.
