@@ -89,7 +89,7 @@ export function Home({ user }: StockChartProps) {
 										src="https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=485019&theme=dark"
 										alt="Indicator Insights - Buy, Sell, Why? Know what you're doing. | Product Hunt"
 										width={230}
-										height={50}
+										height={40}
 									/>
 								</a>
 							</div>
@@ -242,12 +242,11 @@ export function Home({ user }: StockChartProps) {
 								</AccordionItem>
 								<AccordionItem value="item-4">
 									<AccordionTrigger className="text-left">
-										What's the difference between free and premium plans?
+										Is there a free trial?
 									</AccordionTrigger>
 									<AccordionContent className="text-left">
-										Premium plans offer access to more indicators, longer
-										historical data, custom alerts, and priority customer
-										support. Check our pricing table for a detailed comparison.
+										Currently, we do not offer a free trial. However, we offer a
+										$3 discount for the launch.
 									</AccordionContent>
 								</AccordionItem>
 							</Accordion>
