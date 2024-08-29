@@ -9,6 +9,12 @@ import { useState } from "react";
 import UMAPChart from "@/components/charts/UMAP-Chart";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
+import {
+	Accordion,
+	AccordionContent,
+	AccordionItem,
+	AccordionTrigger,
+} from "@/components/ui/accordion";
 <script async src="https://js.stripe.com/v3/pricing-table.js"></script>;
 interface StockChartProps {
 	user: User | null; // Use User type from firebase/auth
@@ -177,9 +183,65 @@ export function Home({ user }: StockChartProps) {
 						</div>
 					</section>
 				)}
-			</div>
 
-			<SiteFooter />
+				{!user && (
+					<section className="py-20 bg-background">
+						<div className="container mx-auto px-4">
+							<h2 className="text-3xl font-bold text-center mb-10 text-foreground">
+								Frequently Asked Questions
+							</h2>
+							<Accordion
+								type="single"
+								collapsible
+								className="max-w-2xl mx-auto"
+							>
+								<AccordionItem value="item-1">
+									<AccordionTrigger>
+										What indicators are available?
+									</AccordionTrigger>
+									<AccordionContent>
+										We offer a range of popular indicators including RMI, RSI,
+										EMA, MACD, and Bollinger Bands. We will add new indicators
+										regularly.
+									</AccordionContent>
+								</AccordionItem>
+								<AccordionItem value="item-2">
+									<AccordionTrigger>
+										How often is the data updated?
+									</AccordionTrigger>
+									<AccordionContent>
+										Our data is updated in real-time during market hours,
+										ensuring you always have the latest information for your
+										analysis.
+									</AccordionContent>
+								</AccordionItem>
+								<AccordionItem value="item-3">
+									<AccordionTrigger>
+										Can I use this for any stock market?
+									</AccordionTrigger>
+									<AccordionContent>
+										Currently, we support major US stock exchanges. We're
+										working on expanding our coverage to include international
+										markets in the future.
+									</AccordionContent>
+								</AccordionItem>
+								<AccordionItem value="item-4">
+									<AccordionTrigger>
+										What's the difference between free and premium plans?
+									</AccordionTrigger>
+									<AccordionContent>
+										Premium plans offer access to more indicators, longer
+										historical data, custom alerts, and priority customer
+										support. Check our pricing table for a detailed comparison.
+									</AccordionContent>
+								</AccordionItem>
+							</Accordion>
+						</div>
+					</section>
+				)}
+
+				<SiteFooter />
+			</div>
 		</>
 	);
 }
