@@ -79,17 +79,17 @@ export function Home({ user }: StockChartProps) {
 									Learn More
 								</Button>
 							</div>
-							<div className="mt-4">
+							<div className="mt-4 flex justify-center">
 								<a
 									href="https://www.producthunt.com/posts/indicator-insights?embed=true&utm_source=badge-featured&utm_medium=badge&utm_souce=badge-indicator&#0045;insights"
 									target="_blank"
-									className="flex items-center justify-center"
 								>
 									<img
-										src="https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=485019&theme=dark"
-										alt="Indicator Insights - Buy, Sell, Why? Know what you're doing. | Product Hunt"
-										width={230}
-										height={40}
+										src="https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=485019&theme=light"
+										alt="Indicator&#0032;Insights - Buy&#0044;&#0032;Sell&#0044;&#0032;Why&#0063;&#0032;Know&#0032;what&#0032;you&#0039;re&#0032;doing&#0046; | Product Hunt"
+										style={{ width: "230px", height: "50px" }}
+										width="230"
+										height="30"
 									/>
 								</a>
 							</div>
