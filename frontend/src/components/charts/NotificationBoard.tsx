@@ -258,7 +258,7 @@ const NotificationBoard: React.FC<NotificationBoardProps> = ({
 									key={notification.id}
 									className={`mb-2 p-2 rounded ${
 										notification.isNew ? "bg-green-100 border" : "bg-gray-100"
-									}`}
+									} cursor-pointer hover:bg-opacity-80 transition-colors`}
 									onClick={() => handleNotificationClick(notification)}
 								>
 									<span className="font-bold">{notification.stock}</span>{" "}

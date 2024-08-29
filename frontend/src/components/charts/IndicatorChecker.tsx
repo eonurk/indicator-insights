@@ -87,7 +87,7 @@ export default function IndicatorChecker({ user }: StockChartProps) {
 			]);
 			const rsiResults = [];
 
-			for (let symbol of symbols) {
+			for (const symbol of symbols) {
 				const history = response[symbol].history; // Get the historical data for the symbol
 				const dates = Object.keys(history).map((date) => new Date(date));
 				const closingPrices = dates

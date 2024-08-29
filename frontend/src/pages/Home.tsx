@@ -4,7 +4,7 @@ import { User } from "firebase/auth"; // Import User type
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/Footer";
 import PricingTable from "@/components/PricingTable";
-import NotificationBoard from "@/components/NotificationBoard";
+import NotificationBoard from "@/components/charts/NotificationBoard";
 import { useState } from "react";
 import UMAPChart from "@/components/charts/UMAP-Chart";
 <script async src="https://js.stripe.com/v3/pricing-table.js"></script>;
@@ -64,14 +64,13 @@ export function Home({ user }: StockChartProps) {
 					</section>
 				)}
 
-				<section
-					id="notification-board"
-					className="pb-20 pt-10 "
-					onClick={() => handleScroll("stock-chart")}
-				>
+				<section id="notification-board" className="pb-20 pt-10">
 					<NotificationBoard
 						user={user}
-						onNotificationClick={handleNotificationClick}
+						onNotificationClick={(stock, period, indicator) => {
+							handleNotificationClick(stock, period, indicator);
+							handleScroll("stock-chart");
+						}}
 					/>
 				</section>
 
