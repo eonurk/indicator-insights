@@ -11,7 +11,7 @@ export default function AboutPage() {
 			<SiteHeader />
 			<div className="container mx-auto px-4 py-8 space-y-12 md:space-y-16">
 				<section className="space-y-6 max-w-3xl mx-auto">
-					<h1 className="text-3xl md:text-4xl font-bold text-primary">
+					<h1 className="text-2xl md:text-2xl font-bold text-primary">
 						About Indicator Insights
 					</h1>
 					<div className="space-y-4 text-base text-neutral-600 dark:text-neutral-400">
@@ -75,7 +75,7 @@ export default function AboutPage() {
 				</section>
 
 				<section className="space-y-6 max-w-3xl mx-auto">
-					<h2 className="text-2xl md:text-3xl font-bold text-primary">
+					<h2 className="text-2xl md:text-2xl font-bold text-primary">
 						Our Mission
 					</h2>
 					<p className="text-base text-neutral-600 dark:text-neutral-400 text-justify">
@@ -88,10 +88,10 @@ export default function AboutPage() {
 				</section>
 
 				<section className="space-y-6">
-					<h2 className="text-2xl md:text-3xl font-bold text-primary max-w-3xl mx-auto">
+					<h2 className="text-2xl md:text-2xl font-bold text-primary max-w-3xl mx-auto">
 						Key Features
 					</h2>
-					<div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+					<div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 md:max-w-4xl mx-auto">
 						<FeatureCard
 							icon={<BarChart3Icon className="h-6 w-6 text-primary" />}
 							title="Advanced Analytics"
@@ -111,7 +111,7 @@ export default function AboutPage() {
 				</section>
 
 				<section className="space-y-6 max-w-3xl mx-auto">
-					<h2 className="text-2xl md:text-3xl font-bold text-primary">
+					<h2 className="text-2xl md:text-2xl font-bold text-primary">
 						Our Journey
 					</h2>
 					<div className="relative border-l border-gray-200 dark:border-gray-700 pl-4">
@@ -139,7 +139,7 @@ export default function AboutPage() {
 				</section>
 
 				<section className="space-y-6 max-w-3xl mx-auto">
-					<h2 className="text-2xl md:text-3xl font-bold text-primary">
+					<h2 className="text-2xl md:text-2xl font-bold text-primary">
 						Ready to Gain Market Insights?
 					</h2>
 					<p className="text-base md:text-lg text-muted-foreground">
