@@ -7,6 +7,8 @@ import PricingTable from "@/components/PricingTable";
 import NotificationBoard from "@/components/charts/NotificationBoard";
 import { useState } from "react";
 import UMAPChart from "@/components/charts/UMAP-Chart";
+import { Link } from "react-router-dom";
+import { Button } from "@/components/ui/button";
 <script async src="https://js.stripe.com/v3/pricing-table.js"></script>;
 interface StockChartProps {
 	user: User | null; // Use User type from firebase/auth
@@ -48,8 +50,34 @@ export function Home({ user }: StockChartProps) {
 	return (
 		<>
 			<SiteHeader />
+			{!user && (
+				<section className="py-20 bg-background">
+					<div className="container mx-auto px-4">
+						<div className="max-w-3xl mx-auto text-center">
+							<h1 className="text-4xl md:text-5xl font-bold mb-6 text-foreground">
+								Smart Investing with Indicator Insights
+							</h1>
+							<p className="text-xl mb-8 text-muted-foreground">
+								Empower your investment decisions with real-time stock analysis,
+								advanced indicators, and market-wide visualizations.
+							</p>
+							<div className="flex justify-center space-x-4">
+								<Button asChild>
+									<Link to="/subscribe">Get Started</Link>
+								</Button>
+								<Button
+									variant="outline"
+									onClick={() => handleScroll("notification-board")}
+								>
+									Learn More
+								</Button>
+							</div>
+						</div>
+					</div>
+				</section>
+			)}
 
-			<div className="container mx-auto px-0">
+			<div className="container mx-auto px-4">
 				{!user && (
 					<section
 						className="mt-[10em] text-center"
