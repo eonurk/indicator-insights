@@ -49,7 +49,7 @@ export function Home({ user }: StockChartProps) {
 		<>
 			<SiteHeader />
 
-			<div className="container mx-auto px-4">
+			<div className="container mx-auto px-0">
 				{!user && (
 					<section
 						className="py-20 text-center"
