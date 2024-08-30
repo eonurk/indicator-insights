@@ -16,7 +16,7 @@ const CheckIcon = () => (
 
 const PricingTable: React.FC = () => {
 	const features = [
-		"Access to all NASDAQ stocks",
+		"NASDAQ 100, S&P 100, Dow Jones",
 		"Real-time market data",
 		"Valuable insights with indicators",
 		"Customizable indicator settings",
@@ -66,7 +66,7 @@ const PricingTable: React.FC = () => {
 						This includes:
 					</p>
 					{features.map((feature, index) => (
-						<li key={index} className="flex items-center">
+						<li key={index} className="text-left flex items-center">
 							<CheckIcon />
 							<span>{feature}</span>
 						</li>
