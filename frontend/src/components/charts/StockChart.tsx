@@ -223,17 +223,20 @@ function StockChart({
 	};
 
 	useEffect(() => {
+		setSymbol(selectedStock);
+	}, [selectedStock]);
+
+	useEffect(() => {
+		setPeriod(selectedPeriod);
+	}, [selectedPeriod]);
+
+	useEffect(() => {
 		getStockInfo(symbol, period);
 		const intervalId = setInterval(() => {
 			getStockInfo(symbol, period);
 		}, 60000);
 		return () => clearInterval(intervalId);
 	}, [symbol, period]);
-
-	useEffect(() => {
-		setSymbol(selectedStock);
-		setPeriod(selectedPeriod);
-	}, [selectedStock, selectedPeriod]);
 
 	return (
 		<Card className="w-full md:w-2/3 md:mx-auto">

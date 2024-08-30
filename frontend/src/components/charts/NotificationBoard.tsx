@@ -101,11 +101,6 @@ const NotificationBoard: React.FC<NotificationBoardProps> = ({
 		availableStocks
 	);
 
-	useEffect(() => {
-		setCurrentStocks(availableStocks);
-		checkForSignals(); // Trigger a new check when availableStocks changes
-	}, [availableStocks, selectedPeriod, enabledIndicators]);
-
 	const toggleIndicator = (indicator: string) => {
 		setEnabledIndicators((prev) => ({
 			...prev,
@@ -240,12 +235,16 @@ const NotificationBoard: React.FC<NotificationBoardProps> = ({
 	}, [currentStocks, selectedPeriod, enabledIndicators]);
 
 	useEffect(() => {
-		checkForSignals(); // Fetch immediately on mount or when dependencies change
+		setCurrentStocks(availableStocks);
+	}, [availableStocks]);
+
+	useEffect(() => {
+		checkForSignals(); // Trigger a new check when availableStocks changes or on mount
 
 		const intervalId = setInterval(checkForSignals, 5 * 60 * 1000); // Check every 5 minutes
 
 		return () => clearInterval(intervalId); // Cleanup the interval on unmount
-	}, [checkForSignals]);
+	}, [checkForSignals, currentStocks, selectedPeriod, enabledIndicators]);
 
 	return (
 		<Card className="mt-4 w-full md:w-2/3 md:mx-auto">

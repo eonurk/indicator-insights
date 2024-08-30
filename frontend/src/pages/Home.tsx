@@ -23,6 +23,7 @@ import {
 	getDefaultCompanies,
 } from "@/utils/marketData";
 import { Label } from "@/components/ui/label";
+import { stocks } from "@/utils/stocks";
 
 <script async src="https://js.stripe.com/v3/pricing-table.js"></script>;
 
@@ -40,29 +41,42 @@ const handleScroll = (target: string) => {
 };
 
 export function Home({ user }: StockChartProps) {
+	const [selectedStock, setSelectedStock] = useState("AAPL");
 	const [selectedPeriod, setSelectedPeriod] = useState("1m");
 	const [selectedIndicators, setSelectedIndicators] = useState({
 		RMI: true,
-		RSI: true,
-		EMA: true,
-		MACD: true,
-		Bollinger: true,
+		RSI: false,
+		EMA: false,
+		MACD: false,
+		Bollinger: false,
 	});
 
 	const [selectedIndex, setSelectedIndex] = useState("S&P 100");
 	const [availableIndices, setAvailableIndices] = useState<string[]>([]);
-	const [selectedStock, setSelectedStock] = useState("AAPL");
 	const [availableStocks, setAvailableStocks] = useState<
 		Record<string, string>
 	>({});
+
+	// Add this function at the top of your component or in a separate utils file
+	function areArraysEqual(arr1: string[], arr2: string[]): boolean {
+		if (arr1.length !== arr2.length) return false;
+		return arr1.every((value, index) => value === arr2[index]);
+	}
 
 	useEffect(() => {
 		const fetchData = async () => {
 			if (!user) {
 				// If user is not logged in, use default companies
 				const defaultStocks = getDefaultCompanies();
-				setAvailableStocks(defaultStocks);
-				setSelectedStock(Object.keys(defaultStocks)[0]);
+				if (
+					!areArraysEqual(
+						Object.keys(availableStocks),
+						Object.keys(defaultStocks)
+					)
+				) {
+					setAvailableStocks(defaultStocks);
+					setSelectedStock(Object.keys(defaultStocks)[0]);
+				}
 			} else {
 				// Fetch available indices if not already loaded
 				if (availableIndices.length === 0) {
@@ -81,7 +95,13 @@ export function Home({ user }: StockChartProps) {
 		};
 
 		fetchData();
-	}, [user, selectedIndex, availableIndices.length, selectedStock]);
+	}, [
+		user,
+		selectedIndex,
+		availableIndices.length,
+		selectedStock,
+		availableStocks,
+	]);
 
 	const handleNotificationClick = (
 		stock: string,
