@@ -3,19 +3,29 @@ import IndicatorChecker from "@/components/charts/IndicatorChecker";
 import { User } from "firebase/auth"; // Import User type
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/Footer";
+import HeroSection from "@/components/HeroSection";
+import FAQHome from "@/components/FAQHome";
 import PricingTable from "@/components/PricingTable";
 import NotificationBoard from "@/components/charts/NotificationBoard";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import UMAPChart from "@/components/charts/UMAP-Chart";
-import { Link } from "react-router-dom";
-import { Button } from "@/components/ui/button";
+
 import {
-	Accordion,
-	AccordionContent,
-	AccordionItem,
-	AccordionTrigger,
-} from "@/components/ui/accordion";
+	Select,
+	SelectContent,
+	SelectItem,
+	SelectTrigger,
+	SelectValue,
+} from "@/components/ui/select";
+import {
+	getAvailableIndices,
+	getCompaniesByIndex,
+	getDefaultCompanies,
+} from "@/utils/marketData";
+import { Label } from "@/components/ui/label";
+
 <script async src="https://js.stripe.com/v3/pricing-table.js"></script>;
+
 interface StockChartProps {
 	user: User | null; // Use User type from firebase/auth
 }
@@ -30,7 +40,6 @@ const handleScroll = (target: string) => {
 };
 
 export function Home({ user }: StockChartProps) {
-	const [selectedStock, setSelectedStock] = useState("AAPL");
 	const [selectedPeriod, setSelectedPeriod] = useState("1m");
 	const [selectedIndicators, setSelectedIndicators] = useState({
 		RMI: true,
@@ -39,6 +48,40 @@ export function Home({ user }: StockChartProps) {
 		MACD: true,
 		Bollinger: true,
 	});
+
+	const [selectedIndex, setSelectedIndex] = useState("S&P 100");
+	const [availableIndices, setAvailableIndices] = useState<string[]>([]);
+	const [selectedStock, setSelectedStock] = useState("AAPL");
+	const [availableStocks, setAvailableStocks] = useState<
+		Record<string, string>
+	>({});
+
+	useEffect(() => {
+		const fetchData = async () => {
+			if (!user) {
+				// If user is not logged in, use default companies
+				const defaultStocks = getDefaultCompanies();
+				setAvailableStocks(defaultStocks);
+				setSelectedStock(Object.keys(defaultStocks)[0]);
+			} else {
+				// Fetch available indices if not already loaded
+				if (availableIndices.length === 0) {
+					const indices = await getAvailableIndices();
+					setAvailableIndices(indices);
+				}
+				// Fetch stocks for the selected index
+				const stocks = await getCompaniesByIndex(selectedIndex);
+				setAvailableStocks(stocks);
+
+				// Update selectedStock if it's not in the new list
+				if (!stocks[selectedStock]) {
+					setSelectedStock(Object.keys(stocks)[0]);
+				}
+			}
+		};
+
+		fetchData();
+	}, [user, selectedIndex, availableIndices.length, selectedStock]);
 
 	const handleNotificationClick = (
 		stock: string,
@@ -56,49 +99,55 @@ export function Home({ user }: StockChartProps) {
 	return (
 		<>
 			<SiteHeader />
-			{!user && (
-				<section className="py-40 bg-background">
-					<div className="container mx-auto px-4">
-						<div className="max-w-3xl mx-auto text-center">
-							<h1 className="text-4xl md:text-5xl font-bold mb-6 text-foreground">
-								Smart Investing with Indicator Insights
-							</h1>
-							<p className="text-xl mb-8 text-muted-foreground">
-								Empower your investment decisions with real-time stock analysis,
-								advanced indicators, and market-wide visualizations.
-							</p>
-
-							<div className="flex justify-center space-x-4">
-								<Button asChild>
-									<Link to="/subscribe">Get Started</Link>
-								</Button>
-								<Button
-									variant="outline"
-									onClick={() => handleScroll("notification-board")}
-								>
-									Learn More
-								</Button>
-							</div>
-							<div className="mt-4 flex justify-center">
-								<a
-									href="https://www.producthunt.com/posts/indicator-insights?embed=true&utm_source=badge-featured&utm_medium=badge&utm_souce=badge-indicator&#0045;insights"
-									target="_blank"
-								>
-									<img
-										src="https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=485019&theme=light"
-										alt="Indicator&#0032;Insights - Buy&#0044;&#0032;Sell&#0044;&#0032;Why&#0063;&#0032;Know&#0032;what&#0032;you&#0039;re&#0032;doing&#0046; | Product Hunt"
-										style={{ width: "230px", height: "50px" }}
-										width="230"
-										height="30"
-									/>
-								</a>
-							</div>
-						</div>
-					</div>
-				</section>
-			)}
+			{!user && <HeroSection />}
 
 			<div className="container mx-auto px-0">
+				{user && (
+					<div className="bg-gradient-to-r from-blue-500 to-purple-600 p-4 rounded-lg shadow-md flex flex-col items-center">
+						<Label className="text-white text-lg font-semibold">
+							Select an index
+						</Label>
+						<p className="text-white text-xs mb-2">
+							As a Pro user, you have access to multiple stock indices.
+						</p>
+						<Select value={selectedIndex} onValueChange={setSelectedIndex}>
+							<SelectTrigger className="w-[200px] bg-white text-gray-800">
+								<SelectValue placeholder="Select an index" />
+							</SelectTrigger>
+							<SelectContent>
+								{availableIndices.map((option) => (
+									<SelectItem key={option} value={option}>
+										{option}
+									</SelectItem>
+								))}
+							</SelectContent>
+						</Select>
+						<p className="text-xs text-white opacity-80 text-center">
+							<br />
+							<span className="inline-flex items-center">
+								<svg
+									xmlns="http://www.w3.org/2000/svg"
+									className="h-4 w-4 mr-1"
+									fill="none"
+									viewBox="0 0 24 24"
+									stroke="currentColor"
+								>
+									<path
+										strokeLinecap="round"
+										strokeLinejoin="round"
+										strokeWidth={2}
+										d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+									/>
+								</svg>
+								<span className="text-white text-xs opacity-80 ">
+									Only the stocks of the selected index are shown. It might take
+									a few seconds to load.
+								</span>
+							</span>
+						</p>
+					</div>
+				)}
+
 				{!user && (
 					<section
 						className="mt-[10em] text-center"
@@ -115,11 +164,11 @@ export function Home({ user }: StockChartProps) {
 
 				<section id="notification-board" className="pb-20 pt-10">
 					<NotificationBoard
-						user={user}
 						onNotificationClick={(stock, period, indicator) => {
 							handleNotificationClick(stock, period, indicator);
 							handleScroll("stock-chart");
 						}}
+						availableStocks={availableStocks}
 					/>
 				</section>
 
@@ -140,12 +189,12 @@ export function Home({ user }: StockChartProps) {
 					</section>
 				)}
 
-				<section id="stock-chart" className="pb-20 pt-10 ">
+				<section id="stock-chart" className="pb-20 pt-10">
 					<StockChart
-						user={user}
 						selectedStock={selectedStock}
 						selectedPeriod={selectedPeriod}
 						selectedIndicators={selectedIndicators}
+						availableStocks={availableStocks}
 					/>
 				</section>
 
@@ -199,60 +248,7 @@ export function Home({ user }: StockChartProps) {
 					</section>
 				)}
 
-				{!user && (
-					<section className="py-20 bg-background">
-						<div className="container mx-auto px-4">
-							<h2 className="text-3xl font-bold text-center mb-10 text-foreground">
-								Frequently Asked Questions
-							</h2>
-							<Accordion
-								type="single"
-								collapsible
-								className="max-w-2xl mx-auto"
-							>
-								<AccordionItem value="item-1">
-									<AccordionTrigger className="text-left">
-										What indicators are available?
-									</AccordionTrigger>
-									<AccordionContent className="text-left">
-										We offer a range of popular indicators including RMI, RSI,
-										EMA, MACD, and Bollinger Bands. We will add new indicators
-										regularly.
-									</AccordionContent>
-								</AccordionItem>
-								<AccordionItem value="item-2">
-									<AccordionTrigger className="text-left">
-										How often is the data updated?
-									</AccordionTrigger>
-									<AccordionContent className="text-left">
-										Our data is updated in real-time during market hours,
-										ensuring you always have the latest information for your
-										analysis.
-									</AccordionContent>
-								</AccordionItem>
-								<AccordionItem value="item-3">
-									<AccordionTrigger className="text-left">
-										Can I use this for any stock market?
-									</AccordionTrigger>
-									<AccordionContent className="text-left">
-										Currently, we support major US stock exchanges. We're
-										working on expanding our coverage to include international
-										markets in the future.
-									</AccordionContent>
-								</AccordionItem>
-								<AccordionItem value="item-4">
-									<AccordionTrigger className="text-left">
-										Is there a free trial?
-									</AccordionTrigger>
-									<AccordionContent className="text-left">
-										Currently, we do not offer a free trial. However, we offer a
-										$3 discount for the launch.
-									</AccordionContent>
-								</AccordionItem>
-							</Accordion>
-						</div>
-					</section>
-				)}
+				{!user && <FAQHome />}
 
 				<SiteFooter />
 			</div>

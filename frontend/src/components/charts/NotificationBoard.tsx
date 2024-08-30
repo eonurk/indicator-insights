@@ -1,5 +1,11 @@
-import React, { useState, useEffect } from "react";
-import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
+import React, { useState, useEffect, useCallback, useRef } from "react";
+import {
+	Card,
+	CardHeader,
+	CardTitle,
+	CardContent,
+	CardDescription,
+} from "@/components/ui/card";
 import { fetchStockData } from "@/fetchStockData";
 import { RMI, RSI, MACD } from "@/utils/Indicators";
 import { format } from "date-fns";
@@ -21,8 +27,7 @@ import {
 	PopoverContent,
 } from "@/components/ui/popover";
 import { Button } from "@/components/ui/button";
-import { stocks } from "@/utils/stocks";
-import { User } from "firebase/auth";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 
 interface Notification {
 	id: string;
@@ -66,7 +71,7 @@ const indicators = [
 ];
 
 interface NotificationBoardProps {
-	user: User | null;
+	availableStocks: { [key: string]: string };
 	onNotificationClick: (
 		stock: string,
 		period: string,
@@ -75,15 +80,31 @@ interface NotificationBoardProps {
 }
 
 const NotificationBoard: React.FC<NotificationBoardProps> = ({
-	user,
 	onNotificationClick,
+	availableStocks,
 }) => {
 	const [notifications, setNotifications] = useState<Notification[]>([]);
 	const [lastUpdateTime, setLastUpdateTime] = useState<Date | null>(new Date());
-	const [selectedPeriod, setSelectedPeriod] = useState<string>("1w");
+	const [selectedPeriod, setSelectedPeriod] = useState<string>("1m");
 	const [enabledIndicators, setEnabledIndicators] = useState<{
 		[key: string]: boolean;
 	}>(Object.fromEntries(indicators.map((ind) => [ind.key, ind.key == "RMI"])));
+	const [isLoading, setIsLoading] = useState(true);
+	const [error, setError] = useState<string | null>(null);
+	const cachedDataRef = useRef<{ [key: string]: any }>({});
+	const lastFetchTimeRef = useRef<{
+		time: Date;
+		period: string;
+		enabledIndicators: { [key: string]: boolean };
+	} | null>(null);
+	const [currentStocks, setCurrentStocks] = useState<{ [key: string]: string }>(
+		availableStocks
+	);
+
+	useEffect(() => {
+		setCurrentStocks(availableStocks);
+		checkForSignals(); // Trigger a new check when availableStocks changes
+	}, [availableStocks, selectedPeriod, enabledIndicators]);
 
 	const toggleIndicator = (indicator: string) => {
 		setEnabledIndicators((prev) => ({
@@ -100,40 +121,56 @@ const NotificationBoard: React.FC<NotificationBoardProps> = ({
 		);
 	};
 
-	const checkForSignals = async () => {
-		const availableStocks = user
-			? stocks
-			: {
-					AAPL: "Apple Inc.",
-					ABNB: "Airbnb, Inc.",
-					AMZN: "Amazon.com, Inc.",
-					EBAY: "eBay Inc.",
-					GOOGL: "Alphabet Inc. (Class A)",
-					META: "Meta Platforms, Inc.",
-					NFLX: "Netflix, Inc.",
-					PLTR: "Palantir Technologies Inc.",
-					ZM: "Zoom Video Communications, Inc.",
-			  };
-
-		const symbols = Object.keys(availableStocks);
+	const checkForSignals = useCallback(async () => {
+		setError(null); // Clear any previous errors
+		const symbols = Object.keys(currentStocks);
 		const newNotifications: Notification[] = [];
 		const currentTime = new Date();
 
-		try {
-			const response = await fetchStockData(
-				symbols.join(","),
-				selectedPeriod,
-				false,
-				["Close"]
-			);
+		// Check if we need to fetch new data
+		const shouldFetchNewData =
+			!lastFetchTimeRef.current ||
+			currentTime.getTime() - lastFetchTimeRef.current.time.getTime() >
+				5 * 60 * 1000 ||
+			selectedPeriod !== lastFetchTimeRef.current?.period ||
+			JSON.stringify(enabledIndicators) !==
+				JSON.stringify(lastFetchTimeRef.current?.enabledIndicators);
 
-			for (let symbol of symbols) {
+		try {
+			let response;
+			if (shouldFetchNewData) {
+				setIsLoading(true);
+				response = await fetchStockData(
+					symbols.join(","),
+					selectedPeriod,
+					false,
+					["Close"]
+				);
+				cachedDataRef.current = response;
+				lastFetchTimeRef.current = {
+					time: currentTime,
+					period: selectedPeriod,
+					enabledIndicators: { ...enabledIndicators },
+				};
+				setIsLoading(false);
+			} else {
+				response = cachedDataRef.current;
+			}
+
+			for (const symbol of symbols) {
+				if (!response[symbol] || !response[symbol].history) {
+					continue;
+				}
 				const history = response[symbol].history;
 				const dates = Object.keys(history).map((date) => new Date(date));
 				const closingPrices = dates
-					.map((date) => history[format(date, "yyyy-MM-dd HH:mm:ss")]?.Close)
+					.map((date) => {
+						const formattedDate = format(date, "yyyy-MM-dd HH:mm:ss");
+						return history[formattedDate]?.Close;
+					})
 					.filter((price) => price !== undefined) as number[];
 
+				// Process indicators and generate notifications
 				for (const indicator of indicators) {
 					if (enabledIndicators[indicator.key]) {
 						let indicatorValues, macdLine, signalLine;
@@ -190,23 +227,34 @@ const NotificationBoard: React.FC<NotificationBoardProps> = ({
 				)
 			);
 			setLastUpdateTime(currentTime);
+			setError(null); // Clear error after successful fetch
 		} catch (error) {
-			console.error("Error fetching stock data:", error);
+			console.error("Error in checkForSignals:", error);
+			setIsLoading(false);
+			if (error instanceof Error) {
+				setError(`Failed to fetch stock data: ${error.message}`);
+			} else {
+				setError("An unexpected error occurred while fetching stock data.");
+			}
 		}
-	};
+	}, [currentStocks, selectedPeriod, enabledIndicators]);
 
 	useEffect(() => {
-		checkForSignals(); // Fetch immediately on mount
+		checkForSignals(); // Fetch immediately on mount or when dependencies change
 
-		const intervalId = setInterval(checkForSignals, 60000); // Fetch every 60 seconds
+		const intervalId = setInterval(checkForSignals, 5 * 60 * 1000); // Check every 5 minutes
 
 		return () => clearInterval(intervalId); // Cleanup the interval on unmount
-	}, [selectedPeriod, enabledIndicators, user]);
+	}, [checkForSignals]);
 
 	return (
 		<Card className="mt-4 w-full md:w-2/3 md:mx-auto">
 			<CardHeader className="flex flex-wrap justify-between items-center">
 				<CardTitle>Real-time Notifications</CardTitle>
+				<CardDescription>
+					Real-time buy/sell signals for portfolio stocks based on selected
+					period and indicators.
+				</CardDescription>
 				{lastUpdateTime && (
 					<div className="flex items-center justify-center text-sm text-gray-500">
 						<span className="bg-green-500 h-3 w-3 rounded-full animate-pulse"></span>
@@ -220,6 +268,7 @@ const NotificationBoard: React.FC<NotificationBoardProps> = ({
 						<SelectTrigger className="min-w-[120px]">
 							<SelectValue placeholder="1 Month" />
 						</SelectTrigger>
+
 						<SelectContent>
 							{periodOptions.map(({ value, label }) => (
 								<SelectItem key={value} value={value}>
@@ -249,8 +298,16 @@ const NotificationBoard: React.FC<NotificationBoardProps> = ({
 			</CardHeader>
 			<ScrollArea className="h-[400px] mt-2">
 				<CardContent>
-					{notifications.length === 0 ? (
+					{error && (
+						<Alert variant="destructive" className="mb-4">
+							<AlertTitle>Error</AlertTitle>
+							<AlertDescription>{error}</AlertDescription>
+						</Alert>
+					)}
+					{isLoading ? (
 						<p>Loading...</p>
+					) : notifications.length === 0 ? (
+						<p>No notifications at this time.</p>
 					) : (
 						<ul>
 							{notifications.map((notification) => (

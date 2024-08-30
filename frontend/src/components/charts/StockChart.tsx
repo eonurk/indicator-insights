@@ -36,11 +36,10 @@ import { ChartOptions, ChartData } from "chart.js";
 
 import RMIChart from "@/components/charts/RMIChart";
 import RSIChart from "@/components/charts/RSIChart";
-import { stocks } from "@/utils/stocks";
-import { User } from "firebase/auth";
 import MACDChart from "@/components/charts/MACD-Chart";
 import EMAChart from "@/components/charts/EMA-Chart";
 import BollingerChart from "@/components/charts/BollingerBand-Chart";
+
 import { Check } from "lucide-react";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import {
@@ -103,13 +102,18 @@ const indicators = [
 ];
 
 interface StockChartProps {
-	user: User | null;
 	selectedStock: string;
 	selectedPeriod: string;
 	selectedIndicators: { [key: string]: boolean };
+	availableStocks: { [key: string]: string };
 }
 
-function StockChart({ user, selectedStock, selectedPeriod }: StockChartProps) {
+function StockChart({
+	selectedStock,
+	selectedPeriod,
+	selectedIndicators: initialSelectedIndicators,
+	availableStocks,
+}: StockChartProps) {
 	const [symbol, setSymbol] = useState(selectedStock);
 	const [period, setPeriod] = useState(selectedPeriod);
 
@@ -130,13 +134,9 @@ function StockChart({ user, selectedStock, selectedPeriod }: StockChartProps) {
 		formattedData: ChartData;
 	} | null>(null);
 
-	const [selectedIndicators, setSelectedIndicators] = useState({
-		RMI: true,
-		RSI: true,
-		EMA: true,
-		MACD: true,
-		Bollinger: false,
-	});
+	const [selectedIndicators, setSelectedIndicators] = useState(() => ({
+		...initialSelectedIndicators,
+	}));
 
 	const [indicatorPeriods, setIndicatorPeriods] = useState({
 		RMI: { period: 14 },
@@ -155,20 +155,6 @@ function StockChart({ user, selectedStock, selectedPeriod }: StockChartProps) {
 				!prev[key as keyof typeof selectedIndicators],
 		}));
 	};
-
-	const availableStocks = user
-		? stocks
-		: {
-				AAPL: "Apple Inc.",
-				ABNB: "Airbnb, Inc.",
-				AMZN: "Amazon.com, Inc.",
-				EBAY: "eBay Inc.",
-				GOOGL: "Alphabet Inc. (Class A)",
-				META: "Meta Platforms, Inc.",
-				NFLX: "Netflix, Inc.",
-				PLTR: "Palantir Technologies Inc.",
-				ZM: "Zoom Video Communications, Inc.",
-		  };
 
 	const getStockInfo = async (symbol: string, period: string) => {
 		try {
@@ -252,17 +238,17 @@ function StockChart({ user, selectedStock, selectedPeriod }: StockChartProps) {
 	return (
 		<Card className="w-full md:w-2/3 md:mx-auto">
 			<CardHeader className="items-center gap-2 space-y-0 border-b py-5 sm:flex-row">
-				<div className="flex-1 gap-1 text-center sm:text-left">
+				<div className="flex-1 gap-2 text-center sm:text-left">
 					<CardTitle>{stockInfo?.symbol}</CardTitle>
 					<CardDescription className={stockInfo?.cardTitleColor}>
 						${stockInfo?.currentPrice} ({stockInfo?.priceChangePercentage}%)
 						<div className="flex gap-4">
-							<div className="grid text-slate-400">
+							<div className="grid text-slate-400 ">
 								<p>Volume: {stockInfo?.volume}</p>
 								<p>Avg Volume: {stockInfo?.avgVolume}</p>
 								<p>Market Cap: {stockInfo?.marketCap}</p>
 							</div>
-							<div className="grid text-slate-400">
+							<div className="grid text-slate-400 ">
 								<p>P/E ratio: {stockInfo?.peRatio}</p>
 								<p>52 Wk Low: {stockInfo?.week52Low}</p>
 								<p>52 Wk High: {stockInfo?.week52High}</p>
@@ -270,8 +256,7 @@ function StockChart({ user, selectedStock, selectedPeriod }: StockChartProps) {
 						</div>
 					</CardDescription>
 				</div>
-
-				<div className="flex gap-2">
+				<div className="flex-1 gap-1 max-w-64 flex flex-col">
 					<Select value={symbol} onValueChange={setSymbol}>
 						<SelectTrigger
 							className="flex min-w-32 rounded-lg sm:ml-auto"
@@ -303,36 +288,36 @@ function StockChart({ user, selectedStock, selectedPeriod }: StockChartProps) {
 							))}
 						</SelectContent>
 					</Select>
-				</div>
 
-				<ScrollArea className="w-64 whitespace-nowrap">
-					<div className="flex gap-2">
-						{Object.keys(selectedIndicators).map((key) => (
-							<div key={key} className="flex items-center">
-								<Checkbox
-									id={key}
-									checked={
-										selectedIndicators[key as keyof typeof selectedIndicators]
-									}
-									onCheckedChange={() => toggleIndicator(key)}
-									className="hidden"
-								/>
-								<div
-									onClick={() => toggleIndicator(key)}
-									className={checkboxClasses(
-										selectedIndicators[key as keyof typeof selectedIndicators]
-									)}
-								>
-									{selectedIndicators[
-										key as keyof typeof selectedIndicators
-									] && <Check className="w-4 h-4" />}
-									<span className="ml-2 text-sm font-medium">{key}</span>
+					<ScrollArea className="w-full whitespace-nowrap">
+						<div className="flex gap-1">
+							{Object.keys(selectedIndicators).map((key) => (
+								<div key={key} className="flex items-center">
+									<Checkbox
+										id={key}
+										checked={
+											selectedIndicators[key as keyof typeof selectedIndicators]
+										}
+										onCheckedChange={() => toggleIndicator(key)}
+										className="hidden"
+									/>
+									<div
+										onClick={() => toggleIndicator(key)}
+										className={checkboxClasses(
+											selectedIndicators[key as keyof typeof selectedIndicators]
+										)}
+									>
+										{selectedIndicators[
+											key as keyof typeof selectedIndicators
+										] && <Check className="w-4 h-4" />}
+										<span className="ml-2 text-sm font-medium">{key}</span>
+									</div>
 								</div>
-							</div>
-						))}
-					</div>
-					<ScrollBar orientation="horizontal" />
-				</ScrollArea>
+							))}
+						</div>
+						<ScrollBar orientation="horizontal" />
+					</ScrollArea>
+				</div>
 			</CardHeader>
 
 			<CardContent className="pt-6">
