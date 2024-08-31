@@ -21,11 +21,15 @@ const HeroSection = () => {
 						advanced indicators, and market-wide visualizations.
 					</p>
 
-					<div className="flex justify-center space-x-4">
-						<Button asChild>
+					<div className="flex justify-center space-x-4 transition-all duration-300 ">
+						<Button
+							asChild
+							className="py-6 px-8 hover:shadow-lg hover:scale-105 transition-all duration-300"
+						>
 							<Link to="/subscribe">Get Started</Link>
 						</Button>
 						<Button
+							className="py-6 px-8 hover:shadow-lg hover:scale-105 transition-all duration-300"
 							variant="outline"
 							onClick={() => handleScroll("notification-board")}
 						>
