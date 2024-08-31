@@ -177,7 +177,7 @@ export function Home({ user }: StockChartProps) {
 					</section>
 				)}
 
-				<section id="notification-board" className="pb-20 pt-10">
+				<section id="notification-board" className="pb-10 pt-10 relative">
 					<NotificationBoard
 						onNotificationClick={(stock, period, indicator) => {
 							handleNotificationClick(stock, period, indicator);
@@ -185,6 +185,29 @@ export function Home({ user }: StockChartProps) {
 						}}
 						availableStocks={availableStocks}
 					/>
+					{!user && (
+						<div className="relative sm:w-2/3 h-full max-w-screen-xl mx-auto">
+							<div className="absolute -top-4 left-1/2 transform -translate-x-1/2 animate-bounce">
+								<svg
+									className="w-4 h-4 text-slate-500 z-0"
+									fill="none"
+									stroke="currentColor"
+									viewBox="0 0 24 24"
+									xmlns="http://www.w3.org/2000/svg"
+								>
+									<path
+										strokeLinecap="round"
+										strokeLinejoin="round"
+										strokeWidth={4}
+										d="M5 10l7-7m0 0l7 7m-7-7v18"
+									/>
+								</svg>
+							</div>
+							<p className="z-10 text-sm md:text-base font-bold text-white px-4 py-3 bg-gradient-to-r from-slate-400 to-slate-600 rounded-lg shadow-lg transition-all duration-300">
+								Click a notification to explore insights
+							</p>
+						</div>
+					)}
 				</section>
 
 				{!user && (
