@@ -46,8 +46,8 @@ const FAQHome = () => {
 							Is there a free trial?
 						</AccordionTrigger>
 						<AccordionContent className="text-left">
-							Currently, we do not offer a free trial. However, we offer a $3
-							discount for the launch.
+							Yes! We offer a 7-day free trial. After the trial, you can choose
+							to subscribe to our service for only €9.99 per month.
 						</AccordionContent>
 					</AccordionItem>
 				</Accordion>
