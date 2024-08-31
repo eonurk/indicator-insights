@@ -75,7 +75,9 @@ export function Home({ user }: StockChartProps) {
 					)
 				) {
 					setAvailableStocks(defaultStocks);
-					setSelectedStock(Object.keys(defaultStocks)[0]);
+					if (!Object.keys(defaultStocks).includes(selectedStock)) {
+						setSelectedStock(Object.keys(defaultStocks)[0]);
+					}
 				}
 			} else {
 				// Fetch available indices if not already loaded
@@ -95,13 +97,7 @@ export function Home({ user }: StockChartProps) {
 		};
 
 		fetchData();
-	}, [
-		user,
-		selectedIndex,
-		availableIndices.length,
-		selectedStock,
-		availableStocks,
-	]);
+	}, [user, selectedIndex, availableIndices.length, selectedStock]);
 
 	const handleNotificationClick = (
 		stock: string,
