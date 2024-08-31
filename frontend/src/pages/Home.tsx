@@ -141,18 +141,12 @@ export function Home({ user }: StockChartProps) {
 							<br />
 							<span className="inline-flex items-center">
 								<svg
-									xmlns="http://www.w3.org/2000/svg"
-									className="h-4 w-4 mr-1"
-									fill="none"
+									className="w-4 h-4 text-slate-500 z-0"
+									fill="currentColor"
 									viewBox="0 0 24 24"
-									stroke="currentColor"
+									xmlns="http://www.w3.org/2000/svg"
 								>
-									<path
-										strokeLinecap="round"
-										strokeLinejoin="round"
-										strokeWidth={2}
-										d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-									/>
+									<path d="M12 2L2 22h20L12 2z" />
 								</svg>
 								<span className="text-white text-xs opacity-80 ">
 									Only the stocks of the selected index are shown. It might take
@@ -186,24 +180,18 @@ export function Home({ user }: StockChartProps) {
 						availableStocks={availableStocks}
 					/>
 					{!user && (
-						<div className="relative sm:w-2/3 h-full max-w-screen-xl mx-auto">
-							<div className="absolute -top-4 left-1/2 transform -translate-x-1/2 animate-bounce">
+						<div className="relative sm:w-2/3 h-full max-w-screen-xl mx-auto mt-6">
+							<div className="absolute -top-4 z-0 left-1/2 transform -translate-x-1/2 animate-bounce">
 								<svg
-									className="w-4 h-4 text-slate-500 z-0"
-									fill="none"
-									stroke="currentColor"
+									className="w-4 h-4 text-slate-700 z-0"
+									fill="currentColor"
 									viewBox="0 0 24 24"
 									xmlns="http://www.w3.org/2000/svg"
 								>
-									<path
-										strokeLinecap="round"
-										strokeLinejoin="round"
-										strokeWidth={4}
-										d="M5 10l7-7m0 0l7 7m-7-7v18"
-									/>
+									<path d="M12 2L2 22h20L12 2z" />
 								</svg>
 							</div>
-							<p className="z-10 text-sm md:text-base font-bold text-white px-4 py-3 bg-gradient-to-r from-slate-400 to-slate-600 rounded-lg shadow-lg transition-all duration-300">
+							<p className="z-10 text-sm md:text-base font-bold text-white px-4 py-3 bg-gradient-to-r from-gray-800 via-gray-700 to-gray-900 rounded-lg shadow-lg transition-all duration-300 border border-gray-600">
 								Click a notification to explore insights
 							</p>
 						</div>
