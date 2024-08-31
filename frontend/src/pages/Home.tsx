@@ -23,7 +23,6 @@ import {
 	getDefaultCompanies,
 } from "@/utils/marketData";
 import { Label } from "@/components/ui/label";
-import { stocks } from "@/utils/stocks";
 
 <script async src="https://js.stripe.com/v3/pricing-table.js"></script>;
 
@@ -45,10 +44,10 @@ export function Home({ user }: StockChartProps) {
 	const [selectedPeriod, setSelectedPeriod] = useState("1m");
 	const [selectedIndicators, setSelectedIndicators] = useState({
 		RMI: true,
-		RSI: false,
-		EMA: false,
-		MACD: false,
-		Bollinger: false,
+		RSI: true,
+		EMA: true,
+		MACD: true,
+		Bollinger: true,
 	});
 
 	const [selectedIndex, setSelectedIndex] = useState("S&P 100");
