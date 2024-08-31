@@ -33,8 +33,8 @@ const PricingTable: React.FC = () => {
 					Indicator Insight Pro
 				</h2>
 				<div className="flex items-center mb-2">
-					<span className="text-blue-500 bg-white border border-blue-500 text-xs px-2 py-0.5 rounded-full">
-						Special Launch Offer
+					<span className="text-blue-500 bg-white border border-blue-500 text-xs px-4 py-1 rounded-full">
+						7-Day Free Trial
 					</span>
 				</div>
 				<p className="text-sm font-light text-gray-400 mb-4 text-left">
@@ -55,10 +55,10 @@ const PricingTable: React.FC = () => {
 				<button
 					className="w-full bg-blue-600 text-white text-sm py-3 rounded-md hover:bg-blue-700 transition duration-300"
 					onClick={() => {
-						window.location.href = "https://buy.stripe.com/9AQg2M0Zy5Rq7Ic3cd";
+						window.location.href = "https://buy.stripe.com/bIYcQA37GenW4w0bIK";
 					}}
 				>
-					Subscribe
+					Start Free Trial
 				</button>
 
 				<ul className="mt-4 space-y-2 text-sm">
