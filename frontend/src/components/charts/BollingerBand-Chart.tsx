@@ -2,6 +2,7 @@ import { useMemo } from "react";
 import { Line } from "react-chartjs-2";
 import { BollingerBands } from "@/utils/Indicators";
 import { CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { ChartData } from "chart.js";
 
 function calculateBollingerProfit(
 	prices: number[],
@@ -42,13 +43,10 @@ function calculateBollingerProfit(
 }
 
 interface BollingerChartProps {
-	formattedData: {
-		labels: Date[];
-		datasets: Dataset[];
-	};
+	formattedData: ChartData<"line">;
 	period?: number;
 	stdDev?: number;
-	options?: any;
+	options?: unknown;
 }
 
 export default function BollingerChart({
@@ -67,42 +65,51 @@ export default function BollingerChart({
 			return null;
 		}
 
-		const prices = formattedData.datasets[0].data.map(
-			(point: { y: any }) => point.y
-		);
+		const prices = formattedData.datasets[0].data
+			.map((point: number | { y: number } | null) =>
+				typeof point === "object" && point !== null ? point.y : point
+			)
+			.filter((y): y is number => y !== null);
 		return BollingerBands(prices, period, stdDev);
 	}, [formattedData, period, stdDev]);
 
 	if (!bandsData) return null;
 
-	const prices = formattedData.datasets[0].data.map(
-		(point: { y: any }) => point.y
+	const upperBand = bandsData
+		.map((band) => band.upper)
+		.filter((v): v is number => v !== null);
+	const lowerBand = bandsData
+		.map((band) => band.lower)
+		.filter((v): v is number => v !== null);
+	const { profit, buyPoints, sellPoints } = calculateBollingerProfit(
+		formattedData.datasets[0].data
+			.map((point: number | { y: number } | null) =>
+				typeof point === "object" && point !== null ? point.y : point
+			)
+			.filter((y): y is number => y !== null),
+		upperBand,
+		lowerBand
 	);
-	const upperBand = bandsData.map((band) => band.upper);
-	const lowerBand = bandsData.map((band) => band.lower);
-	const middleBand = bandsData.map((band) => band.middle);
-
-	const { profit, buyPoints, sellPoints } = useMemo(() => {
-		return calculateBollingerProfit(prices, upperBand, lowerBand);
-	}, [prices, upperBand, lowerBand]);
 
 	const chartData = {
 		labels: formattedData.labels,
 		datasets: [
 			{
 				label: "Price",
-				data: prices.map((value: any, index: string | number) => ({
-					x: formattedData.labels[index],
-					y: value,
-				})),
+				data: formattedData.datasets[0].data.map(
+					(value: number | { y: number } | null, index: number) => ({
+						x: formattedData.labels?.[index] ?? index,
+						y: value,
+					})
+				),
 				borderColor: "black",
 				borderWidth: 2,
 				fill: false,
 			},
 			{
 				label: "Upper Band",
-				data: upperBand.map((value, index) => ({
-					x: formattedData.labels[index],
+				data: upperBand.map((value: number | null, index: number) => ({
+					x: formattedData.labels?.[index] ?? index,
 					y: value,
 				})),
 				borderColor: "blue",
@@ -111,8 +118,8 @@ export default function BollingerChart({
 			},
 			{
 				label: "Lower Band",
-				data: lowerBand.map((value, index) => ({
-					x: formattedData.labels[index],
+				data: lowerBand.map((value: number | null, index: number) => ({
+					x: formattedData.labels?.[index] ?? index,
 					y: value,
 				})),
 				borderColor: "blue",
@@ -121,18 +128,20 @@ export default function BollingerChart({
 			},
 			{
 				label: "Middle Band",
-				data: middleBand.map((value, index) => ({
-					x: formattedData.labels[index],
-					y: value,
-				})),
+				data: formattedData.datasets[0].data.map(
+					(value: number | { y: number } | null, index: number) => ({
+						x: formattedData.labels?.[index] ?? index,
+						y: typeof value === "object" && value !== null ? value.y : value,
+					})
+				),
 				borderColor: "grey",
 				borderWidth: 1,
 				fill: false,
 			},
 			{
 				label: "Buy Points",
-				data: buyPoints.map((point) => ({
-					x: formattedData.labels[point.x],
+				data: buyPoints.map((point: { x: number; y: number }) => ({
+					x: formattedData.labels?.[point.x] ?? point.x,
 					y: point.y,
 				})),
 				backgroundColor: "green",
@@ -142,8 +151,8 @@ export default function BollingerChart({
 			},
 			{
 				label: "Sell Points",
-				data: sellPoints.map((point) => ({
-					x: formattedData.labels[point.x],
+				data: sellPoints.map((point: { x: number; y: number }) => ({
+					x: formattedData.labels?.[point.x] ?? point.x,
 					y: point.y,
 				})),
 				backgroundColor: "red",
@@ -153,9 +162,8 @@ export default function BollingerChart({
 			},
 		],
 	};
-
 	const customOptions = {
-		...options,
+		...(options as object),
 	};
 
 	return (

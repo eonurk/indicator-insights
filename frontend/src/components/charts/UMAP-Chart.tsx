@@ -17,9 +17,11 @@ import {
 	SelectContent,
 	SelectItem,
 } from "@/components/ui/select";
-import { calculateRMIProfit } from "@/components/charts/RMIChart";
-import { calculateRSIProfit } from "@/components/charts/RSIChart";
-import { calculateMACDProfit } from "@/components/charts/MACD-Chart";
+import {
+	calculateRMIProfit,
+	calculateRSIProfit,
+	calculateMACDProfit,
+} from "@/utils/calculateProfit";
 import { MACD, RMI, RSI } from "@/utils/Indicators";
 import {
 	Accordion,
@@ -48,6 +50,11 @@ const indicatorOptions = [
 
 interface UMAPChartProps {
 	user: User | null;
+}
+
+// Define the StockData type
+interface StockData {
+	history: Record<string, { Close: number }>;
 }
 
 function UMAPChart({ user }: UMAPChartProps) {
@@ -122,13 +129,18 @@ function UMAPChart({ user }: UMAPChartProps) {
 					tooltip: {
 						callbacks: {
 							label: (context) => {
-								const point = context.raw as any;
+								const point = context.raw as {
+									symbol: string;
+									close: number;
+									latestSignal: string | null;
+									latestSignalPrice: number | null;
+								};
 								return [
 									`${point.symbol}: $${point.close.toFixed(2)}`,
 									point.latestSignal
-										? `(${
-												point.latestSignal
-										  }: ${point.latestSignalPrice.toFixed(2)})`
+										? `(${point.latestSignal}: ${
+												point.latestSignalPrice?.toFixed(2) || "-"
+										  })`
 										: "",
 								]
 									.filter(Boolean)
@@ -147,7 +159,7 @@ function UMAPChart({ user }: UMAPChartProps) {
 				},
 			},
 		});
-	}, [data]);
+	}, [data, user]);
 
 	useEffect(() => {
 		if (chartRef.current && data.length > 0 && showChart) {
@@ -169,7 +181,7 @@ function UMAPChart({ user }: UMAPChartProps) {
 			console.log("Fetched stock data response:", response);
 
 			const stockDataArray = Object.values(response).map((stock: StockData) =>
-				Object.values(stock.history).map((day) => day.Close)
+				Object.values(stock.history).map((day: { Close: number }) => day.Close)
 			);
 
 			if (stockDataArray.length === 0) {
@@ -190,7 +202,7 @@ function UMAPChart({ user }: UMAPChartProps) {
 	};
 
 	const calculateProfit = (
-		stockHistory: Record<string, any>,
+		stockHistory: Record<string, { Close: number }>,
 		indicator: string
 	): {
 		profit: number;
@@ -198,7 +210,7 @@ function UMAPChart({ user }: UMAPChartProps) {
 		latestSignalPrice: number | null;
 	} => {
 		const closingPrices = Object.values(stockHistory).map(
-			(day: any) => day.Close
+			(day: { Close: number }) => day.Close
 		);
 
 		if (indicator === "RMI") {
@@ -298,7 +310,6 @@ function UMAPChart({ user }: UMAPChartProps) {
 				spread: 1,
 				nEpochs: 200,
 				random: Math.random,
-				seed: 42,
 			});
 			const result = umap.fit(normalizedData);
 
@@ -319,7 +330,7 @@ function UMAPChart({ user }: UMAPChartProps) {
 					}
 
 					// Calculate profit based on the selected indicator
-					const { profit, latestSignal, latestSignalPrice } = calculateProfit(
+					const { latestSignal, latestSignalPrice } = calculateProfit(
 						history,
 						indicator
 					);

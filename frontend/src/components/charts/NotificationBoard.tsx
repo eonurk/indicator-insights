@@ -9,9 +9,12 @@ import {
 import { fetchStockData } from "@/fetchStockData";
 import { RMI, RSI, MACD } from "@/utils/Indicators";
 import { format } from "date-fns";
-import { calculateRMIProfit } from "@/components/charts/RMIChart";
-import { calculateRSIProfit } from "@/components/charts/RSIChart";
-import { calculateMACDProfit } from "@/components/charts/MACD-Chart";
+import {
+	calculateRMIProfit,
+	calculateMACDProfit,
+	calculateRSIProfit,
+} from "@/utils/calculateProfit";
+
 import { ScrollArea } from "@/components/ui/scroll-area";
 import {
 	Select,
@@ -91,7 +94,9 @@ const NotificationBoard: React.FC<NotificationBoardProps> = ({
 	}>(Object.fromEntries(indicators.map((ind) => [ind.key, ind.key == "RMI"])));
 	const [isLoading, setIsLoading] = useState(true);
 	const [error, setError] = useState<string | null>(null);
-	const cachedDataRef = useRef<{ [key: string]: any }>({});
+	const cachedDataRef = useRef<{
+		[key: string]: { history: Record<string, { Close: number }> };
+	}>({});
 	const lastFetchTimeRef = useRef<{
 		time: Date;
 		period: string;
@@ -168,18 +173,37 @@ const NotificationBoard: React.FC<NotificationBoardProps> = ({
 				// Process indicators and generate notifications
 				for (const indicator of indicators) {
 					if (enabledIndicators[indicator.key]) {
-						let indicatorValues, macdLine, signalLine;
+						let indicatorValues:
+							| number[]
+							| {
+									macdLine: number[];
+									signalLine: number[];
+									histogram: number[];
+							  };
+						let macdLine: number[] = [],
+							signalLine: number[] = [];
 
 						if (indicator.key === "MACD") {
-							({ macdLine, signalLine } = indicator.calculate(closingPrices));
+							const macdResult = indicator.calculate(closingPrices) as {
+								macdLine: number[];
+								signalLine: number[];
+								histogram: number[];
+							};
+							indicatorValues = macdResult;
+							macdLine = macdResult.macdLine;
+							signalLine = macdResult.signalLine;
 						} else {
-							indicatorValues = indicator.calculate(closingPrices);
+							indicatorValues = indicator.calculate(closingPrices) as number[];
 						}
 
 						const { buyPoints, sellPoints, latestBuyPrice, latestSellPrice } =
 							indicator.key === "MACD"
 								? indicator.calculateProfit(closingPrices, macdLine, signalLine)
-								: indicator.calculateProfit(closingPrices, indicatorValues);
+								: indicator.calculateProfit(
+										closingPrices,
+										indicatorValues as number[],
+										dates.map((date) => date.getTime())
+								  );
 
 						const addNotification = (
 							signal: "buy" | "sell",
@@ -244,7 +268,7 @@ const NotificationBoard: React.FC<NotificationBoardProps> = ({
 		const intervalId = setInterval(checkForSignals, 5 * 60 * 1000); // Check every 5 minutes
 
 		return () => clearInterval(intervalId); // Cleanup the interval on unmount
-	}, [checkForSignals, currentStocks, selectedPeriod, enabledIndicators]);
+	}, [checkForSignals]);
 
 	return (
 		<Card className="mt-4 w-full md:w-2/3 md:mx-auto">

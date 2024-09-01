@@ -142,7 +142,7 @@ export function SMA(prices: number[], period: number): number[] {
 	for (let i = 0; i < prices.length; i++) {
 		if (i < period - 1) {
 			// Not enough data points to calculate SMA
-			sma.push(null);
+			sma.push(0);
 		} else {
 			const sum = prices
 				.slice(i - period + 1, i + 1)

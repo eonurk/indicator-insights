@@ -32,7 +32,6 @@ import {
 	Legend,
 	TimeSeriesScale,
 } from "chart.js";
-import { ChartOptions, ChartData } from "chart.js";
 
 import RMIChart from "@/components/charts/RMIChart";
 import RSIChart from "@/components/charts/RSIChart";
@@ -108,6 +107,45 @@ interface StockChartProps {
 	availableStocks: { [key: string]: string };
 }
 
+interface DataPoint {
+	x: Date;
+	y: number;
+}
+
+import { ChartData, ChartOptions } from "chart.js";
+import { CartesianScaleTypeRegistry, ScaleOptionsByType } from "chart.js";
+
+interface DataPoint {
+	x: Date;
+	y: number;
+}
+
+interface StockChartProps {
+	selectedStock: string;
+	selectedPeriod: string;
+	selectedIndicators: Record<string, boolean>;
+	availableStocks: Record<string, string>;
+}
+
+type GenericChartOptions = Omit<ChartOptions<"line">, "scales"> & {
+	scales?: {
+		[key: string]: ScaleOptionsByType<keyof CartesianScaleTypeRegistry>;
+	};
+};
+
+interface FormattedChartData {
+	labels: Date[];
+	datasets: {
+		label: string;
+		data: { x: Date; y: number }[];
+		borderColor: string;
+		borderWidth: number;
+		backgroundColor: string;
+		fill: boolean;
+		tension: number;
+	}[];
+}
+
 function StockChart({
 	selectedStock,
 	selectedPeriod,
@@ -131,7 +169,7 @@ function StockChart({
 		lineColor: string;
 		cardTitleColor: string;
 		chartOptions: ChartOptions;
-		formattedData: ChartData;
+		formattedData: ChartData<"line", DataPoint[]>;
 	} | null>(null);
 
 	const [selectedIndicators, setSelectedIndicators] = useState(() => ({
@@ -167,6 +205,9 @@ function StockChart({
 
 			const history = stockData["history"];
 			const dates = Object.keys(history).map((date) => new Date(date));
+			// Ensure dates is always defined
+			if (dates.length === 0) return;
+
 			const closingPrices = dates
 				.map((date) => history[format(date, "yyyy-MM-dd HH:mm:ss")]?.Close)
 				.filter((price) => price !== undefined) as number[];
@@ -196,7 +237,7 @@ function StockChart({
 				lineColor: lineColor,
 				cardTitleColor: cardTitleColor,
 				formattedData: {
-					labels: dates,
+					labels: dates as Date[], // Ensure labels is always defined as Date[]
 					datasets: [
 						{
 							label: symbol,
@@ -327,7 +368,7 @@ function StockChart({
 				{stockInfo && (
 					<>
 						<Line
-							data={stockInfo.formattedData as ChartData<"line">}
+							data={stockInfo.formattedData as ChartData<"line", DataPoint[]>}
 							options={stockInfo.chartOptions as ChartOptions<"line">}
 						/>
 						<div className="flex justify-between items-center">
@@ -344,12 +385,14 @@ function StockChart({
 													<IndicatorComponent
 														key={indicatorKey}
 														formattedData={
-															stockInfo.formattedData as ChartData<"line">
+															stockInfo.formattedData as FormattedChartData
 														}
 														{...indicatorPeriods[
 															key as keyof typeof indicatorPeriods
 														]}
-														options={stockInfo.chartOptions}
+														options={
+															stockInfo.chartOptions as GenericChartOptions
+														}
 													/>
 													<Button
 														key={`${indicatorKey}-settings`}

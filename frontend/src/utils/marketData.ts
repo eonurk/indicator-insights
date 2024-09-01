@@ -7,10 +7,15 @@ export interface Index {
 
 export interface Company {
 	name: string;
-	symbol: string;
+	symbol: string | null; // Allow null for symbol
 	country: string;
 	indices: string[];
 	industries: string[];
+	symbols?: { yahoo: string; google: string; currency: string }[]; // Optional
+	metadata?: { founded: number | string; employees: number | string }; // Optional
+	isins?: string[]; // Optional
+	akas?: string[]; // Optional
+	wiki_name?: string; // Optional
 }
 
 export interface MarketData {

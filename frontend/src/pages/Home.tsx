@@ -105,9 +105,12 @@ export function Home({ user }: StockChartProps) {
 	) => {
 		setSelectedStock(stock);
 		setSelectedPeriod(period);
-		setSelectedIndicators((prev) => ({
-			...Object.fromEntries(Object.keys(prev).map((key) => [key, false])),
-			[indicator]: true,
+		setSelectedIndicators(() => ({
+			RMI: indicator === "RMI",
+			RSI: indicator === "RSI",
+			EMA: indicator === "EMA",
+			MACD: indicator === "MACD",
+			Bollinger: indicator === "Bollinger",
 		}));
 	};
 

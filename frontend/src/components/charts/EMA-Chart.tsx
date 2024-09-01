@@ -2,6 +2,12 @@ import { useMemo } from "react";
 import { Line } from "react-chartjs-2";
 import { EMA } from "@/utils/Indicators";
 import { CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { ChartOptions } from "chart.js";
+
+interface Dataset {
+	data: { y: number }[];
+	// Add other properties if needed
+}
 
 function calculateEMAProfit(prices: number[], emaData: number[]) {
 	let capital = 100;
@@ -46,7 +52,7 @@ interface EMAChartProps {
 		datasets: Dataset[];
 	};
 	period?: number;
-	options?: any;
+	options?: ChartOptions;
 }
 
 export default function EMAChart({
@@ -65,7 +71,7 @@ export default function EMAChart({
 		}
 
 		const prices = formattedData.datasets[0].data.map(
-			(point: { y: any }) => point.y
+			(point: { y: number }) => point.y
 		);
 		return EMA(prices, period);
 	}, [formattedData, period]);
@@ -73,24 +79,22 @@ export default function EMAChart({
 	if (!emaData) return null;
 
 	const prices = formattedData.datasets[0].data.map(
-		(point: { y: any }) => point.y
+		(point: { y: number }) => point.y
 	);
 
-	const { profit, buyPoints, sellPoints } = useMemo(() => {
-		return calculateEMAProfit(prices, emaData);
-	}, [prices, emaData]);
+	const { profit, buyPoints, sellPoints } = calculateEMAProfit(prices, emaData);
 
 	const chartData = {
 		labels: formattedData.labels,
 		datasets: [
 			{
 				label: "Price",
-				data: prices.map((value: any, index: string | number) => ({
+				data: prices.map((value: number, index: number) => ({
 					x: formattedData.labels[index],
 					y: value,
 				})),
 				borderColor: "black",
-				borderWidth: 2,
+				borderWidth: 1,
 				fill: false,
 			},
 			{
@@ -100,7 +104,7 @@ export default function EMAChart({
 					y: value,
 				})),
 				borderColor: "blue",
-				borderWidth: 2,
+				borderWidth: 1,
 				fill: false,
 			},
 			{
@@ -146,7 +150,7 @@ export default function EMAChart({
 					</CardDescription>
 				</div>
 			</CardHeader>
-			<Line data={chartData} options={customOptions} />
+			<Line data={chartData} options={customOptions as object} />
 		</>
 	);
 }

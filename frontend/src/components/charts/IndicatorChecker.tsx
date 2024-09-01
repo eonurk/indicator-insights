@@ -30,7 +30,7 @@ import {
 } from "@/components/ui/table";
 
 import { RMI } from "@/utils/Indicators";
-import { calculateRMIProfit } from "@/components/charts/RMIChart";
+import { calculateRMIProfit } from "@/utils/calculateProfit";
 
 import { stocks } from "@/utils/stocks";
 import { fetchStockData } from "@/fetchStockData";
@@ -47,19 +47,34 @@ const periodOptions = [
 ];
 
 // Helper function to determine the last signal
-function determineLastSignal(prices: number[], rmiData: number[]): any {
+function determineLastSignal(prices: number[], rmiData: number[]): unknown {
 	if (rmiData.length < 2) return "No signal";
 	// return { profit, buyPoints, sellPoints, latestBuyPrice };
 	return calculateRMIProfit(prices, rmiData);
 }
+
 interface StockChartProps {
 	user: User | null; // Use User type from firebase/auth
 }
+
+interface Result {
+	symbol: string;
+	indicatorResult: number[];
+	lastSignal: {
+		profit: number;
+		buyPoints: number[];
+		sellPoints: number[];
+		latestBuyPrice: number | null;
+		latestSellPrice?: number | null;
+	};
+	closingPrices: number[];
+}
+
 export default function IndicatorChecker({ user }: StockChartProps) {
 	const [buttonDisable, setButtonDisable] = useState(false);
 	const [period, setPeriod] = useState<string>("1w");
 	const [indicator, setIndicator] = useState<string>("RMI");
-	const [results, setResults] = useState<any[]>([]);
+	const [results, setResults] = useState<Result[]>([]);
 
 	const handleStart = async () => {
 		try {
@@ -100,7 +115,7 @@ export default function IndicatorChecker({ user }: StockChartProps) {
 				rsiResults.push({ symbol, indicatorResult, lastSignal, closingPrices });
 			}
 
-			setResults(rsiResults);
+			setResults(rsiResults as Result[]);
 		} catch (error) {
 			console.error("Error fetching stock data:", error);
 		} finally {
@@ -217,7 +232,8 @@ export default function IndicatorChecker({ user }: StockChartProps) {
 											<TableCell className="p-1">
 												{result.lastSignal.latestBuyPrice !== null
 													? result.lastSignal.latestBuyPrice.toFixed(2)
-													: result.lastSignal.latestSellPrice !== null
+													: result.lastSignal.latestSellPrice !== undefined &&
+													  result.lastSignal.latestSellPrice !== null
 													? result.lastSignal.latestSellPrice.toFixed(2)
 													: "-"}
 											</TableCell>

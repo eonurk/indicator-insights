@@ -1,12 +1,15 @@
 import { useMemo } from "react";
 import { Line } from "react-chartjs-2";
 import { RMI } from "@/utils/Indicators";
+import { calculateRMIProfit } from "@/utils/calculateProfit"; // Import the function
 import {
 	CardDescription,
 	CardFooter,
 	CardHeader,
 	CardTitle,
 } from "@/components/ui/card";
+import { ChartOptions } from "chart.js";
+
 interface DataPoint {
 	x: Date;
 	y: number;
@@ -21,55 +24,15 @@ interface Dataset {
 	fill: boolean;
 	tension: number;
 }
-
-interface RMIChartProps {
-	formattedData: {
-		labels: Date[];
-		datasets: Dataset[];
-	};
-	period?: number;
-	options?: any;
+interface FormattedChartData {
+	labels: Date[];
+	datasets: Dataset[];
 }
 
-// Calculate profit based on RSI with buy/sell signals
-export function calculateRMIProfit(prices: any[], rmiData: string | any[]) {
-	let capital = 100; // Start with an initial capital (can be any arbitrary value)
-	let latestBuyPrice = null;
-	let latestSellPrice = null;
-	const buyPoints = [];
-	const sellPoints = [];
-
-	for (let i = 1; i < rmiData.length; i++) {
-		// Buy signal: RSI crosses above 30
-		if (rmiData[i - 1] < 30 && rmiData[i] > 30 && rmiData[i - 1] != null) {
-			latestBuyPrice = prices[i];
-			buyPoints.push({ x: i, y: rmiData[i], price: prices[i] });
-		}
-		// Sell signal: RSI crosses below 70
-		else if (
-			rmiData[i - 1] > 70 &&
-			rmiData[i] < 70 &&
-			latestBuyPrice !== null
-		) {
-			// Calculate profit/loss for this trade and update capital
-			capital = capital * (1 + (prices[i] - latestBuyPrice) / latestBuyPrice);
-			sellPoints.push({ x: i, y: rmiData[i], price: prices[i] });
-			latestBuyPrice = null; // Reset after tracking the latest sell
-			latestSellPrice = prices[i];
-		}
-	}
-
-	// If there's an open position at the end, close it using the last price
-	if (latestBuyPrice !== null) {
-		capital =
-			capital *
-			(1 + (prices[prices.length - 1] - latestBuyPrice) / latestBuyPrice);
-	}
-
-	// Compound profit/loss is the difference between the final capital and initial capital
-	const profit = capital - 100;
-
-	return { profit, buyPoints, sellPoints, latestBuyPrice, latestSellPrice };
+interface RMIChartProps {
+	formattedData: FormattedChartData;
+	period?: number;
+	options?: object;
 }
 
 export default function RMIChart({
@@ -96,9 +59,7 @@ export default function RMIChart({
 
 	const prices = formattedData.datasets[0].data.map((point) => point.y);
 	// Calculate profit and buy/sell points
-	const { profit, buyPoints, sellPoints } = useMemo(() => {
-		return calculateRMIProfit(prices, rmiData);
-	}, [prices, rmiData]);
+	const { profit, buyPoints, sellPoints } = calculateRMIProfit(prices, rmiData);
 
 	const chartData = {
 		labels: formattedData.labels,
@@ -140,9 +101,9 @@ export default function RMIChart({
 	};
 
 	const customOptions = {
-		...options,
+		...(options as ChartOptions<"line">),
 		scales: {
-			...options.scales,
+			...((options as ChartOptions<"line">)?.scales || {}),
 			y: {
 				suggestedMin: 0,
 				suggestedMax: 100,
