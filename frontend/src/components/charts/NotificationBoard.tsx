@@ -249,7 +249,7 @@ const NotificationBoard: React.FC<NotificationBoardProps> = ({
 	return (
 		<Card className="mt-4 w-full md:w-2/3 md:mx-auto">
 			<CardHeader className="flex flex-wrap justify-between items-center">
-				<CardTitle>Real-time Notifications</CardTitle>
+				<CardTitle>Real-time Insights</CardTitle>
 				<CardDescription>
 					Real-time buy/sell signals for portfolio stocks based on selected
 					period and indicators.
@@ -264,12 +264,17 @@ const NotificationBoard: React.FC<NotificationBoardProps> = ({
 				)}
 				<div className="flex gap-2">
 					<Select value={selectedPeriod} onValueChange={setSelectedPeriod}>
+						{/* Button that opens the dropdown */}
 						<SelectTrigger className="min-w-[120px]">
-							<SelectValue placeholder="1 Month" />
+							{/* Displays the currently selected value */}
+							<SelectValue />
 						</SelectTrigger>
 
+						{/* Container for the dropdown items */}
 						<SelectContent>
+							{/* Map over periodOptions to create a list of selectable items */}
 							{periodOptions.map(({ value, label }) => (
+								// Each item represents a selectable period option
 								<SelectItem key={value} value={value}>
 									{label}
 								</SelectItem>
@@ -287,6 +292,7 @@ const NotificationBoard: React.FC<NotificationBoardProps> = ({
 										id={key}
 										checked={enabledIndicators[key]}
 										onCheckedChange={() => toggleIndicator(key)}
+										className="w-5 h-5 m-1" // Add this line to increase the size
 									/>
 									<label htmlFor={key}>{label}</label>
 								</div>
@@ -312,26 +318,34 @@ const NotificationBoard: React.FC<NotificationBoardProps> = ({
 							{notifications.map((notification) => (
 								<li
 									key={notification.id}
-									className={`mb-2 p-2 rounded ${
+									className={`mb-2 p-4 rounded-lg shadow-md transition-transform transform ${
 										notification.isNew ? "bg-green-100 border" : "bg-gray-100"
-									} cursor-pointer hover:bg-opacity-80 transition-colors`}
+									} cursor-pointer hover:bg-opacity-80 hover:scale-105`}
 									onClick={() => handleNotificationClick(notification)}
 								>
-									<span className="font-bold">{notification.stock}</span>{" "}
-									{notification.indicator} gives a{" "}
-									<span
-										className={
-											notification.signal === "buy"
-												? "text-green-500"
-												: "text-red-500"
-										}
-									>
-										{notification.signal}
-									</span>{" "}
-									signal at ${notification.price.toFixed(2)}
-									<span className="text-sm text-gray-500 ml-2">
-										{format(notification.timestamp, "yyyy-MM-dd HH:mm")}
-									</span>
+									<div className="flex items-center justify-between">
+										<span className="font-bold text-lg">
+											{notification.stock}
+										</span>
+										<span
+											className={`text-lg font-base ${
+												notification.signal === "buy"
+													? "text-green-500"
+													: "text-red-500"
+											}`}
+										>
+											{notification.signal.toUpperCase()}
+										</span>
+									</div>
+									<div className="flex items-center justify-between mt-2">
+										<span className="text-sm text-gray-500">
+											{notification.indicator} signal at $
+											{notification.price.toFixed(2)}
+										</span>
+										<span className="text-sm text-gray-500">
+											{format(notification.timestamp, "yyyy-MM-dd HH:mm")}
+										</span>
+									</div>
 								</li>
 							))}
 						</ul>

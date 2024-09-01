@@ -180,19 +180,9 @@ export function Home({ user }: StockChartProps) {
 						availableStocks={availableStocks}
 					/>
 					{!user && (
-						<div className="relative sm:w-2/3 h-full max-w-screen-xl mx-auto mt-6">
-							<div className="absolute -top-4 z-0 left-1/2 transform -translate-x-1/2 animate-bounce">
-								<svg
-									className="w-4 h-4 text-slate-700 z-0"
-									fill="currentColor"
-									viewBox="0 0 24 24"
-									xmlns="http://www.w3.org/2000/svg"
-								>
-									<path d="M12 2L2 22h20L12 2z" />
-								</svg>
-							</div>
-							<p className="z-10 text-sm md:text-base font-bold text-white px-4 py-3 bg-gradient-to-r from-gray-800 via-gray-700 to-gray-900 rounded-lg shadow-lg transition-all duration-300 border border-gray-600">
-								Click a notification to explore insights
+						<div className="relative sm:w-2/3 h-full max-w-screen-xl mx-auto">
+							<p className="z-10 text-sm font-xs text-gray-100 px-1 py-1 bg-gray-400 rounded transition-all duration-300">
+								Click on an insight to explore more
 							</p>
 						</div>
 					)}
