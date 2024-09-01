@@ -19,7 +19,6 @@ interface Dataset {
 	fill: boolean;
 	tension: number;
 }
-
 interface FormattedChartData {
 	labels: Date[];
 	datasets: Dataset[];

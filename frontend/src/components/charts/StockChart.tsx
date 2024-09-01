@@ -100,25 +100,27 @@ const indicators = [
 	},
 ];
 
-interface StockChartProps {
-	selectedStock: string;
-	selectedPeriod: string;
-	selectedIndicators: { [key: string]: boolean };
-	availableStocks: { [key: string]: string };
-}
-
 interface DataPoint {
 	x: Date;
 	y: number;
+}
+
+interface Dataset {
+	label: string;
+	data: DataPoint[];
+	borderColor: string;
+	borderWidth: number;
+	backgroundColor: string;
+	fill: boolean;
+	tension: number;
+}
+interface FormattedChartData {
+	labels: Date[];
+	datasets: Dataset[];
 }
 
 import { ChartData, ChartOptions } from "chart.js";
 import { CartesianScaleTypeRegistry, ScaleOptionsByType } from "chart.js";
-
-interface DataPoint {
-	x: Date;
-	y: number;
-}
 
 interface StockChartProps {
 	selectedStock: string;
@@ -132,19 +134,6 @@ type GenericChartOptions = Omit<ChartOptions<"line">, "scales"> & {
 		[key: string]: ScaleOptionsByType<keyof CartesianScaleTypeRegistry>;
 	};
 };
-
-interface FormattedChartData {
-	labels: Date[];
-	datasets: {
-		label: string;
-		data: { x: Date; y: number }[];
-		borderColor: string;
-		borderWidth: number;
-		backgroundColor: string;
-		fill: boolean;
-		tension: number;
-	}[];
-}
 
 function StockChart({
 	selectedStock,

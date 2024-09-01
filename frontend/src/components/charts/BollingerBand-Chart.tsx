@@ -2,7 +2,6 @@ import { useMemo } from "react";
 import { Line } from "react-chartjs-2";
 import { BollingerBands } from "@/utils/Indicators";
 import { CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { ChartData } from "chart.js";
 
 function calculateBollingerProfit(
 	prices: number[],
@@ -42,8 +41,27 @@ function calculateBollingerProfit(
 	return { profit, buyPoints, sellPoints };
 }
 
+interface DataPoint {
+	x: Date;
+	y: number;
+}
+
+interface Dataset {
+	label: string;
+	data: DataPoint[];
+	borderColor: string;
+	borderWidth: number;
+	backgroundColor: string;
+	fill: boolean;
+	tension: number;
+}
+interface FormattedChartData {
+	labels: Date[];
+	datasets: Dataset[];
+}
+
 interface BollingerChartProps {
-	formattedData: ChartData<"line">;
+	formattedData: FormattedChartData;
 	period?: number;
 	stdDev?: number;
 	options?: unknown;

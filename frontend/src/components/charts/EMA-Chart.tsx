@@ -3,54 +3,29 @@ import { Line } from "react-chartjs-2";
 import { EMA } from "@/utils/Indicators";
 import { CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { ChartOptions } from "chart.js";
+import { calculateEMAProfit } from "@/utils/calculateProfit";
 
-interface Dataset {
-	data: { y: number }[];
-	// Add other properties if needed
+interface DataPoint {
+	x: Date;
+	y: number;
 }
 
-function calculateEMAProfit(prices: number[], emaData: number[]) {
-	let capital = 100;
-	let latestBuyPrice = null;
-	let latestSellPrice = null;
-	const buyPoints = [];
-	const sellPoints = [];
-
-	for (let i = 1; i < emaData.length; i++) {
-		// Buy signal: Price crosses above EMA
-		if (prices[i - 1] < emaData[i - 1] && prices[i] > emaData[i]) {
-			latestBuyPrice = prices[i];
-			latestSellPrice = null;
-			buyPoints.push({ x: i, y: prices[i] });
-		}
-		// Sell signal: Price crosses below EMA
-		else if (
-			prices[i - 1] > emaData[i - 1] &&
-			prices[i] < emaData[i] &&
-			latestBuyPrice !== null
-		) {
-			capital = capital * (1 + (prices[i] - latestBuyPrice) / latestBuyPrice);
-			sellPoints.push({ x: i, y: prices[i] });
-			latestBuyPrice = null;
-			latestSellPrice = prices[i];
-		}
-	}
-
-	if (latestBuyPrice !== null) {
-		capital =
-			capital *
-			(1 + (prices[prices.length - 1] - latestBuyPrice) / latestBuyPrice);
-	}
-
-	const profit = capital - 100;
-	return { profit, buyPoints, sellPoints, latestBuyPrice, latestSellPrice };
+interface Dataset {
+	label: string;
+	data: DataPoint[];
+	borderColor: string;
+	borderWidth: number;
+	backgroundColor: string;
+	fill: boolean;
+	tension: number;
+}
+interface FormattedChartData {
+	labels: Date[];
+	datasets: Dataset[];
 }
 
 interface EMAChartProps {
-	formattedData: {
-		labels: Date[];
-		datasets: Dataset[];
-	};
+	formattedData: FormattedChartData;
 	period?: number;
 	options?: ChartOptions;
 }

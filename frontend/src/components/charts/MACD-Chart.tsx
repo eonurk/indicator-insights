@@ -6,7 +6,7 @@ import { ChartData, ChartOptions } from "chart.js";
 import { calculateMACDProfit } from "@/utils/calculateProfit";
 
 interface DataPoint {
-	x: number;
+	x: Date;
 	y: number;
 }
 

@@ -137,3 +137,40 @@ export function calculateRSIProfit(prices: number[], rsiData: number[]) {
 
 	return { profit, buyPoints, sellPoints, latestBuyPrice, latestSellPrice }; // Return both buy and sell prices
 }
+
+export function calculateEMAProfit(prices: number[], emaData: number[]) {
+	let capital = 100;
+	let latestBuyPrice = null;
+	let latestSellPrice = null;
+	const buyPoints = [];
+	const sellPoints = [];
+
+	for (let i = 1; i < emaData.length; i++) {
+		// Buy signal: Price crosses above EMA
+		if (prices[i - 1] < emaData[i - 1] && prices[i] > emaData[i]) {
+			latestBuyPrice = prices[i];
+			latestSellPrice = null;
+			buyPoints.push({ x: i, y: prices[i] });
+		}
+		// Sell signal: Price crosses below EMA
+		else if (
+			prices[i - 1] > emaData[i - 1] &&
+			prices[i] < emaData[i] &&
+			latestBuyPrice !== null
+		) {
+			capital = capital * (1 + (prices[i] - latestBuyPrice) / latestBuyPrice);
+			sellPoints.push({ x: i, y: prices[i] });
+			latestBuyPrice = null;
+			latestSellPrice = prices[i];
+		}
+	}
+
+	if (latestBuyPrice !== null) {
+		capital =
+			capital *
+			(1 + (prices[prices.length - 1] - latestBuyPrice) / latestBuyPrice);
+	}
+
+	const profit = capital - 100;
+	return { profit, buyPoints, sellPoints, latestBuyPrice, latestSellPrice };
+}
