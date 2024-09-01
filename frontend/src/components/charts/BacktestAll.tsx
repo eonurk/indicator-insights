@@ -29,8 +29,15 @@ import {
 	TableRow,
 } from "@/components/ui/table";
 
-import { RMI } from "@/utils/Indicators";
-import { calculateRMIProfit } from "@/utils/calculateProfit";
+import { RMI, RSI, SMA, EMA, MACD, BollingerBands } from "@/utils/Indicators";
+import {
+	calculateRMIProfit,
+	calculateRSIProfit,
+	calculateSMAProfit,
+	calculateEMAProfit,
+	calculateMACDProfit,
+	calculateBollingerBandsProfit,
+} from "@/utils/calculateProfit";
 
 import { stocks } from "@/utils/stocks";
 import { fetchStockData } from "@/fetchStockData";
@@ -46,11 +53,12 @@ const periodOptions = [
 	{ value: "all", label: "All" },
 ];
 
-// Helper function to determine the last signal
-function determineLastSignal(prices: number[], rmiData: number[]): unknown {
-	if (rmiData.length < 2) return "No signal";
-	// return { profit, buyPoints, sellPoints, latestBuyPrice };
-	return calculateRMIProfit(prices, rmiData);
+interface SignalData {
+	profit: number;
+	buyPoints: { x: number; y: number; price: number }[];
+	sellPoints: { x: number; y: number; price: number }[];
+	latestBuyPrice: number | null;
+	latestSellPrice: number | null;
 }
 
 interface StockChartProps {
@@ -60,13 +68,7 @@ interface StockChartProps {
 interface Result {
 	symbol: string;
 	indicatorResult: number[];
-	lastSignal: {
-		profit: number;
-		buyPoints: number[];
-		sellPoints: number[];
-		latestBuyPrice: number | null;
-		latestSellPrice?: number | null;
-	};
+	lastSignal: SignalData; // Update this line
 	closingPrices: number[];
 }
 
@@ -79,7 +81,6 @@ export default function IndicatorChecker({ user }: StockChartProps) {
 	const handleStart = async () => {
 		try {
 			setButtonDisable(true);
-			// Assuming chartOptions is an object where keys are symbols and values are options
 
 			const availableStocks = user
 				? stocks
@@ -100,22 +101,73 @@ export default function IndicatorChecker({ user }: StockChartProps) {
 			const response = await fetchStockData(symbols.join(","), period, false, [
 				"Close",
 			]);
-			const rsiResults = [];
+			const indicatorResults = [];
 
 			for (const symbol of symbols) {
-				const history = response[symbol].history; // Get the historical data for the symbol
+				const history = response[symbol].history;
 				const dates = Object.keys(history).map((date) => new Date(date));
 				const closingPrices = dates
 					.map((date) => history[format(date, "yyyy-MM-dd HH:mm:ss")]?.Close)
 					.filter((price) => price !== undefined) as number[];
 
-				// Call your RMI function with the extracted prices and the period
-				const indicatorResult = RMI(closingPrices, 14);
-				const lastSignal = determineLastSignal(closingPrices, indicatorResult);
-				rsiResults.push({ symbol, indicatorResult, lastSignal, closingPrices });
+				let indicatorResult: number[] = [];
+				let signalData: SignalData | undefined = undefined; // Update this line
+
+				switch (indicator) {
+					case "RMI":
+						indicatorResult = RMI(closingPrices, 14);
+						signalData = calculateRMIProfit(closingPrices, indicatorResult);
+						break;
+					case "RSI":
+						indicatorResult = RSI(closingPrices, 14);
+						signalData = calculateRSIProfit(
+							closingPrices,
+							indicatorResult
+						) as SignalData;
+						break;
+					case "SMA":
+						indicatorResult = SMA(closingPrices, 14);
+						signalData = calculateSMAProfit(
+							closingPrices,
+							indicatorResult
+						) as SignalData;
+						break;
+					case "EMA":
+						indicatorResult = EMA(closingPrices, 14);
+						signalData = calculateEMAProfit(
+							closingPrices,
+							indicatorResult
+						) as SignalData;
+						break;
+					case "MACD": {
+						const macdResult = MACD(closingPrices, 12, 26, 9);
+						signalData = calculateMACDProfit(
+							closingPrices,
+							macdResult.macdLine,
+							macdResult.signalLine
+						) as SignalData;
+						break;
+					}
+					case "BollingerBands": {
+						const bbResult = BollingerBands(closingPrices, 20, 2);
+						signalData = calculateBollingerBandsProfit(
+							closingPrices,
+							bbResult.map((band) => band.upper) as number[],
+							bbResult.map((band) => band.lower) as number[]
+						) as SignalData;
+						break;
+					}
+				}
+
+				indicatorResults.push({
+					symbol,
+					indicatorResult,
+					lastSignal: signalData as SignalData, // Update this line
+					closingPrices,
+				});
 			}
 
-			setResults(rsiResults as Result[]);
+			setResults(indicatorResults as Result[]);
 		} catch (error) {
 			console.error("Error fetching stock data:", error);
 		} finally {
@@ -144,6 +196,13 @@ export default function IndicatorChecker({ user }: StockChartProps) {
 									</SelectTrigger>
 									<SelectContent position="popper">
 										<SelectItem value="RMI">RMI</SelectItem>
+										<SelectItem value="RSI">RSI</SelectItem>
+										<SelectItem value="SMA">SMA</SelectItem>
+										<SelectItem value="EMA">EMA</SelectItem>
+										<SelectItem value="MACD">MACD</SelectItem>
+										<SelectItem value="BollingerBands">
+											Bollinger Bands
+										</SelectItem>
 									</SelectContent>
 								</Select>
 							</div>
@@ -217,7 +276,6 @@ export default function IndicatorChecker({ user }: StockChartProps) {
 										<TableRow
 											key={result.symbol}
 											className={
-												// return { profit, buyPoints, sellPoints, latestBuyPrice };
 												result.lastSignal.latestBuyPrice !== null
 													? "text-green-500"
 													: "text-red-500"

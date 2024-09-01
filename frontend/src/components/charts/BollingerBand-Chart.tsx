@@ -2,44 +2,7 @@ import { useMemo } from "react";
 import { Line } from "react-chartjs-2";
 import { BollingerBands } from "@/utils/Indicators";
 import { CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-
-function calculateBollingerProfit(
-	prices: number[],
-	upperBand: number[],
-	lowerBand: number[]
-) {
-	let capital = 100;
-	let latestBuyPrice = null;
-	const buyPoints = [];
-	const sellPoints = [];
-
-	for (let i = 1; i < prices.length; i++) {
-		// Buy signal: Price crosses below the lower band
-		if (prices[i] < lowerBand[i] && prices[i - 1] >= lowerBand[i - 1]) {
-			latestBuyPrice = prices[i];
-			buyPoints.push({ x: i, y: prices[i] });
-		}
-		// Sell signal: Price crosses above the upper band
-		else if (
-			prices[i] > upperBand[i] &&
-			prices[i - 1] <= upperBand[i - 1] &&
-			latestBuyPrice !== null
-		) {
-			capital = capital * (1 + (prices[i] - latestBuyPrice) / latestBuyPrice);
-			sellPoints.push({ x: i, y: prices[i] });
-			latestBuyPrice = null;
-		}
-	}
-
-	if (latestBuyPrice !== null) {
-		capital =
-			capital *
-			(1 + (prices[prices.length - 1] - latestBuyPrice) / latestBuyPrice);
-	}
-
-	const profit = capital - 100;
-	return { profit, buyPoints, sellPoints };
-}
+import { calculateBollingerBandsProfit } from "@/utils/calculateProfit";
 
 interface DataPoint {
 	x: Date;
@@ -99,7 +62,7 @@ export default function BollingerChart({
 	const lowerBand = bandsData
 		.map((band) => band.lower)
 		.filter((v): v is number => v !== null);
-	const { profit, buyPoints, sellPoints } = calculateBollingerProfit(
+	const { profit, buyPoints, sellPoints } = calculateBollingerBandsProfit(
 		formattedData.datasets[0].data
 			.map((point: number | { y: number } | null) =>
 				typeof point === "object" && point !== null ? point.y : point

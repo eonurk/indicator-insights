@@ -1,5 +1,5 @@
 import StockChart from "@/components/charts/StockChart";
-import IndicatorChecker from "@/components/charts/IndicatorChecker";
+import IndicatorChecker from "@/components/charts/BacktestAll";
 import { User } from "firebase/auth"; // Import User type
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/Footer";
@@ -45,6 +45,7 @@ export function Home({ user }: StockChartProps) {
 	const [selectedIndicators, setSelectedIndicators] = useState({
 		RMI: true,
 		RSI: true,
+		SMA: true,
 		EMA: true,
 		MACD: true,
 		Bollinger: true,
@@ -96,7 +97,15 @@ export function Home({ user }: StockChartProps) {
 		};
 
 		fetchData();
-	}, [user, selectedIndex, availableIndices.length, selectedStock]);
+	}, [
+		user,
+		selectedIndex,
+		availableIndices.length,
+		selectedStock,
+		selectedPeriod,
+		selectedIndicators,
+		availableStocks,
+	]);
 
 	const handleNotificationClick = (
 		stock: string,
@@ -105,13 +114,14 @@ export function Home({ user }: StockChartProps) {
 	) => {
 		setSelectedStock(stock);
 		setSelectedPeriod(period);
-		setSelectedIndicators(() => ({
+		setSelectedIndicators({
 			RMI: indicator === "RMI",
 			RSI: indicator === "RSI",
+			SMA: indicator === "SMA",
 			EMA: indicator === "EMA",
 			MACD: indicator === "MACD",
 			Bollinger: indicator === "Bollinger",
-		}));
+		});
 	};
 
 	return (

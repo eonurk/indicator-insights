@@ -36,6 +36,7 @@ import {
 import RMIChart from "@/components/charts/RMIChart";
 import RSIChart from "@/components/charts/RSIChart";
 import MACDChart from "@/components/charts/MACD-Chart";
+import SMAChart from "@/components/charts/SMA-Chart";
 import EMAChart from "@/components/charts/EMA-Chart";
 import BollingerChart from "@/components/charts/BollingerBand-Chart";
 
@@ -88,6 +89,12 @@ const indicators = [
 		component: EMAChart,
 		periodKeys: ["period"],
 	},
+	{
+		key: "SMA",
+		component: SMAChart,
+		periodKeys: ["period"],
+	},
+
 	{
 		key: "MACD",
 		component: MACDChart,
@@ -169,6 +176,7 @@ function StockChart({
 		RMI: { period: 14 },
 		RSI: { period: 14 },
 		EMA: { period: 14 },
+		SMA: { period: 14 },
 		MACD: { fastPeriod: 26, slowPeriod: 12, signalPeriod: 9 },
 		Bollinger: { period: 20, stdDev: 2 },
 	});

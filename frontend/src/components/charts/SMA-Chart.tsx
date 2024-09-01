@@ -1,9 +1,10 @@
 import { useMemo } from "react";
 import { Line } from "react-chartjs-2";
-import { EMA } from "@/utils/Indicators";
+import { SMA } from "@/utils/Indicators";
 import { CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { calculateSMAProfit } from "@/utils/calculateProfit";
 import { ChartOptions } from "chart.js";
-import { calculateEMAProfit } from "@/utils/calculateProfit";
+
 interface DataPoint {
 	x: Date;
 	y: number;
@@ -23,41 +24,47 @@ interface FormattedChartData {
 	datasets: Dataset[];
 }
 
-interface EMAChartProps {
+interface SMAChartProps {
 	formattedData: FormattedChartData;
 	period?: number;
 	options?: ChartOptions;
 }
 
-export default function EMAChart({
+export default function SMAChart({
 	formattedData,
-	period = 100,
+	period = 14,
 	options = {},
-}: EMAChartProps) {
-	const emaData = useMemo(() => {
+}: SMAChartProps) {
+	// Calculate SMA data using useMemo
+	const smaData = useMemo(() => {
 		if (
 			!formattedData ||
 			!formattedData.datasets ||
 			formattedData.datasets.length === 0
 		) {
-			console.error("Invalid data structure provided to EMAChart");
+			console.error("Invalid data structure provided to SMAChart");
 			return null;
 		}
 
+		// Extract prices from the formatted data
 		const prices = formattedData.datasets[0].data.map(
 			(point: { y: number }) => point.y
 		);
-		return EMA(prices, period);
+		// Calculate SMA
+		return SMA(prices, period);
 	}, [formattedData, period]);
 
-	if (!emaData) return null;
+	if (!smaData) return null;
 
+	// Extract prices again for profit calculation
 	const prices = formattedData.datasets[0].data.map(
 		(point: { y: number }) => point.y
 	);
 
-	const { profit, buyPoints, sellPoints } = calculateEMAProfit(prices, emaData);
+	// Calculate profit, buy points, and sell points
+	const { profit, buyPoints, sellPoints } = calculateSMAProfit(prices, smaData);
 
+	// Prepare chart data
 	const chartData = {
 		labels: formattedData.labels,
 		datasets: [
@@ -72,8 +79,8 @@ export default function EMAChart({
 				fill: false,
 			},
 			{
-				label: "EMA",
-				data: emaData.map((value, index) => ({
+				label: "SMA",
+				data: smaData.map((value, index) => ({
 					x: formattedData.labels[index],
 					y: value,
 				})),
@@ -106,6 +113,7 @@ export default function EMAChart({
 		],
 	};
 
+	// Merge custom options with default options
 	const customOptions = {
 		...options,
 	};
@@ -114,7 +122,7 @@ export default function EMAChart({
 		<>
 			<CardHeader className="flex items-center gap-2 space-y-0 py-5 sm:flex-row">
 				<div className="grid flex-1 gap-1 text-center sm:text-left">
-					<CardTitle className="text-xl">EMA({period})</CardTitle>
+					<CardTitle className="text-xl">SMA({period})</CardTitle>
 					<CardDescription
 						className={`${
 							profit > 0 ? "text-base text-green-500" : "text-base text-red-500"

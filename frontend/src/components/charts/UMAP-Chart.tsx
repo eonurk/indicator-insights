@@ -21,8 +21,10 @@ import {
 	calculateRMIProfit,
 	calculateRSIProfit,
 	calculateMACDProfit,
+	calculateEMAProfit,
+	calculateSMAProfit,
 } from "@/utils/calculateProfit";
-import { MACD, RMI, RSI } from "@/utils/Indicators";
+import { EMA, MACD, RMI, RSI, SMA } from "@/utils/Indicators";
 import {
 	Accordion,
 	AccordionContent,
@@ -45,6 +47,19 @@ const indicatorOptions = [
 	{ value: "RMI", label: "RMI" },
 	{ value: "MACD", label: "MACD" },
 	{ value: "RSI", label: "RSI" },
+	{ value: "EMA", label: "EMA" },
+	{ value: "BB", label: "Bollinger Bands" },
+	{ value: "SMA", label: "SMA" },
+	// { value: "STOCH", label: "Stochastic" },
+	// { value: "ADX", label: "ADX" },
+	// { value: "CCI", label: "CCI" },
+	// { value: "ROC", label: "ROC" },
+	// { value: "ATR", label: "ATR" },
+	// { value: "RVI", label: "RVI" },
+	// { value: "MFI", label: "MFI" },
+	// { value: "OBV", label: "OBV" },
+	// { value: "VWAP", label: "VWAP" },
+
 	// Add more indicators as needed
 ];
 
@@ -259,6 +274,36 @@ function UMAPChart({ user }: UMAPChartProps) {
 			const latestSignalPrice =
 				latestBuyPrice !== null ? latestBuyPrice : latestSellPrice;
 			return { profit, latestSignal, latestSignalPrice };
+		} else if (indicator === "EMA") {
+			const emaData = EMA(closingPrices, 14);
+			const { profit, latestBuyPrice, latestSellPrice } = calculateEMAProfit(
+				closingPrices,
+				emaData
+			);
+			const latestSignal =
+				latestBuyPrice !== null
+					? "buy"
+					: latestSellPrice !== null
+					? "sell"
+					: null;
+			const latestSignalPrice =
+				latestBuyPrice !== null ? latestBuyPrice : latestSellPrice;
+			return { profit, latestSignal, latestSignalPrice };
+		} else if (indicator === "SMA") {
+			const smaData = SMA(closingPrices, 14);
+			const { profit, latestBuyPrice, latestSellPrice } = calculateSMAProfit(
+				closingPrices,
+				smaData
+			);
+			const latestSignal =
+				latestBuyPrice !== null
+					? "buy"
+					: latestSellPrice !== null
+					? "sell"
+					: null;
+			const latestSignalPrice =
+				latestBuyPrice !== null ? latestBuyPrice : latestSellPrice;
+			return { profit, latestSignal, latestSignalPrice };
 		}
 		return { profit: 0, latestSignal: null, latestSignalPrice: null };
 	};
@@ -356,7 +401,6 @@ function UMAPChart({ user }: UMAPChartProps) {
 				})
 				.filter((point) => point !== null);
 
-			console.log("Chart data:", chartData);
 			return chartData.map((point) => ({
 				x: point.x,
 				y: point.y,

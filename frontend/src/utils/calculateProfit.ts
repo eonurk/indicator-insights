@@ -174,3 +174,79 @@ export function calculateEMAProfit(prices: number[], emaData: number[]) {
 	const profit = capital - 100;
 	return { profit, buyPoints, sellPoints, latestBuyPrice, latestSellPrice };
 }
+
+export function calculateSMAProfit(prices: number[], smaData: number[]) {
+	let capital = 100;
+	let latestBuyPrice = null;
+	let latestSellPrice = null;
+	const buyPoints = [];
+	const sellPoints = [];
+
+	for (let i = 1; i < smaData.length; i++) {
+		// Buy signal: Price crosses above SMA
+		if (prices[i - 1] < smaData[i - 1] && prices[i] > smaData[i]) {
+			latestBuyPrice = prices[i];
+			buyPoints.push({ x: i, y: prices[i] });
+		}
+		// Sell signal: Price crosses below SMA
+		else if (
+			prices[i - 1] > smaData[i - 1] &&
+			prices[i] < smaData[i] &&
+			latestBuyPrice !== null
+		) {
+			capital = capital * (1 + (prices[i] - latestBuyPrice) / latestBuyPrice);
+			sellPoints.push({ x: i, y: prices[i] });
+			latestBuyPrice = null;
+			latestSellPrice = prices[i];
+		}
+	}
+
+	if (latestBuyPrice !== null) {
+		capital =
+			capital *
+			(1 + (prices[prices.length - 1] - latestBuyPrice) / latestBuyPrice);
+	}
+
+	const profit = capital - 100;
+	return { profit, buyPoints, sellPoints, latestBuyPrice, latestSellPrice };
+}
+
+export function calculateBollingerBandsProfit(
+	prices: number[],
+	upperBand: number[],
+	lowerBand: number[]
+) {
+	let capital = 100;
+	let latestBuyPrice = null;
+	let latestSellPrice = null;
+	const buyPoints = [];
+	const sellPoints = [];
+
+	for (let i = 1; i < prices.length; i++) {
+		// Buy signal: Price crosses below the lower band
+		if (prices[i] < lowerBand[i] && prices[i - 1] >= lowerBand[i - 1]) {
+			latestBuyPrice = prices[i];
+			buyPoints.push({ x: i, y: prices[i] });
+		}
+		// Sell signal: Price crosses above the upper band
+		else if (
+			prices[i] > upperBand[i] &&
+			prices[i - 1] <= upperBand[i - 1] &&
+			latestBuyPrice !== null
+		) {
+			capital = capital * (1 + (prices[i] - latestBuyPrice) / latestBuyPrice);
+			sellPoints.push({ x: i, y: prices[i] });
+			latestBuyPrice = null;
+			latestSellPrice = prices[i];
+		}
+	}
+
+	if (latestBuyPrice !== null) {
+		capital =
+			capital *
+			(1 + (prices[prices.length - 1] - latestBuyPrice) / latestBuyPrice);
+	}
+
+	const profit = capital - 100;
+	return { profit, buyPoints, sellPoints, latestBuyPrice, latestSellPrice };
+}

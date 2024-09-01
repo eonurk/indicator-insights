@@ -1,5 +1,5 @@
 type IconProps = React.HTMLAttributes<SVGElement>;
-interface IconImg extends React.ImgHTMLAttributes<HTMLImageElement> {}
+type IconImg = React.ImgHTMLAttributes<HTMLImageElement>;
 
 import logo from "@/assets/logo.png";
 export const Icons = {
