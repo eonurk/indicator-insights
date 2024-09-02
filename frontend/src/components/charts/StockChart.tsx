@@ -40,7 +40,7 @@ import SMAChart from "@/components/charts/SMA-Chart";
 import EMAChart from "@/components/charts/EMA-Chart";
 import BollingerChart from "@/components/charts/BollingerBand-Chart";
 
-import { Check } from "lucide-react";
+import { Check, DownloadIcon } from "lucide-react";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import {
 	Dialog,
@@ -52,6 +52,8 @@ import {
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
+import { saveAs } from "file-saver";
+import { useRef } from "react";
 
 // Add this function to generate the class for the checkbox based on its checked state
 const checkboxClasses = (checked: boolean) =>
@@ -183,6 +185,31 @@ function StockChart({
 
 	const [editingIndicator, setEditingIndicator] = useState<string | null>(null);
 
+	const chartRef = useRef<ChartJS<"line", DataPoint[], unknown>>(null);
+
+	const downloadChart = (
+		chartRef: React.RefObject<
+			ChartJS<"line", DataPoint[], unknown>
+		> | null = null
+	) => {
+		if (chartRef && chartRef.current) {
+			const url = chartRef.current.toBase64Image();
+			saveAs(url, `${symbol}-${period}.png`);
+		} else {
+			// Download all indicator charts
+			Object.keys(selectedIndicators).forEach((key) => {
+				if (selectedIndicators[key as keyof typeof selectedIndicators]) {
+					const indicatorChartRef = document.querySelector(
+						`#${key}-chart`
+					) as HTMLCanvasElement;
+					if (indicatorChartRef) {
+						const url = indicatorChartRef.toDataURL("image/png");
+						saveAs(url, `${symbol}-${period}-${key}.png`);
+					}
+				}
+			});
+		}
+	};
 	const toggleIndicator = (key: string) => {
 		setSelectedIndicators((prev) => ({
 			...prev,
@@ -365,16 +392,25 @@ function StockChart({
 				{stockInfo && (
 					<>
 						<Line
+							ref={chartRef}
 							data={stockInfo.formattedData as ChartData<"line", DataPoint[]>}
 							options={stockInfo.chartOptions as ChartOptions<"line">}
 						/>
-						<div className="flex justify-between items-center">
-							<div className="flex gap-2"></div>
+						<div className="flex justify-end items-center">
+							<div className="flex gap-2">
+								<Button
+									onClick={() => downloadChart(chartRef)}
+									variant="ghost"
+									size="sm"
+								>
+									<DownloadIcon className="w-4 h-4 mr-2" /> Download Chart
+								</Button>
+							</div>
 						</div>
-
+						<Separator />
 						{Object.keys(selectedIndicators).map((key) =>
 							selectedIndicators[key as keyof typeof selectedIndicators] ? (
-								<div key={key} className="mt-4">
+								<div key={key}>
 									{indicators.map(
 										({ key: indicatorKey, component: IndicatorComponent }) =>
 											indicatorKey === key ? (
@@ -391,14 +427,25 @@ function StockChart({
 															stockInfo.chartOptions as GenericChartOptions
 														}
 													/>
-													<Button
-														key={`${indicatorKey}-settings`}
-														variant="ghost"
-														size="sm"
-														onClick={() => setEditingIndicator(key)}
-													>
-														⚙️ {indicatorKey} Settings
-													</Button>
+													<div className="flex justify-end items-center mt-1">
+														{/* <Button
+															onClick={() => downloadChart(chartRef)}
+															className="flex justify-end items-center"
+															variant="ghost"
+															size="sm"
+														>
+															<DownloadIcon className="w-4 h-4" />
+														</Button> */}
+
+														<Button
+															key={`${indicatorKey}-settings`}
+															variant="ghost"
+															size="sm"
+															onClick={() => setEditingIndicator(key)}
+														>
+															⚙️ {indicatorKey} Settings
+														</Button>
+													</div>
 													<Separator />
 												</>
 											) : null

@@ -2,12 +2,7 @@ import { useMemo } from "react";
 import { Line } from "react-chartjs-2";
 import { RMI } from "@/utils/Indicators";
 import { calculateRMIProfit } from "@/utils/calculateProfit"; // Import the function
-import {
-	CardDescription,
-	CardFooter,
-	CardHeader,
-	CardTitle,
-} from "@/components/ui/card";
+import { CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { ChartOptions } from "chart.js";
 
 interface DataPoint {
@@ -126,12 +121,6 @@ export default function RMIChart({
 				</div>
 			</CardHeader>
 			<Line data={chartData} options={customOptions} />
-			<br />
-			<CardFooter className="text-left text-sm text-slate-400">
-				RMI 30/70 was calculated for all indicator points. <br />
-				Sum of the potential cumulative profit/loss was reported as Total
-				Profit.
-			</CardFooter>
 		</>
 	);
 }

@@ -31,8 +31,10 @@ import {
 } from "@/components/ui/popover";
 import { Button } from "@/components/ui/button";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { exportNotificationsToCSV } from "@/utils/saveExcel";
+import { DownloadIcon } from "lucide-react";
 
-interface Notification {
+export interface Notification {
 	id: string;
 	stock: string;
 	indicator: string;
@@ -273,7 +275,16 @@ const NotificationBoard: React.FC<NotificationBoardProps> = ({
 	return (
 		<Card className="mt-4 w-full md:w-2/3 md:mx-auto">
 			<CardHeader className="flex flex-wrap justify-between items-center">
-				<CardTitle>Real-time Insights</CardTitle>
+				<div className="flex items-center ml-2">
+					<CardTitle>Real-time Insights</CardTitle>
+					<a
+						className="ml-2 cursor-pointer"
+						onClick={() => exportNotificationsToCSV(notifications)}
+					>
+						<DownloadIcon className="w-5 h-5 cursor-pointer" />
+					</a>
+				</div>
+
 				<CardDescription>
 					Real-time buy/sell signals for portfolio stocks based on selected
 					period and indicators.
@@ -338,41 +349,43 @@ const NotificationBoard: React.FC<NotificationBoardProps> = ({
 					) : notifications.length === 0 ? (
 						<p>No notifications at this time.</p>
 					) : (
-						<ul>
-							{notifications.map((notification) => (
-								<li
-									key={notification.id}
-									className={`mb-2 p-4 rounded-lg shadow-md transition-transform transform ${
-										notification.isNew ? "bg-green-100 border" : "bg-gray-100"
-									} cursor-pointer hover:bg-opacity-80 hover:scale-105`}
-									onClick={() => handleNotificationClick(notification)}
-								>
-									<div className="flex items-center justify-between">
-										<span className="font-bold text-lg">
-											{notification.stock}
-										</span>
-										<span
-											className={`text-lg font-base ${
-												notification.signal === "buy"
-													? "text-green-500"
-													: "text-red-500"
-											}`}
-										>
-											{notification.signal.toUpperCase()}
-										</span>
-									</div>
-									<div className="flex items-center justify-between mt-2">
-										<span className="text-sm text-gray-500">
-											{notification.indicator} signal at $
-											{notification.price.toFixed(2)}
-										</span>
-										<span className="text-sm text-gray-500">
-											{format(notification.timestamp, "yyyy-MM-dd HH:mm")}
-										</span>
-									</div>
-								</li>
-							))}
-						</ul>
+						<>
+							<ul>
+								{notifications.map((notification) => (
+									<li
+										key={notification.id}
+										className={`mb-2 p-4 rounded-lg shadow-md transition-transform transform ${
+											notification.isNew ? "bg-green-100 border" : "bg-gray-100"
+										} cursor-pointer hover:bg-opacity-80 hover:scale-105`}
+										onClick={() => handleNotificationClick(notification)}
+									>
+										<div className="flex items-center justify-between">
+											<span className="font-bold text-lg">
+												{notification.stock}
+											</span>
+											<span
+												className={`text-lg font-base ${
+													notification.signal === "buy"
+														? "text-green-500"
+														: "text-red-500"
+												}`}
+											>
+												{notification.signal.toUpperCase()}
+											</span>
+										</div>
+										<div className="flex items-center justify-between mt-2">
+											<span className="text-sm text-gray-500">
+												{notification.indicator} signal at $
+												{notification.price.toFixed(2)}
+											</span>
+											<span className="text-sm text-gray-500">
+												{format(notification.timestamp, "yyyy-MM-dd HH:mm")}
+											</span>
+										</div>
+									</li>
+								))}
+							</ul>
+						</>
 					)}
 				</CardContent>
 			</ScrollArea>

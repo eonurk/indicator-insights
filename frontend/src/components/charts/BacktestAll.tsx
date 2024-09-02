@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { ReloadIcon } from "@radix-ui/react-icons";
+import { DownloadIcon, ReloadIcon } from "@radix-ui/react-icons";
 import { format } from "date-fns";
 import {
 	Card,
@@ -42,6 +42,8 @@ import {
 import { stocks } from "@/utils/stocks";
 import { fetchStockData } from "@/fetchStockData";
 import { User } from "firebase/auth";
+import { exportToCSV } from "@/utils/saveExcel"; // Add this import
+import { Separator } from "../ui/separator";
 
 const periodOptions = [
 	{ value: "1d", label: "1 Day" },
@@ -174,6 +176,22 @@ export default function IndicatorChecker({ user }: StockChartProps) {
 			setButtonDisable(false);
 		}
 	};
+
+	function exportResultsToCSV(results: Result[]): void {
+		const csvData = results.map((result) => ({
+			Symbol: result.symbol,
+			LastSignal: result.lastSignal.latestBuyPrice !== null ? "Buy" : "Sell",
+			SignalPrice:
+				result.lastSignal.latestBuyPrice !== null
+					? result.lastSignal.latestBuyPrice.toFixed(2)
+					: result.lastSignal.latestSellPrice?.toFixed(2) || "-",
+			CurrentPrice:
+				result.closingPrices[result.closingPrices.length - 1].toFixed(2),
+			IndicatorProfit: result.lastSignal.profit.toFixed(2) + "%",
+		}));
+
+		exportToCSV(csvData, `backtest_results_${indicator}_${period}.csv`);
+	}
 
 	return (
 		<>
@@ -315,6 +333,17 @@ export default function IndicatorChecker({ user }: StockChartProps) {
 							</Table>
 						</ScrollArea>
 					</CardContent>
+					<Separator />
+					<div className="justify-end my-2 flex mr-2">
+						<Button
+							variant="ghost"
+							className="cursor-pointer justify-end "
+							onClick={() => exportResultsToCSV(results)}
+						>
+							<DownloadIcon className="w-4 h-4 mr-2" /> Download Backtest
+							Results
+						</Button>
+					</div>
 				</Card>
 			)}
 		</>
