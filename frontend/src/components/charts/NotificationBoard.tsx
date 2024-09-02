@@ -30,7 +30,7 @@ import {
 	PopoverContent,
 } from "@/components/ui/popover";
 import { Button } from "@/components/ui/button";
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { Alert, AlertDescription } from "@/components/ui/alert";
 import { exportNotificationsToCSV } from "@/utils/saveExcel";
 import { DownloadIcon } from "lucide-react";
 
