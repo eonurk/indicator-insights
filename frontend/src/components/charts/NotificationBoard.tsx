@@ -339,15 +339,18 @@ const NotificationBoard: React.FC<NotificationBoardProps> = ({
 			<ScrollArea className="h-[400px] mt-2">
 				<CardContent>
 					{error && (
-						<Alert variant="destructive" className="mb-4">
-							<AlertTitle>Error</AlertTitle>
-							<AlertDescription>{error}</AlertDescription>
+						<Alert variant="default" className="mb-4">
+							<AlertDescription className="animate-pulse text-green-500">
+								Please wait while we fetch the data...
+							</AlertDescription>
 						</Alert>
 					)}
 					{isLoading ? (
-						<p>Loading...</p>
-					) : notifications.length === 0 ? (
-						<p>No notifications at this time.</p>
+						<Alert variant="default" className="mb-4">
+							<AlertDescription className="animate-pulse text-green-500">
+								Loading...
+							</AlertDescription>
+						</Alert>
 					) : (
 						<>
 							<ul>

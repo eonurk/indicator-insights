@@ -85,27 +85,22 @@ export function Home({ user }: StockChartProps) {
 					const indices = await getAvailableIndices();
 					setAvailableIndices(indices);
 				}
-				// Fetch stocks for the selected index
+				// Fetch stocks for the selected index only if they've changed
 				const stocks = await getCompaniesByIndex(selectedIndex);
-				setAvailableStocks(stocks);
-
-				// Update selectedStock if it's not in the new list
-				if (!stocks[selectedStock]) {
-					setSelectedStock(Object.keys(stocks)[0]);
+				if (
+					!areArraysEqual(Object.keys(availableStocks), Object.keys(stocks))
+				) {
+					setAvailableStocks(stocks);
+					// Update selectedStock if it's not in the new list
+					if (!stocks[selectedStock]) {
+						setSelectedStock(Object.keys(stocks)[0]);
+					}
 				}
 			}
 		};
 
 		fetchData();
-	}, [
-		user,
-		selectedIndex,
-		availableIndices.length,
-		selectedStock,
-		selectedPeriod,
-		selectedIndicators,
-		availableStocks,
-	]);
+	}, [user, selectedIndex, availableIndices.length]);
 
 	const handleNotificationClick = (
 		stock: string,
