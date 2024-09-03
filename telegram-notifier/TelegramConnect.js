@@ -202,3 +202,5 @@ const checkForSignals = async () => {
 		console.error("Error in checkForSignals:", error);
 	}
 };
+
+checkForSignals();
