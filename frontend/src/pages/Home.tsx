@@ -48,7 +48,7 @@ export function Home({ user }: StockChartProps) {
 		SMA: true,
 		EMA: true,
 		MACD: true,
-		Bollinger: true,
+		Bollinger: false,
 	});
 
 	const [selectedIndex, setSelectedIndex] = useState("S&P 100");

@@ -19,6 +19,9 @@ import {
 import { Checkbox } from "@/components/ui/checkbox";
 import { Line } from "react-chartjs-2";
 import "chartjs-adapter-date-fns";
+import { ChartData, ChartOptions } from "chart.js";
+import { CartesianScaleTypeRegistry, ScaleOptionsByType } from "chart.js";
+
 import { chartOptions } from "@/components/charts/chartOptions";
 import {
 	CategoryScale,
@@ -32,6 +35,8 @@ import {
 	Legend,
 	TimeSeriesScale,
 } from "chart.js";
+
+import RiskWeather from "@/components/RiskWeather";
 
 import RMIChart from "@/components/charts/RMIChart";
 import RSIChart from "@/components/charts/RSIChart";
@@ -128,9 +133,6 @@ interface FormattedChartData {
 	datasets: Dataset[];
 }
 
-import { ChartData, ChartOptions } from "chart.js";
-import { CartesianScaleTypeRegistry, ScaleOptionsByType } from "chart.js";
-
 interface StockChartProps {
 	selectedStock: string;
 	selectedPeriod: string;
@@ -152,6 +154,7 @@ function StockChart({
 }: StockChartProps) {
 	const [symbol, setSymbol] = useState(selectedStock);
 	const [period, setPeriod] = useState(selectedPeriod);
+	const [portfolioRisk, setPortfolioRisk] = useState(0);
 
 	const [stockInfo, setStockInfo] = useState<{
 		symbol: string;
@@ -303,15 +306,35 @@ function StockChart({
 		return () => clearInterval(intervalId);
 	}, [symbol, period]);
 
+	useEffect(() => {
+		// Calculate portfolio risk based on selected indicators and stock data
+		const calculateRisk = () => {
+			if (!stockInfo) return 0;
+			const latestPrice =
+				stockInfo.formattedData.datasets[0].data[
+					stockInfo.formattedData.datasets[0].data.length - 1
+				].y;
+			const averagePrice =
+				stockInfo.formattedData.datasets[0].data.reduce(
+					(sum, point) => sum + point.y,
+					0
+				) / stockInfo.formattedData.datasets[0].data.length;
+			const volatility = Math.abs(latestPrice - averagePrice) / averagePrice;
+			return Math.min(volatility * 100, 100); // Scale to 0-100
+		};
+		setPortfolioRisk(calculateRisk());
+	}, [stockInfo]);
+
 	return (
 		<Card className="w-full md:w-2/3 md:mx-auto">
 			<CardHeader className="items-center gap-2 space-y-0 border-b py-5 sm:flex-row">
 				<div className="flex-1 gap-2 text-center sm:text-left">
 					<CardTitle>{stockInfo?.symbol}</CardTitle>
+
 					<CardDescription className={stockInfo?.cardTitleColor}>
 						${stockInfo?.currentPrice} ({stockInfo?.priceChangePercentage}%)
 						<div className="flex gap-4">
-							<div className="grid text-slate-400 ">
+							<div className="grid text-slate-400">
 								<p>Volume: {stockInfo?.volume}</p>
 								<p>Avg Volume: {stockInfo?.avgVolume}</p>
 								<p>Market Cap: {stockInfo?.marketCap}</p>
@@ -324,6 +347,7 @@ function StockChart({
 						</div>
 					</CardDescription>
 				</div>
+
 				<div className="flex-1 gap-1 max-w-64 flex flex-col">
 					<Select value={symbol} onValueChange={setSymbol}>
 						<SelectTrigger
@@ -388,14 +412,18 @@ function StockChart({
 				</div>
 			</CardHeader>
 
-			<CardContent className="pt-6">
+			<CardContent className="pt-4">
 				{stockInfo && (
 					<>
+						<div className="flex justify-end items-center">
+							<RiskWeather portfolioRisk={portfolioRisk} />
+						</div>
 						<Line
 							ref={chartRef}
 							data={stockInfo.formattedData as ChartData<"line", DataPoint[]>}
 							options={stockInfo.chartOptions as ChartOptions<"line">}
 						/>
+
 						<div className="flex justify-end items-center">
 							<div className="flex gap-2">
 								<Button
