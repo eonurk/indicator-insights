@@ -187,13 +187,13 @@ const checkForSignals = async () => {
 					2
 				)}\nSignal: Sell\nIndicator: RMI(14)\nPeriod: ${period}\nTime: ${latestSignalDate.toLocaleString()}`;
 			}
-
+			await sendTelegramMessage(message);
 			// Check if the latest buy or sell price is within the last 5 minutes
 			if (
 				(latestBuyPrice !== null || latestSellPrice !== null) &&
 				Date.now() - latestSignalDate.getTime() <= 5 * 60 * 1000
 			) {
-				await sendTelegramMessage(message);
+				// await sendTelegramMessage(message);
 			} else {
 				console.log("No signal within the last 5 minutes");
 			}
