@@ -188,7 +188,6 @@ const checkForSignals = async () => {
 				)}\nSignal: Sell\nIndicator: RMI(14)\nPeriod: ${period}\nTime: ${latestSignalDate.toLocaleString()}`;
 			}
 
-			await sendTelegramMessage(message);
 			// Check if the latest buy or sell price is within the last 5 minutes
 			if (
 				(latestBuyPrice !== null || latestSellPrice !== null) &&
@@ -203,6 +202,3 @@ const checkForSignals = async () => {
 		console.error("Error in checkForSignals:", error);
 	}
 };
-
-// Run the checkForSignals function every 5 minutes
-setInterval(checkForSignals, 20 * 1000);
