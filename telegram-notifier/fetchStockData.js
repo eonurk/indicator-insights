@@ -1,31 +1,12 @@
-interface StockHistory {
-	[date: string]: {
-		Close: number;
-		Open: number;
-		High: number;
-		Low: number;
-		Volume: number;
-	};
-}
-
-interface StockData {
-	[key: string]: any;
-	symbol: string;
-	history: StockHistory;
-}
+const axios = require("axios");
 
 const baseURL =
-	window.location.hostname === "localhost"
+	process.env.NODE_ENV === "development"
 		? "http://localhost:5000"
 		: "https://indicatorinsights.co";
 
 // fetches and returns StockData for a symbol and period
-export async function fetchStockData(
-	symbol: string,
-	period: string,
-	getAll: boolean = true,
-	index?: string[]
-): Promise<StockData> {
+const fetchStockData = async (symbol, period, getAll = true, index) => {
 	try {
 		// Build the URL with the necessary query parameters
 		let url = `${baseURL}/api/stock/${symbol}?period=${period}&getAll=${getAll}`;
@@ -37,18 +18,16 @@ export async function fetchStockData(
 		}
 
 		// Send a request to the server and wait for its response
-		const response = await fetch(url);
-		const data: StockData = await response.json();
-
-		return data;
+		const response = await axios.get(url);
+		return response.data;
 	} catch (error) {
 		console.error("Error fetching stock data:", error);
 		throw new Error("Failed to fetch stock data"); // or return an empty object
 	}
-}
+};
 
 // returns the percent change of a stock
-export function getPercentChange(closingPrices: number[]) {
+const getPercentChange = (closingPrices) => {
 	if (closingPrices.length < 2) {
 		throw new Error("Insufficient data to calculate percent change.");
 	}
@@ -65,4 +44,6 @@ export function getPercentChange(closingPrices: number[]) {
 	const priceChangePercentage = (priceChange / initialPrice) * 100;
 
 	return priceChangePercentage;
-}
+};
+
+module.exports = { fetchStockData, getPercentChange };
