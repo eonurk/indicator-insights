@@ -26,8 +26,8 @@ export function Signup() {
 		try {
 			await createUserWithEmailAndPassword(auth, email, password);
 			navigate("/");
-		} catch (error: any) {
-			setError(error.message);
+		} catch (error: unknown) {
+			setError(error instanceof Error ? error.message : "Failed to sign up");
 		} finally {
 			setLoading(false);
 		}
@@ -38,8 +38,8 @@ export function Signup() {
 		try {
 			await signInWithPopup(auth, provider);
 			navigate("/");
-		} catch (error: any) {
-			setError(error.message);
+		} catch (error: unknown) {
+			setError(error instanceof Error ? error.message : "Failed to sign up");
 		}
 	};
 
@@ -88,7 +88,7 @@ export function Signup() {
 				<span>
 					<Icons.google className="h-4 w-4 mr-2" />
 				</span>{" "}
-				<span>Sign in with Google</span>
+				<span>Sign up with Google</span>
 			</Button>
 			<div className="text-sm">
 				{error && <p className="text-red-500 mt-4">{error}</p>}

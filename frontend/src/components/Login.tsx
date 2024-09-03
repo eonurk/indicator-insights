@@ -31,8 +31,8 @@ export default function Login() {
 		try {
 			await signInWithEmailAndPassword(auth, email, password);
 			navigate("/"); // Redirect to the dashboard after login
-		} catch (error: any) {
-			setError(error.message);
+		} catch (error: unknown) {
+			setError(error instanceof Error ? error.message : "Failed to sign in");
 		}
 	};
 
@@ -41,8 +41,8 @@ export default function Login() {
 		try {
 			await signInWithPopup(auth, provider);
 			navigate("/");
-		} catch (error: any) {
-			setError(error.message);
+		} catch (error: unknown) {
+			setError(error instanceof Error ? error.message : "Failed to sign in");
 		}
 	};
 
@@ -70,7 +70,10 @@ export default function Login() {
 					<div className="grid gap-2">
 						<div className="flex items-center">
 							<Label htmlFor="password">Password</Label>
-							<Link to="#" className="ml-auto inline-block text-sm underline">
+							<Link
+								to="/reset-password"
+								className="ml-auto inline-block text-sm underline"
+							>
 								Forgot your password?
 							</Link>
 						</div>

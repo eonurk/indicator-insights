@@ -16,6 +16,7 @@ import FAQPage from "@/pages/FAQPage";
 import { useEffect, useState } from "react";
 import { getAuth, onAuthStateChanged, User } from "firebase/auth";
 import { Toaster } from "@/components/ui/toaster";
+import ResetPassword from "@/pages/ResetPassword";
 
 function App() {
 	const [user, setUser] = useState<User | null>(null); // Use User type from firebase/auth
@@ -44,6 +45,7 @@ function App() {
 					<Route path="/privacy" element={<PrivacyPolicyPage />} />
 					<Route path="/contact" element={<ContactPage />} />
 					<Route path="/faq" element={<FAQPage />} />
+					<Route path="/reset-password" element={<ResetPassword />} />
 					<Route path="*" element={<NotFoundPage />} />
 				</Routes>
 			</Router>
