@@ -12,8 +12,8 @@ const {
 } = require("./calculateProfit");
 
 const TELEGRAM_API_URL = "https://api.telegram.org/bot";
-const BOT_TOKEN = "7234323936:AAHRMl72iLW0sYzo176cbDeVNM2wPdEvCtk"; // Replace with your bot token
-const CHANNEL_ID = "@iisight"; // Replace with your channel ID
+const BOT_TOKEN = process.env.TELEGRAM_API_KEY; // Replace with your bot token
+const CHANNEL_ID = process.env.TELEGRAM_CHAT_ID; // Replace with your channel ID
 
 const sendTelegramMessage = async (message) => {
 	try {
