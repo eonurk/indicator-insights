@@ -1,4 +1,18 @@
 import { marketData } from "@/utils/data";
+import { bist100 } from "@/utils/BIST100";
+
+export const allMarketData: MarketData = {
+	indices: [...marketData.indices, ...bist100.indices],
+	companies: [...marketData.companies, ...bist100.companies].map((company) => ({
+		...company, // Spread all properties first
+		country: "country" in company ? company.country : "",
+		indices: Array.isArray(company.indices) ? company.indices : [],
+		industries:
+			"industries" in company && Array.isArray(company.industries)
+				? company.industries
+				: [],
+	})),
+};
 
 export interface Index {
 	name: string;
@@ -24,7 +38,7 @@ export interface MarketData {
 }
 
 export async function fetchMarketData(): Promise<MarketData> {
-	return Promise.resolve(marketData);
+	return Promise.resolve(allMarketData);
 }
 
 // Helper function to get company names by symbols

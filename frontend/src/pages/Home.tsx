@@ -47,9 +47,9 @@ export function Home({ user }: StockChartProps) {
 	const [selectedPeriod, setSelectedPeriod] = useState("1m");
 	const [selectedIndicators, setSelectedIndicators] = useState({
 		RMI: true,
-		RSI: true,
+		RSI: false,
 		SMA: true,
-		EMA: true,
+		EMA: false,
 		MACD: true,
 		Bollinger: false,
 	});
@@ -103,7 +103,13 @@ export function Home({ user }: StockChartProps) {
 		};
 
 		fetchData();
-	}, [user, selectedIndex, availableIndices.length]);
+	}, [
+		user,
+		selectedIndex,
+		availableIndices.length,
+		availableStocks,
+		selectedStock,
+	]);
 
 	const handleNotificationClick = (
 		stock: string,

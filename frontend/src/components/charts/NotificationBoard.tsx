@@ -122,7 +122,6 @@ const NotificationBoard: React.FC<NotificationBoardProps> = ({
 			notification.indicator
 		);
 	};
-
 	const checkForSignals = useCallback(async () => {
 		setError(null); // Clear any previous errors
 		const symbols = Object.keys(currentStocks);
@@ -136,7 +135,8 @@ const NotificationBoard: React.FC<NotificationBoardProps> = ({
 				5 * 60 * 1000 ||
 			selectedPeriod !== lastFetchTimeRef.current?.period ||
 			JSON.stringify(enabledIndicators) !==
-				JSON.stringify(lastFetchTimeRef.current?.enabledIndicators);
+				JSON.stringify(lastFetchTimeRef.current?.enabledIndicators) ||
+			JSON.stringify(currentStocks) !== JSON.stringify(availableStocks);
 
 		try {
 			let response;
@@ -258,7 +258,7 @@ const NotificationBoard: React.FC<NotificationBoardProps> = ({
 				setError("An unexpected error occurred while fetching stock data.");
 			}
 		}
-	}, [currentStocks, selectedPeriod, enabledIndicators]);
+	}, [currentStocks, selectedPeriod, enabledIndicators, availableStocks]);
 
 	useEffect(() => {
 		setCurrentStocks(availableStocks);
