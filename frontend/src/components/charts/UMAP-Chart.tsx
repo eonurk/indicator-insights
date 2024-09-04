@@ -23,8 +23,9 @@ import {
 	calculateMACDProfit,
 	calculateEMAProfit,
 	calculateSMAProfit,
+	calculateBollingerBandsProfit,
 } from "@/utils/calculateProfit";
-import { EMA, MACD, RMI, RSI, SMA } from "@/utils/Indicators";
+import { BollingerBands, EMA, MACD, RMI, RSI, SMA } from "@/utils/Indicators";
 import {
 	Accordion,
 	AccordionContent,
@@ -130,7 +131,14 @@ function UMAPChart({ user }: UMAPChartProps) {
 							const typedPoint = point as { color?: string };
 							return typedPoint.color || "rgba(0, 122, 255, 0.6)";
 						}),
-						pointRadius: user ? 6 : 10,
+						pointRadius: user ? 8 : 12,
+						showLine: true,
+						pointBorderWidth: 1,
+						pointBorderColor: "rgba(0, 0, 0, 0.8)",
+						pointHoverBorderWidth: 2,
+						pointHoverBorderColor: "rgba(0, 0, 0, 0.8)",
+						pointHoverRadius: user ? 8 : 10,
+						pointHoverBackgroundColor: "rgba(0, 0, 0, 0.8)",
 					},
 				],
 			},
@@ -304,6 +312,23 @@ function UMAPChart({ user }: UMAPChartProps) {
 			const latestSignalPrice =
 				latestBuyPrice !== null ? latestBuyPrice : latestSellPrice;
 			return { profit, latestSignal, latestSignalPrice };
+		} else if (indicator == "BB") {
+			const bands = BollingerBands(closingPrices, 20, 2);
+			const { profit, latestBuyPrice, latestSellPrice } =
+				calculateBollingerBandsProfit(
+					closingPrices,
+					bands.map((band) => band.upper),
+					bands.map((band) => band.lower)
+				);
+			const latestSignal =
+				latestBuyPrice !== null
+					? "buy"
+					: latestSellPrice !== null
+					? "sell"
+					: null;
+			const latestSignalPrice =
+				latestBuyPrice !== null ? latestBuyPrice : latestSellPrice;
+			return { profit, latestSignal, latestSignalPrice };
 		}
 		return { profit: 0, latestSignal: null, latestSignalPrice: null };
 	};
@@ -383,10 +408,10 @@ function UMAPChart({ user }: UMAPChartProps) {
 					// Determine color based on the latest signal
 					const color =
 						latestSignal === "buy"
-							? "rgba(0, 250, 50, 0.8)"
+							? "rgba(50, 205, 50)" // Lime green
 							: latestSignal === "sell"
-							? "rgba(220, 20, 60, 0.8)" // Cooler red (Crimson)
-							: "rgba(0, 122, 255, 0.6)"; // Default color for no signal
+							? "rgba(255, 69, 0)" // Red-Orange
+							: "rgba(100, 149, 237)"; // Cornflower blue for no signal
 
 					return {
 						x: point[0],

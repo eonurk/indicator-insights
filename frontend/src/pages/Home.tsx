@@ -7,7 +7,7 @@ import HeroSection from "@/components/HeroSection";
 import FAQHome from "@/components/FAQHome";
 import PricingTable from "@/components/PricingTable";
 import NotificationBoard from "@/components/charts/NotificationBoard";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import UMAPChart from "@/components/charts/UMAP-Chart";
 import { motion } from "framer-motion";
 import {
@@ -60,16 +60,17 @@ export function Home({ user }: StockChartProps) {
 		Record<string, string>
 	>({});
 
-	// Add this function at the top of your component or in a separate utils file
-	function areArraysEqual(arr1: string[], arr2: string[]): boolean {
-		if (arr1.length !== arr2.length) return false;
-		return arr1.every((value, index) => value === arr2[index]);
-	}
+	const areArraysEqual = useCallback(
+		(arr1: string[], arr2: string[]): boolean => {
+			if (arr1.length !== arr2.length) return false;
+			return arr1.every((value, index) => value === arr2[index]);
+		},
+		[]
+	);
 
 	useEffect(() => {
 		const fetchData = async () => {
 			if (!user) {
-				// If user is not logged in, use default companies
 				const defaultStocks = getDefaultCompanies();
 				if (
 					!areArraysEqual(
@@ -83,18 +84,15 @@ export function Home({ user }: StockChartProps) {
 					}
 				}
 			} else {
-				// Fetch available indices if not already loaded
 				if (availableIndices.length === 0) {
 					const indices = await getAvailableIndices();
 					setAvailableIndices(indices);
 				}
-				// Fetch stocks for the selected index only if they've changed
 				const stocks = await getCompaniesByIndex(selectedIndex);
 				if (
 					!areArraysEqual(Object.keys(availableStocks), Object.keys(stocks))
 				) {
 					setAvailableStocks(stocks);
-					// Update selectedStock if it's not in the new list
 					if (!stocks[selectedStock]) {
 						setSelectedStock(Object.keys(stocks)[0]);
 					}
@@ -109,24 +107,24 @@ export function Home({ user }: StockChartProps) {
 		availableIndices.length,
 		availableStocks,
 		selectedStock,
+		areArraysEqual,
 	]);
 
-	const handleNotificationClick = (
-		stock: string,
-		period: string,
-		indicator: string
-	) => {
-		setSelectedStock(stock);
-		setSelectedPeriod(period);
-		setSelectedIndicators({
-			RMI: indicator === "RMI",
-			RSI: indicator === "RSI",
-			SMA: indicator === "SMA",
-			EMA: indicator === "EMA",
-			MACD: indicator === "MACD",
-			Bollinger: indicator === "Bollinger",
-		});
-	};
+	const handleNotificationClick = useCallback(
+		(stock: string, period: string, indicator: string) => {
+			setSelectedStock(stock);
+			setSelectedPeriod(period);
+			setSelectedIndicators({
+				RMI: indicator === "RMI",
+				RSI: indicator === "RSI",
+				SMA: indicator === "SMA",
+				EMA: indicator === "EMA",
+				MACD: indicator === "MACD",
+				Bollinger: indicator === "Bollinger",
+			});
+		},
+		[]
+	);
 
 	return (
 		<>
@@ -202,60 +200,41 @@ export function Home({ user }: StockChartProps) {
 							transition={{ duration: 0.8, delay: 0.2 }}
 							className="mt-4 text-xl md:w-2/3 mx-auto text-muted-foreground"
 						>
-							Analyze stock performance using advanced indicators to identify:
+							Analyze stock performance using advanced indicators to identify
+							{/* add cards with icons and text: talk about using indicators to identify trends and make trading decisions */}
+							<div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-10  text-black">
+								<div className="bg-white p-4 rounded-lg shadow-md ">
+									<div className="flex items-center justify-center">
+										<Icons.trendingUp className="w-12 h-12 text-blue-500 mb-4" />
+									</div>
+									<span className="text-xl font-bold">Identify Trends</span>
+									<p className="text-muted-foreground text-sm">
+										Use indicators to identify trends and make informed trading
+										decisions.
+									</p>
+								</div>
+								<div className="bg-white p-4 rounded-lg shadow-md">
+									<div className="flex items-center justify-center">
+										<Icons.pieChart className="w-12 h-12 text-green-500 mb-4" />
+									</div>
+									<span className="text-xl font-bold">Analyze Performance</span>
+									<p className="text-muted-foreground text-sm">
+										Track stock performance over time to gauge market movements
+										and make informed trading decisions.
+									</p>
+								</div>
+								<div className="bg-white p-4 rounded-lg shadow-md">
+									<div className="flex items-center justify-center">
+										<Icons.barChart className="w-12 h-12 text-red-500 mb-4" />
+									</div>
+									<span className="text-xl font-bold">Optimize Strategies</span>
+									<p className="text-muted-foreground text-sm">
+										Leverage data to optimize your trading strategies for better
+										outcomes.
+									</p>
+								</div>
+							</div>
 						</motion.p>
-						<motion.div
-							initial={{ opacity: 0, scale: 0.8 }}
-							whileInView={{ opacity: 1, scale: 1 }}
-							viewport={{ once: true }}
-							transition={{ duration: 0.8, delay: 0.4 }}
-							className="flex flex-col md:flex-row justify-center items-center space-y-4 md:space-y-0 md:space-x-8 mt-6"
-						>
-							<motion.div
-								whileHover={{ scale: 1.05 }}
-								className="flex items-center bg-green-100 dark:bg-green-900 p-3 rounded-lg"
-							>
-								<svg
-									className="w-6 h-6 text-green-500 mr-2"
-									fill="none"
-									stroke="currentColor"
-									viewBox="0 0 24 24"
-									xmlns="http://www.w3.org/2000/svg"
-								>
-									<path
-										strokeLinecap="round"
-										strokeLinejoin="round"
-										strokeWidth={2}
-										d="M5 10l7-7m0 0l7 7m-7-7v18"
-									/>
-								</svg>
-								<span className="text-lg font-medium text-green-500">
-									Opportunities
-								</span>
-							</motion.div>
-							<motion.div
-								whileHover={{ scale: 1.05 }}
-								className="flex items-center bg-red-100 dark:bg-red-900 p-3 rounded-lg"
-							>
-								<svg
-									className="w-6 h-6 text-red-500 mr-2"
-									fill="none"
-									stroke="currentColor"
-									viewBox="0 0 24 24"
-									xmlns="http://www.w3.org/2000/svg"
-								>
-									<path
-										strokeLinecap="round"
-										strokeLinejoin="round"
-										strokeWidth={2}
-										d="M19 14l-7 7m0 0l-7-7m7 7V3"
-									/>
-								</svg>
-								<span className="text-lg font-medium text-red-500">
-									Potential Risks
-								</span>
-							</motion.div>
-						</motion.div>
 						<motion.div
 							initial={{ opacity: 0, y: 20 }}
 							whileInView={{ opacity: 1, y: 0 }}
@@ -342,6 +321,7 @@ export function Home({ user }: StockChartProps) {
 							viewport={{ once: true }}
 							transition={{ duration: 0.5, delay: 0.2 }}
 						>
+							{/* This section highlights the new feature that allows users to explore the entire market, providing them with comprehensive insights and data. */}
 							Explore the Entire Market <br />
 							<motion.span
 								className="inline-block bg-blue-500 text-white px-3 py-1 rounded-full text-sm font-bold mt-2 animate-pulse"
