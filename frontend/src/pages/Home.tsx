@@ -9,7 +9,7 @@ import PricingTable from "@/components/PricingTable";
 import NotificationBoard from "@/components/charts/NotificationBoard";
 import { useState, useEffect } from "react";
 import UMAPChart from "@/components/charts/UMAP-Chart";
-
+import { motion } from "framer-motion";
 import {
 	Select,
 	SelectContent,
@@ -167,20 +167,6 @@ export function Home({ user }: StockChartProps) {
 					</div>
 				)}
 
-				{!user && (
-					<section
-						className="mt-[10em] text-center"
-						onClick={() => handleScroll("notification-board")}
-					>
-						<h2 className="text-2xl font-normal text-neutral-600 dark:text-neutral-400">
-							Get real-time insights with your favorite indicator
-						</h2>
-						<div className="text-4xl motion-safe:animate-bounce mt-4">
-							&#8964;
-						</div>
-					</section>
-				)}
-
 				<section id="notification-board" className="pb-10 pt-10 relative">
 					<NotificationBoard
 						onNotificationClick={(stock, period, indicator) => {
@@ -199,19 +185,93 @@ export function Home({ user }: StockChartProps) {
 				</section>
 
 				{!user && (
-					<section className="pt-20 text-center">
-						<h2 className="text-2xl md:w-2/3 mx-auto font-normal text-neutral-600 dark:text-neutral-400">
-							Analyze stock performance with powerful indicators to spot
-							<span className="text-green-500">
-								{" "}
-								profitable opportunities
-							</span>{" "}
-							and
-							<span className="text-red-500"> potential risks</span>
-						</h2>
-						<div className="text-4xl motion-safe:animate-bounce mt-4">
+					<section className="pt-20 text-center overflow-hidden">
+						<motion.h2
+							initial={{ opacity: 0, y: -20 }}
+							whileInView={{ opacity: 1, y: 0 }}
+							viewport={{ once: true }}
+							transition={{ duration: 0.8 }}
+							className="text-4xl md:text-4xl md:w-3/4 lg:w-2/3 mx-auto font-semibold text-foreground"
+						>
+							Unlock Market Insights with Powerful Analytics
+						</motion.h2>
+						<motion.p
+							initial={{ opacity: 0, y: 20 }}
+							whileInView={{ opacity: 1, y: 0 }}
+							viewport={{ once: true }}
+							transition={{ duration: 0.8, delay: 0.2 }}
+							className="mt-4 text-xl md:w-2/3 mx-auto text-muted-foreground"
+						>
+							Analyze stock performance using advanced indicators to identify:
+						</motion.p>
+						<motion.div
+							initial={{ opacity: 0, scale: 0.8 }}
+							whileInView={{ opacity: 1, scale: 1 }}
+							viewport={{ once: true }}
+							transition={{ duration: 0.8, delay: 0.4 }}
+							className="flex flex-col md:flex-row justify-center items-center space-y-4 md:space-y-0 md:space-x-8 mt-6"
+						>
+							<motion.div
+								whileHover={{ scale: 1.05 }}
+								className="flex items-center bg-green-100 dark:bg-green-900 p-3 rounded-lg"
+							>
+								<svg
+									className="w-6 h-6 text-green-500 mr-2"
+									fill="none"
+									stroke="currentColor"
+									viewBox="0 0 24 24"
+									xmlns="http://www.w3.org/2000/svg"
+								>
+									<path
+										strokeLinecap="round"
+										strokeLinejoin="round"
+										strokeWidth={2}
+										d="M5 10l7-7m0 0l7 7m-7-7v18"
+									/>
+								</svg>
+								<span className="text-lg font-medium text-green-500">
+									Opportunities
+								</span>
+							</motion.div>
+							<motion.div
+								whileHover={{ scale: 1.05 }}
+								className="flex items-center bg-red-100 dark:bg-red-900 p-3 rounded-lg"
+							>
+								<svg
+									className="w-6 h-6 text-red-500 mr-2"
+									fill="none"
+									stroke="currentColor"
+									viewBox="0 0 24 24"
+									xmlns="http://www.w3.org/2000/svg"
+								>
+									<path
+										strokeLinecap="round"
+										strokeLinejoin="round"
+										strokeWidth={2}
+										d="M19 14l-7 7m0 0l-7-7m7 7V3"
+									/>
+								</svg>
+								<span className="text-lg font-medium text-red-500">
+									Potential Risks
+								</span>
+							</motion.div>
+						</motion.div>
+						<motion.div
+							initial={{ opacity: 0, y: 20 }}
+							whileInView={{ opacity: 1, y: 0 }}
+							viewport={{ once: true }}
+							transition={{ duration: 0.8, delay: 0.6 }}
+							className="mt-8"
+						></motion.div>
+						<motion.div
+							className="text-5xl mt-6"
+							initial={{ y: 0 }}
+							whileInView={{ y: [0, -10, 0] }}
+							viewport={{ once: true }}
+							transition={{ repeat: Infinity, duration: 1.5 }}
+						>
 							&#8964;
-						</div>
+						</motion.div>
 					</section>
 				)}
 
@@ -225,14 +285,41 @@ export function Home({ user }: StockChartProps) {
 				</section>
 
 				{!user && (
-					<section className="pt-20 text-center">
-						<h2 className="text-2xl font-normal text-neutral-600 dark:text-neutral-400">
-							Check an indicator for all stocks
-						</h2>
-						<div className="text-4xl motion-safe:animate-bounce mt-4">
+					<motion.section
+						className="pt-20 text-center"
+						initial={{ opacity: 0, y: 50 }}
+						whileInView={{ opacity: 1, y: 0 }}
+						viewport={{ once: true, amount: 0.3 }}
+						transition={{ duration: 0.7 }}
+					>
+						<motion.h2
+							className="text-4xl font-semibold text-gradient bg-clip-text text-transparent bg-gradient-to-r from-blue-500 to-purple-600"
+							initial={{ opacity: 0, y: 20 }}
+							whileInView={{ opacity: 1, y: 0 }}
+							viewport={{ once: true }}
+							transition={{ duration: 0.5, delay: 0.2 }}
+						>
+							Discover Market-Wide Insights
+						</motion.h2>
+						<motion.p
+							className="mt-4 text-xl text-muted-foreground"
+							initial={{ opacity: 0, y: 20 }}
+							whileInView={{ opacity: 1, y: 0 }}
+							viewport={{ once: true }}
+							transition={{ duration: 0.5, delay: 0.4 }}
+						>
+							Analyze indicators across all stocks simultaneously
+						</motion.p>
+						<motion.div
+							className="text-5xl mt-6 text-blue-500"
+							initial={{ y: 0 }}
+							whileInView={{ y: [0, -10, 0] }}
+							viewport={{ once: true }}
+							transition={{ repeat: Infinity, duration: 1.5 }}
+						>
 							&#8964;
-						</div>
-					</section>
+						</motion.div>
+					</motion.section>
 				)}
 
 				<section className="pb-20 pt-10 ">
@@ -240,20 +327,42 @@ export function Home({ user }: StockChartProps) {
 				</section>
 
 				{!user && (
-					<section
-						className="pt-20 text-center"
+					<motion.section
+						className="pt-20 text-center cursor-pointer transform hover:scale-105 transition-all duration-300"
 						onClick={() => handleScroll("umap-board")}
+						initial={{ opacity: 0, y: 50 }}
+						whileInView={{ opacity: 1, y: 0 }}
+						viewport={{ once: true, amount: 0.3 }}
+						transition={{ duration: 0.7 }}
 					>
-						<h2 className="text-2xl font-normal text-neutral-600 dark:text-neutral-400">
-							Visualize the entire market at a glance <br />
-							<span className="text-blue-500 bg-blue-100 dark:bg-blue-900 px-2 py-1 rounded-full text-xs font-semibold inline-block align-middle mt-2">
+						<motion.h2
+							className="text-4xl font-semibold text-gradient bg-clip-text"
+							initial={{ opacity: 0, y: 20 }}
+							whileInView={{ opacity: 1, y: 0 }}
+							viewport={{ once: true }}
+							transition={{ duration: 0.5, delay: 0.2 }}
+						>
+							Explore the Entire Market <br />
+							<motion.span
+								className="inline-block bg-blue-500 text-white px-3 py-1 rounded-full text-sm font-bold mt-2 animate-pulse"
+								initial={{ scale: 0 }}
+								whileInView={{ scale: 1 }}
+								viewport={{ once: true }}
+								transition={{ delay: 0.7, type: "spring", stiffness: 500 }}
+							>
 								NEW
-							</span>
-						</h2>
-						<div className="text-4xl motion-safe:animate-bounce mt-4">
+							</motion.span>
+						</motion.h2>
+						<motion.div
+							className="text-5xl mt-6"
+							initial={{ y: 0 }}
+							whileInView={{ y: [0, -10, 0] }}
+							viewport={{ once: true }}
+							transition={{ repeat: Infinity, duration: 1.5 }}
+						>
 							&#8964;
-						</div>
-					</section>
+						</motion.div>
+					</motion.section>
 				)}
 
 				<section id="umap-board" className="pb-20 pt-10 ">
@@ -261,17 +370,42 @@ export function Home({ user }: StockChartProps) {
 				</section>
 
 				{!user && (
-					<section className="pt-20 text-center">
-						<h2 className="text-2xl font-normal text-neutral-600 dark:text-neutral-400 mb-4">
-							Get access to more indicators and features
-						</h2>
-						<div className="text-4xl motion-safe:animate-bounce mb-8">
-							&#8964;
-						</div>
-						<div className="flex pb-10">
+					<motion.section
+						className="pt-20 text-center"
+						initial={{ opacity: 0, y: 50 }}
+						whileInView={{ opacity: 1, y: 0 }}
+						viewport={{ once: true, amount: 0.3 }}
+						transition={{ duration: 0.7 }}
+					>
+						<motion.h2
+							className="text-4xl md:text-4xl font-semibold text-gradient bg-clip-text text-transparent bg-gradient-to-r from-blue-500 to-purple-600 mb-6"
+							initial={{ opacity: 0, y: 20 }}
+							whileInView={{ opacity: 1, y: 0 }}
+							viewport={{ once: true }}
+							transition={{ duration: 0.5, delay: 0.2 }}
+						>
+							Unlock the Full Potential of Market Analysis
+						</motion.h2>
+						<motion.p
+							className="text-xl text-muted-foreground mb-8"
+							initial={{ opacity: 0, y: 20 }}
+							whileInView={{ opacity: 1, y: 0 }}
+							viewport={{ once: true }}
+							transition={{ duration: 0.5, delay: 0.4 }}
+						>
+							Gain access to advanced indicators and powerful features
+						</motion.p>
+
+						<motion.div
+							className="flex justify-center pb-10"
+							initial={{ opacity: 0, y: 30 }}
+							whileInView={{ opacity: 1, y: 0 }}
+							viewport={{ once: true }}
+							transition={{ duration: 0.5, delay: 0.8 }}
+						>
 							<PricingTable />
-						</div>
-					</section>
+						</motion.div>
+					</motion.section>
 				)}
 
 				{!user && (
