@@ -79,7 +79,7 @@ export async function getAvailableIndices(): Promise<string[]> {
 	// const marketData = await fetchMarketData();
 	// return marketData.indices.map((index) => index.name);
 	// TODO: Remove this hardcoded list and use the one from the market data
-	return ["NASDAQ 100", "S&P 100", "DOW JONES"];
+	return ["NASDAQ 100", "S&P 100", "DOW JONES", "BIST 100"];
 }
 
 // For non logged in users, we will show a default set of companies
