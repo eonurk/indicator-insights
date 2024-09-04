@@ -317,8 +317,8 @@ function UMAPChart({ user }: UMAPChartProps) {
 			const { profit, latestBuyPrice, latestSellPrice } =
 				calculateBollingerBandsProfit(
 					closingPrices,
-					bands.map((band) => band.upper),
-					bands.map((band) => band.lower)
+					bands.map((band) => band.upper || 0),
+					bands.map((band) => band.lower || 0)
 				);
 			const latestSignal =
 				latestBuyPrice !== null
