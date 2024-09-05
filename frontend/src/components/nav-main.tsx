@@ -1,5 +1,3 @@
-"use client";
-
 import { Link } from "react-router-dom"; // Import necessary hooks from react-router-dom
 // import { siteConfig } from "@/config/site";
 import { cn } from "@/lib/utils";

@@ -47,10 +47,10 @@ export function Home({ user }: StockChartProps) {
 	const [selectedPeriod, setSelectedPeriod] = useState("1m");
 	const [selectedIndicators, setSelectedIndicators] = useState({
 		RMI: true,
-		RSI: false,
+		RSI: true,
 		SMA: true,
 		EMA: false,
-		MACD: true,
+		MACD: false,
 		Bollinger: false,
 	});
 

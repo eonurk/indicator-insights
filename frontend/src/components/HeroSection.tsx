@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
-import { Button } from "./ui/button";
+import { Button } from "@/components/ui/button";
 import { motion } from "framer-motion";
+import SocialProof from "@/components/SocialProof";
 
 const HeroSection = () => {
 	const handleScroll = (id: string) => {
@@ -81,6 +82,9 @@ const HeroSection = () => {
 						>
 							Learn More
 						</Button>
+					</div>
+					<div className="flex justify-center space-x-4 transition-all duration-300 mt-6">
+						<SocialProof />
 					</div>
 				</div>
 			</div>

@@ -1,5 +1,3 @@
-"use client";
-
 import { siteConfig } from "@/config/site";
 import { Separator } from "@/components/ui/separator";
 import { Link } from "react-router-dom";
