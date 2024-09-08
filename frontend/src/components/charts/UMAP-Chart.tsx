@@ -389,7 +389,6 @@ function UMAPChart({ user }: UMAPChartProps) {
 					const history = stockInfo[symbol].history;
 					const latestDate = Object.keys(history).pop();
 					const latestData = latestDate ? history[latestDate] : null;
-					console.log(latestData);
 					if (!latestData || typeof latestData.Close === "undefined") {
 						console.error(`Missing latest price for symbol: ${symbol}`);
 						return null;

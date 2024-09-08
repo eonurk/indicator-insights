@@ -76,16 +76,16 @@ const AIStockAnalysis: React.FC<AIStockAnalysisProps> = ({
 	}, []);
 
 	useEffect(() => {
-		setStockSymbol(selectedStock);
-		setPeriod(selectedPeriod);
-	}, [selectedStock, selectedPeriod]);
+		setStockSymbol(stockSymbol);
+		setPeriod(period);
+	}, [stockSymbol, period]);
 
 	const getCurrentDate = () => {
 		const today = new Date();
 		return today.toISOString().split("T")[0];
 	};
 
-	const generateSummary = async (selectedStock: string) => {
+	const generateSummary = async () => {
 		if (!user && hasUsedFreeTry) {
 			navigate("/subscribe");
 			return;
@@ -112,7 +112,6 @@ const AIStockAnalysis: React.FC<AIStockAnalysisProps> = ({
 				["Close"]
 			)) as Record<string, StockData>;
 
-			console.log("Stock data:", stockData);
 			if (!stockData[stockSymbol]) {
 				throw new Error(`No data found for ${stockSymbol}`);
 			}
@@ -124,8 +123,6 @@ const AIStockAnalysis: React.FC<AIStockAnalysisProps> = ({
 				.filter((price) => price !== undefined) as number[];
 
 			// Calculate indicators
-
-			console.log("Closing prices:", closingPrices);
 			const rmi = RMI(closingPrices, 14);
 			const rsi = RSI(closingPrices, 14);
 			const macd = MACD(closingPrices);
@@ -134,7 +131,7 @@ const AIStockAnalysis: React.FC<AIStockAnalysisProps> = ({
 
 			// Prepare the stock information for analysis
 			const stockInfo = `
-Stock Symbol: ${selectedStock}
+Stock Symbol: ${stockSymbol}
 Latest Price: $${closingPrices[closingPrices.length - 1].toFixed(2)}
 RMI (14): ${rmi[rmi.length - 1].toFixed(2)}
 RSI (14): ${rsi[rsi.length - 1].toFixed(2)}
@@ -180,17 +177,21 @@ Summarize the stock information above in a concise manner and provide a brief an
 			</CardHeader>
 			<CardContent className="mt-4 w-full px-0">
 				<Select value={stockSymbol} onValueChange={setStockSymbol}>
-					<SelectTrigger className="bg-white text-indigo-600 max-w-[250px] mx-auto">
-						<SelectValue placeholder="Select a stock" />
+					<SelectTrigger
+						className="bg-white text-indigo-600 mt-2 max-w-[250px] mx-auto text-sm"
+						aria-label="Select a value"
+					>
+						<SelectValue placeholder="AAPL" />
 					</SelectTrigger>
-					<SelectContent>
-						{Object.keys(availableStocks).map((stockSymbol) => (
-							<SelectItem key={stockSymbol} value={stockSymbol}>
-								{availableStocks[stockSymbol]}
+					<SelectContent position="popper">
+						{Object.entries(availableStocks).map(([id, name]) => (
+							<SelectItem key={id} value={id}>
+								{name}
 							</SelectItem>
 						))}
 					</SelectContent>
 				</Select>
+
 				<Select value={period} onValueChange={setPeriod}>
 					<SelectTrigger className="bg-white text-indigo-600 mt-2 mb-8 max-w-[250px] mx-auto text-sm">
 						<SelectValue placeholder="Select a period" />
@@ -222,7 +223,7 @@ Summarize the stock information above in a concise manner and provide a brief an
 					</Link>
 				) : (
 					<Button
-						onClick={() => generateSummary(selectedStock)}
+						onClick={() => generateSummary()}
 						disabled={isLoading}
 						className={`transition-all duration-300 ${
 							isLoading ? "scale-95" : "scale-100"
@@ -243,7 +244,7 @@ Summarize the stock information above in a concise manner and provide a brief an
 				{summary && (
 					<div className="mt-8 bg-white p-8 rounded-lg shadow-lg w-full">
 						<h3 className="text-lg font-semibold mb-4 text-indigo-600">
-							AI Analysis for {selectedStock}
+							{stockSymbol} ({period})
 						</h3>
 						<Separator />
 						<ReactMarkdown className="text-gray-800 text-base text-justify">

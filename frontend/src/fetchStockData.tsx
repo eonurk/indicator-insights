@@ -69,8 +69,6 @@ export function getPercentChange(closingPrices: number[]) {
 
 export async function fetchSummary(stockInfo: string): Promise<string> {
 	try {
-		console.log("Fetching summary for:", stockInfo);
-		console.log("Base URL:", baseURL);
 		const response = await fetch(
 			`${baseURL}/api/generate-summary?stockInfo=${stockInfo}`,
 			{
