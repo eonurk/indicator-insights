@@ -75,6 +75,11 @@ const AIStockAnalysis: React.FC<AIStockAnalysisProps> = ({
 		setDailyLimit(dailyLimit);
 	}, []);
 
+	useEffect(() => {
+		setStockSymbol(selectedStock);
+		setPeriod(selectedPeriod);
+	}, [selectedStock, selectedPeriod]);
+
 	const getCurrentDate = () => {
 		const today = new Date();
 		return today.toISOString().split("T")[0];
@@ -161,9 +166,9 @@ Summarize the stock information above in a concise manner and provide a brief an
 	return (
 		<Card
 			className="
-			mt-4 w-full md:w-2/3 md:mx-auto
-		items-center bg-gradient-to-r
-		from-indigo-500 via-purple-500 to-pink-500 shadow-2xl rounded-xl"
+			mt-4 w-full md:w-2/3 md:mx-auto p-2 md:p-4 
+			items-center bg-gradient-to-r shadow-2xl rounded-xl
+		from-indigo-500 via-purple-500 to-pink-500"
 		>
 			<CardHeader className="items-center">
 				<CardTitle className="text-white tracking-wide mt-4">
@@ -175,7 +180,7 @@ Summarize the stock information above in a concise manner and provide a brief an
 			</CardHeader>
 			<CardContent className="mt-4 w-full px-0">
 				<Select value={stockSymbol} onValueChange={setStockSymbol}>
-					<SelectTrigger className="bg-white text-indigo-600 w-full max-w-xs mx-auto">
+					<SelectTrigger className="bg-white text-indigo-600 max-w-[250px] mx-auto">
 						<SelectValue placeholder="Select a stock" />
 					</SelectTrigger>
 					<SelectContent>
@@ -187,7 +192,7 @@ Summarize the stock information above in a concise manner and provide a brief an
 					</SelectContent>
 				</Select>
 				<Select value={period} onValueChange={setPeriod}>
-					<SelectTrigger className="bg-white text-indigo-600 mt-2 mb-8 w-full max-w-xs mx-auto text-sm">
+					<SelectTrigger className="bg-white text-indigo-600 mt-2 mb-8 max-w-[250px] mx-auto text-sm">
 						<SelectValue placeholder="Select a period" />
 					</SelectTrigger>
 					<SelectContent>
@@ -241,14 +246,14 @@ Summarize the stock information above in a concise manner and provide a brief an
 							AI Analysis for {selectedStock}
 						</h3>
 						<Separator />
-						<ReactMarkdown className="text-gray-800 text-base text-left leading-relaxed">
+						<ReactMarkdown className="text-gray-800 text-base text-justify">
 							{summary}
 						</ReactMarkdown>
 					</div>
 				)}
 
 				{!user && !hasUsedFreeTry && (
-					<p className="text-white text-center mt-8 text-lg">
+					<p className="text-white text-center mt-8 text-base">
 						You have 1 complimentary analysis available. Sign up for unlimited
 						access to our premium features.
 					</p>
