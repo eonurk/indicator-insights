@@ -9,7 +9,7 @@ interface StockHistory {
 }
 
 interface StockData {
-	[key: string]: any;
+	[key: string]: unknown;
 	symbol: string;
 	history: StockHistory;
 }
@@ -65,4 +65,30 @@ export function getPercentChange(closingPrices: number[]) {
 	const priceChangePercentage = (priceChange / initialPrice) * 100;
 
 	return priceChangePercentage;
+}
+
+export async function fetchSummary(stockInfo: string): Promise<string> {
+	try {
+		console.log("Fetching summary for:", stockInfo);
+		console.log("Base URL:", baseURL);
+		const response = await fetch(
+			`${baseURL}/api/generate-summary?stockInfo=${stockInfo}`,
+			{
+				method: "GET",
+				headers: {
+					"Content-Type": "application/json",
+				},
+			}
+		);
+
+		if (!response.ok) {
+			throw new Error("Network response was not ok");
+		}
+
+		const data = await response.json();
+		return data.summary;
+	} catch (error) {
+		console.error("Error generating summary:", error);
+		throw new Error("Failed to generate summary");
+	}
 }

@@ -140,6 +140,16 @@ interface StockChartProps {
 	availableStocks: Record<string, string>;
 }
 
+interface HistoryData {
+	history: Record<string, { [key: string]: number }>;
+	volume: number;
+	avgVolume: number;
+	marketCap: number;
+	week52High: number;
+	week52Low: number;
+	peRatio: string;
+}
+
 type GenericChartOptions = Omit<ChartOptions<"line">, "scales"> & {
 	scales?: {
 		[key: string]: ScaleOptionsByType<keyof CartesianScaleTypeRegistry>;
@@ -164,7 +174,7 @@ function StockChart({
 		marketCap: string;
 		week52High: number;
 		week52Low: number;
-		peRatio: number;
+		peRatio: string;
 		currentPrice: string | undefined;
 		priceChangePercentage: string;
 		lineColor: string;
@@ -223,7 +233,10 @@ function StockChart({
 
 	const getStockInfo = async (symbol: string, period: string) => {
 		try {
-			const fetchedData = await fetchStockData(symbol, period);
+			const fetchedData = (await fetchStockData(symbol, period)) as Record<
+				string,
+				HistoryData
+			>;
 			const stockData = fetchedData[symbol];
 			if (!stockData) {
 				console.error("No data found for symbol:", symbol);
@@ -258,7 +271,7 @@ function StockChart({
 				marketCap: formatNumber(stockData["marketCap"]),
 				week52High: stockData["week52High"],
 				week52Low: stockData["week52Low"],
-				peRatio: stockData["peRatio"] ? stockData["peRatio"].toFixed(2) : "-",
+				peRatio: stockData["peRatio"] ? stockData["peRatio"].toString() : "-",
 				currentPrice: latestPrice ? latestPrice.toFixed(2) : "-",
 				priceChangePercentage: priceChangePercentage.toFixed(2),
 				lineColor: lineColor,

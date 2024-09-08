@@ -26,6 +26,7 @@ import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { Icons } from "@/components/icons";
+import AIStockAnalysis from "@/components/charts/AIStockAnalysisProps";
 
 <script async src="https://js.stripe.com/v3/pricing-table.js"></script>;
 
@@ -164,6 +165,17 @@ export function Home({ user }: StockChartProps) {
 						</p>
 					</div>
 				)}
+
+				<section className="pb-20 pt-10 relative">
+					<AIStockAnalysis
+						user={user || null}
+						selectedStock={selectedStock}
+						selectedPeriod={selectedPeriod}
+						availableStocks={availableStocks}
+					/>
+				</section>
+
+				{/* Get real time insights on your stocks */}
 
 				<section id="notification-board" className="pb-10 pt-10 relative">
 					<NotificationBoard

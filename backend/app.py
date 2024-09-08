@@ -1,4 +1,6 @@
 from flask import Flask, jsonify, request
+import openai
+import os
 import yfinance as yf
 from flask_cors import CORS
 
@@ -72,6 +74,28 @@ def get_stock_data(symbols):
 
         return jsonify(data), 200
 
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+
+@app.route('/api/generate-summary', methods=['GET'])
+def generate_summary():
+    try:
+        stock_info = request.args.get('stockInfo', '')
+        # Here you would typically call your AI model to generate a summary
+        # For now, we'll just return a placeholder response
+        openai.api_key = os.getenv("OPENAI_API_KEY")
+
+        response = openai.chat.completions.create(
+            model="gpt-4o-mini",
+            messages=[
+                {"role": "system", "content": "Make coherent paragraphs. Use markdown to format the response."},
+                {"role": "user", "content": f"{stock_info}."}
+            ]
+        )
+        summary = response.choices[0].message.content
+
+        return jsonify({"summary": summary}), 200
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 

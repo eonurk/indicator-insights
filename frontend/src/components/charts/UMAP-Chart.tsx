@@ -195,13 +195,9 @@ function UMAPChart({ user }: UMAPChartProps) {
 		setError(null);
 		try {
 			const symbols = Object.keys(availableStocks);
-			const response: Record<string, StockData> = await fetchStockData(
-				symbols.join(","),
-				period,
-				false,
-				["Close"]
-			);
-			console.log("Fetched stock data response:", response);
+			const response = (await fetchStockData(symbols.join(","), period, false, [
+				"Close",
+			])) as Record<string, StockData>;
 
 			const stockDataArray = Object.values(response).map((stock: StockData) =>
 				Object.values(stock.history).map((day: { Close: number }) => day.Close)

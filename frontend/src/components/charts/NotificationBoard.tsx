@@ -75,6 +75,22 @@ const indicators = [
 	},
 ];
 
+interface StockData {
+	[key: string]: unknown;
+	symbol: string;
+	history: StockHistory;
+}
+
+interface StockHistory {
+	[date: string]: {
+		Close: number;
+		Open: number;
+		High: number;
+		Low: number;
+		Volume: number;
+	};
+}
+
 interface NotificationBoardProps {
 	availableStocks: { [key: string]: string };
 	onNotificationClick: (
@@ -97,7 +113,7 @@ const NotificationBoard: React.FC<NotificationBoardProps> = ({
 	const [isLoading, setIsLoading] = useState(true);
 	const [error, setError] = useState<string | null>(null);
 	const cachedDataRef = useRef<{
-		[key: string]: { history: Record<string, { Close: number }> };
+		[key: string]: StockData;
 	}>({});
 	const lastFetchTimeRef = useRef<{
 		time: Date;
@@ -142,13 +158,13 @@ const NotificationBoard: React.FC<NotificationBoardProps> = ({
 			let response;
 			if (shouldFetchNewData) {
 				setIsLoading(true);
-				response = await fetchStockData(
+				response = (await fetchStockData(
 					symbols.join(","),
 					selectedPeriod,
 					false,
 					["Close"]
-				);
-				cachedDataRef.current = response;
+				)) as Record<string, StockData>;
+				cachedDataRef.current = response as Record<string, StockData>;
 				lastFetchTimeRef.current = {
 					time: currentTime,
 					period: selectedPeriod,

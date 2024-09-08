@@ -16,13 +16,13 @@ const CheckIcon = () => (
 
 const PricingTable: React.FC = () => {
 	const features = [
-		"NASDAQ 100, S&P 100, Dow Jones",
+		"NASDAQ 100, S&P 100 and more",
+		"10 AI Stock Insights per day",
 		"Real-time market data",
 		"Valuable insights with indicators",
 		"Customizable indicator settings",
 		"Advanced analytics dashboard",
 		"Historical data analysis",
-		"Early access to new features",
 		"Priority email support",
 	];
 

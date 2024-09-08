@@ -67,6 +67,22 @@ interface StockChartProps {
 	user: User | null; // Use User type from firebase/auth
 }
 
+interface StockHistory {
+	[date: string]: {
+		Close: number;
+		Open: number;
+		High: number;
+		Low: number;
+		Volume: number;
+	};
+}
+
+interface StockData {
+	[key: string]: unknown;
+	symbol: string;
+	history: StockHistory;
+}
+
 interface Result {
 	symbol: string;
 	indicatorResult: number[];
@@ -100,9 +116,9 @@ export default function IndicatorChecker({ user }: StockChartProps) {
 
 			const symbols = Object.keys(availableStocks);
 
-			const response = await fetchStockData(symbols.join(","), period, false, [
+			const response = (await fetchStockData(symbols.join(","), period, false, [
 				"Close",
-			]);
+			])) as Record<string, StockData>;
 			const indicatorResults = [];
 
 			for (const symbol of symbols) {
