@@ -140,7 +140,10 @@ MACD Signal: ${macd.signalLine[macd.signalLine.length - 1].toFixed(2)}
 SMA (50): ${sma50[sma50.length - 1].toFixed(2)}
 EMA (20): ${ema20[ema20.length - 1].toFixed(2)}
 
-Summarize the stock information above in a concise manner and provide a brief analysis of the stock's current trend and potential future movement.`;
+Please provide a structured summary with the following sections:
+1. Stock Information Summary
+2. Analysis
+3. Future Outlook`;
 			// Call the backend API
 			const response = await fetchSummary(stockInfo);
 

@@ -166,7 +166,7 @@ export function Home({ user }: StockChartProps) {
 					</div>
 				)}
 
-				<section className="pb-20 pt-10 relative">
+				<section id="ai-stock-analysis" className="pb-20 pt-10 relative">
 					<AIStockAnalysis
 						user={user || null}
 						selectedStock={selectedStock}
@@ -176,6 +176,41 @@ export function Home({ user }: StockChartProps) {
 				</section>
 
 				{/* Get real time insights on your stocks */}
+				{!user && (
+					<motion.div
+						className="text-center text-3xl font-bold"
+						initial={{ opacity: 0, y: 50 }}
+						whileInView={{ opacity: 1, y: 0 }}
+						viewport={{ once: true, amount: 0.3 }}
+						transition={{ duration: 0.8, ease: "easeOut" }}
+					>
+						<motion.span
+							className="inline-block"
+							initial={{ rotateX: -90 }}
+							whileInView={{ rotateX: 0 }}
+							transition={{ delay: 0.2, duration: 0.8, ease: "easeOut" }}
+						>
+							🚀
+						</motion.span>
+						<motion.span
+							className="inline-block ml-2 bg-clip-text text-4xl text-transparent bg-gradient-to-r from-green-400 to-blue-500"
+							initial={{ opacity: 0 }}
+							whileInView={{ opacity: 1 }}
+							transition={{ delay: 0.5, duration: 0.8 }}
+						>
+							Real-time Stock Insights
+						</motion.span>
+						<motion.span
+							whileInView={{ opacity: 1, x: 0 }}
+							initial={{ opacity: 0, x: -50 }}
+							className="block mt-2 text-lg font-medium text-muted-foreground"
+							transition={{ delay: 0.8, duration: 0.8 }}
+						>
+							Get notified instantly when a specific indicator reaches a
+							specific level
+						</motion.span>
+					</motion.div>
+				)}
 
 				<section id="notification-board" className="pb-10 pt-10 relative">
 					<NotificationBoard

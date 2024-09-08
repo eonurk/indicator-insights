@@ -78,7 +78,7 @@ const HeroSection = () => {
 						<Button
 							className="py-6 px-8 hover:shadow-lg hover:scale-105 transition-all duration-300"
 							variant="outline"
-							onClick={() => handleScroll("notification-board")}
+							onClick={() => handleScroll("ai-stock-analysis")}
 						>
 							Learn More
 						</Button>
