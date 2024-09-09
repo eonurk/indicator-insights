@@ -167,11 +167,11 @@ Please provide a structured summary with the following sections:
 		<Card
 			className="
 			mt-4 w-full md:w-2/3 md:mx-auto p-2 md:p-4 
-			items-center bg-gradient-to-r shadow-2xl rounded-xl
+			items-center bg-gradient-to-r shadow-xl rounded-xl
 		from-indigo-500 via-purple-500 to-pink-500"
 		>
 			<CardHeader className="items-center">
-				<CardTitle className="text-white tracking-wide mt-4">
+				<CardTitle className="tracking-wide  mt-4 text-3xl font-bold text-white">
 					AI Stock Insights
 				</CardTitle>
 				<CardDescription className="text-white">
@@ -199,7 +199,7 @@ Please provide a structured summary with the following sections:
 					<SelectTrigger className="bg-white text-indigo-600 mt-2 mb-8 max-w-[250px] mx-auto text-sm">
 						<SelectValue placeholder="Select a period" />
 					</SelectTrigger>
-					<SelectContent>
+					<SelectContent position="popper">
 						<SelectItem value="1d">1 Day</SelectItem>
 						<SelectItem value="1w">1 Week</SelectItem>
 						<SelectItem value="1m">1 Month</SelectItem>
@@ -219,9 +219,9 @@ Please provide a structured summary with the following sections:
 					<Link to="/subscribe">
 						<Button
 							className="transition-all duration-300 hover:scale-105 bg-white 
-						text-indigo-600 text-base py-6 px-8 rounded-full shadow-lg"
+						text-indigo-600 text-base py-6 px-8 rounded-full shadow-lg hover:text-white "
 						>
-							Get Started
+							<p className="animate-pulse">Get Started</p>
 						</Button>
 					</Link>
 				) : (

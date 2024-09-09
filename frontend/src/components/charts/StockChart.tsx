@@ -147,7 +147,7 @@ interface HistoryData {
 	marketCap: number;
 	week52High: number;
 	week52Low: number;
-	peRatio: string;
+	peRatio: number;
 }
 
 type GenericChartOptions = Omit<ChartOptions<"line">, "scales"> & {
@@ -271,7 +271,7 @@ function StockChart({
 				marketCap: formatNumber(stockData["marketCap"]),
 				week52High: stockData["week52High"],
 				week52Low: stockData["week52Low"],
-				peRatio: stockData["peRatio"] ? stockData["peRatio"].toString() : "-",
+				peRatio: stockData["peRatio"] ? stockData["peRatio"].toFixed(2) : "-",
 				currentPrice: latestPrice ? latestPrice.toFixed(2) : "-",
 				priceChangePercentage: priceChangePercentage.toFixed(2),
 				lineColor: lineColor,
