@@ -49,11 +49,11 @@ export function Home({ user }: StockChartProps) {
 	const [selectedPeriod, setSelectedPeriod] = useState("1m");
 	const [selectedIndicators, setSelectedIndicators] = useState({
 		RMI: true,
-		RSI: true,
-		SMA: true,
+		RSI: false,
+		SMA: false,
 		EMA: false,
 		MACD: false,
-		Bollinger: false,
+		Bollinger: true,
 	});
 
 	const [selectedIndex, setSelectedIndex] = useState("S&P 100");
