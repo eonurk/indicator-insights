@@ -27,6 +27,7 @@ import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { Icons } from "@/components/icons";
 import AIStockAnalysis from "@/components/charts/AIStockAnalysisProps";
+import SankeyChart from "@/components/charts/SankeyChart";
 
 <script async src="https://js.stripe.com/v3/pricing-table.js"></script>;
 
@@ -272,7 +273,7 @@ export function Home({ user }: StockChartProps) {
 								</div>
 								<div className="bg-white p-4 rounded-lg shadow-md">
 									<div className="flex items-center justify-center">
-										<Icons.barChart className="w-12 h-12 text-red-500 mb-4" />
+										<Icons.barChart className="w-12 h-12 text-teal-500 mb-4" />
 									</div>
 									<span className="text-xl font-bold">Optimize Strategies</span>
 									<p className="text-muted-foreground text-sm">
@@ -309,6 +310,41 @@ export function Home({ user }: StockChartProps) {
 						availableStocks={availableStocks}
 					/>
 				</section>
+
+				{!user && (
+					<section id="sankey-chart" className="pb-20 pt-10">
+						<motion.div
+							initial={{ opacity: 0, scale: 0.8 }}
+							whileInView={{ opacity: 1, scale: 1 }}
+							viewport={{ once: true, amount: 0.3 }}
+							transition={{ duration: 0.8, ease: "easeOut" }}
+						>
+							<motion.h2
+								className="text-4xl font-bold text-gradient bg-clip-text text-transparent bg-gradient-to-r from-emerald-500 to-blue-600"
+								initial={{ x: -50 }}
+								whileInView={{ x: 0 }}
+								viewport={{ once: true }}
+								transition={{ duration: 0.6, delay: 0.2 }}
+							>
+								Dive into Stock Financials
+							</motion.h2>
+							<motion.p
+								className="mt-4 text-xl text-muted-foreground"
+								initial={{ x: 50 }}
+								whileInView={{ x: 0 }}
+								viewport={{ once: true }}
+								transition={{ duration: 0.6, delay: 0.4 }}
+							>
+								Uncover the financial heartbeat of your favorite stocks
+							</motion.p>
+						</motion.div>
+					</section>
+				)}
+
+				<SankeyChart
+					selectedStock={selectedStock}
+					availableStocks={availableStocks}
+				/>
 
 				{!user && (
 					<motion.section

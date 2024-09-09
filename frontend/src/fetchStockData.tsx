@@ -90,3 +90,9 @@ export async function fetchSummary(stockInfo: string): Promise<string> {
 		throw new Error("Failed to generate summary");
 	}
 }
+
+export async function fetchFinancialData(symbol: string): Promise<unknown> {
+	const response = await fetch(`${baseURL}/api/financial/${symbol}`);
+	const data = await response.json();
+	return data;
+}
