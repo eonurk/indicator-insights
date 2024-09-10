@@ -250,3 +250,44 @@ export function calculateBollingerBandsProfit(
 	const profit = capital - 100;
 	return { profit, buyPoints, sellPoints, latestBuyPrice, latestSellPrice };
 }
+
+export function calculateStochRSIProfit(
+	prices: number[],
+	kLine: number[],
+	dLine: number[]
+) {
+	let capital = 100;
+	let latestBuyPrice = null;
+	let latestSellPrice = null;
+	const buyPoints = [];
+	const sellPoints = [];
+
+	for (let i = 1; i < prices.length; i++) {
+		// Buy signal: %K crosses above %D and %K is below 20
+		if (kLine[i] < 20 && kLine[i] > dLine[i] && kLine[i - 1] <= dLine[i - 1]) {
+			latestBuyPrice = prices[i];
+			buyPoints.push({ x: i, y: kLine[i] });
+		}
+		// Sell signal: %K crosses below %D and %K is above 80
+		else if (
+			kLine[i] > 80 &&
+			kLine[i] < dLine[i] &&
+			kLine[i - 1] >= dLine[i - 1] &&
+			latestBuyPrice !== null
+		) {
+			capital = capital * (1 + (prices[i] - latestBuyPrice) / latestBuyPrice);
+			sellPoints.push({ x: i, y: dLine[i] });
+			latestBuyPrice = null;
+			latestSellPrice = prices[i];
+		}
+	}
+
+	if (latestBuyPrice !== null) {
+		capital =
+			capital *
+			(1 + (prices[prices.length - 1] - latestBuyPrice) / latestBuyPrice);
+	}
+
+	const profit = capital - 100;
+	return { profit, buyPoints, sellPoints, latestBuyPrice, latestSellPrice };
+}

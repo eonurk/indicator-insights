@@ -54,6 +54,7 @@ export function Home({ user }: StockChartProps) {
 		EMA: false,
 		MACD: false,
 		Bollinger: true,
+		StochRSI: true,
 	});
 
 	const [selectedIndex, setSelectedIndex] = useState("S&P 100");
@@ -123,6 +124,7 @@ export function Home({ user }: StockChartProps) {
 				EMA: indicator === "EMA",
 				MACD: indicator === "MACD",
 				Bollinger: indicator === "Bollinger",
+				StochRSI: indicator === "StochRSI",
 			});
 		},
 		[]

@@ -173,3 +173,47 @@ export function BollingerBands(prices: number[], period = 20, stdDev = 2) {
 	});
 	return bands;
 }
+
+export function StochRSI(
+	prices: number[],
+	period: number = 14,
+	kPeriod: number = 3,
+	dPeriod: number = 3
+): { kLine: number[]; dLine: number[] } {
+	if (prices.length < period) {
+		throw new Error("Insufficient data to calculate StochRSI");
+	}
+
+	// Calculate the RSI values
+	const rsi = RSI(prices, period);
+	const stochRSI: number[] = [];
+
+	// Calculate StochRSI
+	for (let index = 0; index < rsi.length; index++) {
+		if (index < period - 1) {
+			stochRSI.push(NaN); // Not enough data for StochRSI
+			continue;
+		}
+
+		// Get the relevant slice of RSI for calculation
+		const rsiSlice = rsi.slice(index - period + 1, index + 1);
+		const highestHigh = Math.max(...rsiSlice);
+		const lowestLow = Math.min(...rsiSlice);
+
+		const k =
+			highestHigh === lowestLow
+				? 0
+				: ((rsi[index] - lowestLow) / (highestHigh - lowestLow)) * 100;
+
+		stochRSI.push(k);
+	}
+
+	// Calculate the %K line using Simple Moving Average (SMA)
+	const kLine = SMA(stochRSI, kPeriod);
+
+	// Calculate the %D line using Simple Moving Average (SMA) of the %K line
+	const dLine = SMA(kLine, dPeriod);
+
+	// Return both %K and %D lines
+	return { kLine, dLine };
+}

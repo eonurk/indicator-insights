@@ -44,6 +44,7 @@ import MACDChart from "@/components/charts/MACD-Chart";
 import SMAChart from "@/components/charts/SMA-Chart";
 import EMAChart from "@/components/charts/EMA-Chart";
 import BollingerChart from "@/components/charts/BollingerBand-Chart";
+import StochRSIChart from "@/components/charts/StochRSI-Chart";
 
 import { Check, DownloadIcon } from "lucide-react";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
@@ -112,13 +113,17 @@ const indicators = [
 		component: BollingerChart,
 		periodKeys: ["period", "stdDev"],
 	},
+	{
+		key: "StochRSI",
+		component: StochRSIChart,
+		periodKeys: ["period", "kPeriod", "dPeriod"],
+	},
 ];
 
 interface DataPoint {
 	x: Date;
 	y: number;
 }
-
 interface Dataset {
 	label: string;
 	data: DataPoint[];
@@ -132,14 +137,12 @@ interface FormattedChartData {
 	labels: Date[];
 	datasets: Dataset[];
 }
-
 interface StockChartProps {
 	selectedStock: string;
 	selectedPeriod: string;
 	selectedIndicators: Record<string, boolean>;
 	availableStocks: Record<string, string>;
 }
-
 interface HistoryData {
 	history: Record<string, { [key: string]: number }>;
 	volume: number;
@@ -149,7 +152,6 @@ interface HistoryData {
 	week52Low: number;
 	peRatio: number;
 }
-
 type GenericChartOptions = Omit<ChartOptions<"line">, "scales"> & {
 	scales?: {
 		[key: string]: ScaleOptionsByType<keyof CartesianScaleTypeRegistry>;
@@ -194,6 +196,7 @@ function StockChart({
 		SMA: { period: 14 },
 		MACD: { fastPeriod: 26, slowPeriod: 12, signalPeriod: 9 },
 		Bollinger: { period: 20, stdDev: 2 },
+		StochRSI: { period: 14, kPeriod: 3, dPeriod: 3 },
 	});
 
 	const [editingIndicator, setEditingIndicator] = useState<string | null>(null);
@@ -347,12 +350,12 @@ function StockChart({
 					<CardDescription className={stockInfo?.cardTitleColor}>
 						${stockInfo?.currentPrice} ({stockInfo?.priceChangePercentage}%)
 						<div className="flex gap-4">
-							<div className="grid text-slate-400">
+							<div className="grid text-slate-400 text-left">
 								<p>Volume: {stockInfo?.volume}</p>
 								<p>Avg Volume: {stockInfo?.avgVolume}</p>
 								<p>Market Cap: {stockInfo?.marketCap}</p>
 							</div>
-							<div className="grid text-slate-400 ">
+							<div className="grid text-slate-400 text-left ">
 								<p>P/E ratio: {stockInfo?.peRatio}</p>
 								<p>52 Wk Low: {stockInfo?.week52Low}</p>
 								<p>52 Wk High: {stockInfo?.week52High}</p>
