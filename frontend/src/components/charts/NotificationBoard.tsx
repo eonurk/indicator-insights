@@ -7,12 +7,22 @@ import {
 	CardDescription,
 } from "@/components/ui/card";
 import { fetchStockData } from "@/fetchStockData";
-import { RMI, RSI, MACD } from "@/utils/Indicators";
+import {
+	RMI,
+	RSI,
+	MACD,
+	// StochRSI,
+	// EMA,
+	// BollingerBands,
+} from "@/utils/Indicators";
 import { format } from "date-fns";
 import {
 	calculateRMIProfit,
 	calculateMACDProfit,
 	calculateRSIProfit,
+	// calculateStochRSIProfit,
+	// calculateEMAProfit,
+	// calculateBollingerBandsProfit,
 } from "@/utils/calculateProfit";
 
 import { ScrollArea } from "@/components/ui/scroll-area";
@@ -73,6 +83,24 @@ const indicators = [
 		calculate: MACD,
 		calculateProfit: calculateMACDProfit,
 	},
+	// {
+	// 	key: "BollingerBands",
+	// 	label: "Bollinger Bands",
+	// 	calculate: BollingerBands,
+	// 	calculateProfit: calculateBollingerBandsProfit,
+	// },
+	// {
+	// 	key: "StochRSI",
+	// 	label: "Stochastic RSI",
+	// 	calculate: StochRSI,
+	// 	calculateProfit: calculateStochRSIProfit,
+	// },
+	// {
+	// 	key: "EMA",
+	// 	label: "EMA",
+	// 	calculate: EMA,
+	// 	calculateProfit: calculateEMAProfit,
+	// },
 ];
 
 interface StockData {

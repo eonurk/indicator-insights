@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import ReactMarkdown from "react-markdown";
 import { User } from "firebase/auth";
+import { toast } from "@/components/ui/use-toast";
 import { Link, useNavigate } from "react-router-dom";
 
 import {
@@ -12,7 +13,7 @@ import {
 	CardFooter,
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Loader2 } from "lucide-react";
+import { Loader2, Copy } from "lucide-react";
 import { fetchStockData, fetchSummary } from "@/fetchStockData";
 import { RMI, RSI, MACD, SMA, EMA } from "@/utils/Indicators";
 import { format } from "date-fns";
@@ -24,6 +25,7 @@ import {
 	SelectValue,
 } from "@/components/ui/select";
 import { Separator } from "../ui/separator";
+import { Icons } from "../icons";
 
 interface StockHistory {
 	[date: string]: {
@@ -184,6 +186,31 @@ Please provide a structured summary with the following sections:
 		}
 	};
 
+	const copyToClipboard = () => {
+		navigator.clipboard.writeText(summary).then(() => {
+			toast({
+				title: "Copied!",
+				description: "Summary copied to clipboard",
+			});
+		});
+	};
+
+	const shareOnTwitter = () => {
+		const tweetText = encodeURIComponent(
+			`Check out this AI-generated stock analysis for ${stockSymbol}:\n\n${summary}
+			\n\nCreated with ❤️ by indicatorinsights.co`
+		);
+		window.open(`https://x.com/intent/tweet?text=${tweetText}`, "_blank");
+	};
+
+	const shareOnTelegram = () => {
+		const text = encodeURIComponent(
+			`AI Stock Analysis for ${stockSymbol}:\n\n${summary}
+            \n\nCreated with ❤️ by indicatorinsights.co`
+		);
+		window.open(`https://t.me/share/url?url=${text}`, "_blank");
+	};
+
 	return (
 		<Card
 			className="
@@ -268,21 +295,41 @@ Please provide a structured summary with the following sections:
 				{summary && (
 					<div className="mt-8 bg-white p-8 rounded-lg shadow-lg w-full">
 						<h3 className="text-lg font-semibold mb-4 text-indigo-600">
-							{stockSymbol} ({period})
+							{stockSymbol} - {period}
 						</h3>
 						<div
-							className="transition-all duration-500 ease-in-out mb-4 rounded-full"
+							className="transition-all duration-500 ease-in-out rounded-full mt-4"
 							style={{
 								width: `${progress}%`,
 								height: "10px",
 								backgroundColor: "#4F46E5",
 							}}
 						/>
-						<Separator />
-						<div className="text-gray-800 text-base text-justify overflow-hidden relative">
+						<Separator className="my-2" />
+						<div className="text-gray-800 text-sm text-justify overflow-hidden relative">
 							<div ref={textRef}>
-								<ReactMarkdown>{summary.slice(0, visibleChars)}</ReactMarkdown>
+								<ReactMarkdown
+									components={{
+										strong: ({ ...props }) => (
+											<span className="font-bold text-indigo-600" {...props} />
+										),
+									}}
+								>
+									{summary.slice(0, visibleChars)}
+								</ReactMarkdown>
 							</div>
+						</div>
+						<div className="mt-4 flex justify-center space-x-2 items-center ">
+							<Button onClick={copyToClipboard} variant="ghost" size="sm">
+								<Copy className="w-4 h-4 mr-2" />
+							</Button>
+							<Button onClick={shareOnTwitter} variant="ghost" size="sm">
+								<Icons.twitter className="w-4 h-4 mr-2" />
+							</Button>
+
+							<Button onClick={shareOnTelegram} variant="ghost" size="sm">
+								<Icons.telegram className="w-4 h-4 mr-2" />
+							</Button>
 						</div>
 					</div>
 				)}
