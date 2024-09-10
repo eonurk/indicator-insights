@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import ReactMarkdown from "react-markdown";
 import { User } from "firebase/auth";
 import { Link, useNavigate } from "react-router-dom";
@@ -62,6 +62,9 @@ const AIStockAnalysis: React.FC<AIStockAnalysisProps> = ({
 
 	const [stockSymbol, setStockSymbol] = useState(selectedStock);
 	const [period, setPeriod] = useState(selectedPeriod);
+	const [visibleChars, setVisibleChars] = useState(0);
+	const textRef = useRef<HTMLDivElement>(null);
+	const [progress, setProgress] = useState(0);
 
 	useEffect(() => {
 		const freeTryUsed = localStorage.getItem("freeTryUsed");
@@ -79,6 +82,24 @@ const AIStockAnalysis: React.FC<AIStockAnalysisProps> = ({
 		setStockSymbol(stockSymbol);
 		setPeriod(period);
 	}, [stockSymbol, period]);
+
+	useEffect(() => {
+		if (summary) {
+			let charIndex = 0;
+			const intervalId = setInterval(() => {
+				if (charIndex < summary.length) {
+					setVisibleChars(charIndex + 2);
+					setProgress(((charIndex + 2) / summary.length) * 100);
+					charIndex += 2;
+				} else {
+					clearInterval(intervalId);
+					setProgress(100);
+				}
+			}, 10);
+
+			return () => clearInterval(intervalId);
+		}
+	}, [summary]);
 
 	const getCurrentDate = () => {
 		const today = new Date();
@@ -249,10 +270,20 @@ Please provide a structured summary with the following sections:
 						<h3 className="text-lg font-semibold mb-4 text-indigo-600">
 							{stockSymbol} ({period})
 						</h3>
+						<div
+							className="transition-all duration-500 ease-in-out mb-4 rounded-full"
+							style={{
+								width: `${progress}%`,
+								height: "10px",
+								backgroundColor: "#4F46E5",
+							}}
+						/>
 						<Separator />
-						<ReactMarkdown className="text-gray-800 text-base text-justify">
-							{summary}
-						</ReactMarkdown>
+						<div className="text-gray-800 text-base text-justify overflow-hidden relative">
+							<div ref={textRef}>
+								<ReactMarkdown>{summary.slice(0, visibleChars)}</ReactMarkdown>
+							</div>
+						</div>
 					</div>
 				)}
 
