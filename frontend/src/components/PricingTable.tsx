@@ -42,8 +42,10 @@ const PricingTable: React.FC = () => {
 					from NASDAQ and much more.
 				</p>
 				<div className="flex items-end mb-4">
-					<span className="text-lg line-through text-gray-500 mr-2">€6.99</span>
-					<span className="text-4xl font-bold">€4.99</span>
+					<span className="text-lg line-through text-gray-500 mr-2">
+						€12.99
+					</span>
+					<span className="text-4xl font-bold">€9.99</span>
 					<span className="text-sm text-gray-500 ml-2 flex flex-col items-start leading-tight">
 						<span>per</span>
 						<span>month</span>
@@ -53,7 +55,7 @@ const PricingTable: React.FC = () => {
 				<button
 					className="w-full bg-blue-600 text-white text-sm py-3 rounded-md hover:bg-blue-700 transition duration-300"
 					onClick={() => {
-						window.location.href = "https://buy.stripe.com/bIY7wg23C0x66E8003";
+						window.location.href = "https://buy.stripe.com/bIYcQA37GenW4w0bIK";
 					}}
 				>
 					Start Free Trial
