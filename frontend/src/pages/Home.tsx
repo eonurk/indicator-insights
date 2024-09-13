@@ -458,7 +458,7 @@ export function Home({ user }: StockChartProps) {
 							viewport={{ once: true }}
 							transition={{ duration: 0.5, delay: 0.4 }}
 						>
-							Gain access to advanced indicators and powerful features
+							Enjoy all premium features for the price of a ☕.
 						</motion.p>
 
 						<motion.div
