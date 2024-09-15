@@ -62,7 +62,7 @@ const SocialProof = () => {
 			<div className="flex items-center">
 				<StarRating rating={4.6} />
 				<span className="ml-2 text-gray-700 text-sm sm:text-base">
-					from 99+ happy users
+					from 99+ happy traders
 				</span>
 			</div>
 		</div>
