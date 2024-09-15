@@ -3,7 +3,7 @@ import IndicatorChecker from "@/components/charts/BacktestAll";
 import { User } from "firebase/auth"; // Import User type
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/Footer";
-import HeroSection from "@/components/HeroSection";
+// import HeroSection from "@/components/HeroSection";
 import FAQHome from "@/components/FAQHome";
 import PricingTable from "@/components/PricingTable";
 import NotificationBoard from "@/components/charts/NotificationBoard";
@@ -29,6 +29,7 @@ import { Icons } from "@/components/icons";
 import AIStockAnalysis from "@/components/charts/AIStockAnalysisProps";
 import SankeyChart from "@/components/charts/SankeyChart";
 import CustomerTestimonials from "@/components/CustomerTestimonials";
+import SocialProof from "@/components/SocialProof";
 
 <script async src="https://js.stripe.com/v3/pricing-table.js"></script>;
 
@@ -134,7 +135,7 @@ export function Home({ user }: StockChartProps) {
 	return (
 		<>
 			<SiteHeader />
-			{!user && <HeroSection />}
+			{/* {!user && <HeroSection />} */}
 
 			<div className="container mx-auto px-0">
 				{user && (
@@ -437,6 +438,9 @@ export function Home({ user }: StockChartProps) {
 
 				{!user && (
 					<div className="pb-20 pt-10 relative">
+						<div className="flex justify-center">
+							<SocialProof />
+						</div>
 						<CustomerTestimonials />
 					</div>
 				)}

@@ -219,7 +219,7 @@ Please provide a structured summary with the following sections:
 		from-indigo-500 via-purple-500 to-pink-500"
 		>
 			<CardHeader className="items-center">
-				<CardTitle className="tracking-wide  mt-4 text-3xl font-bold text-white">
+				<CardTitle className="mt-4 text-3xl text-white">
 					AI Stock Insights
 				</CardTitle>
 				<CardDescription className="text-white">
