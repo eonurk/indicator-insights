@@ -28,6 +28,7 @@ import { Link } from "react-router-dom";
 import { Icons } from "@/components/icons";
 import AIStockAnalysis from "@/components/charts/AIStockAnalysisProps";
 import SankeyChart from "@/components/charts/SankeyChart";
+import CustomerTestimonials from "@/components/CustomerTestimonials";
 
 <script async src="https://js.stripe.com/v3/pricing-table.js"></script>;
 
@@ -435,6 +436,12 @@ export function Home({ user }: StockChartProps) {
 				</section>
 
 				{!user && (
+					<div className="pb-20 pt-10 relative">
+						<CustomerTestimonials />
+					</div>
+				)}
+
+				{!user && (
 					<motion.section
 						className="pt-20 text-center"
 						initial={{ opacity: 0, y: 50 }}
@@ -502,6 +509,9 @@ export function Home({ user }: StockChartProps) {
 						</Link>
 					</div>
 				)}
+
+				{/* Customer Testimonials */}
+
 				{!user && <FAQHome />}
 
 				<SiteFooter />
