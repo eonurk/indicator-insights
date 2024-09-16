@@ -19,7 +19,8 @@ const FAQHome = () => {
 						</AccordionTrigger>
 						<AccordionContent className="text-left">
 							We offer a range of popular indicators including RMI, RSI, EMA,
-							MACD, and Bollinger Bands. We will add new indicators regularly.
+							MACD, and Bollinger Bands. We are constantly adding new
+							indicators.
 						</AccordionContent>
 					</AccordionItem>
 					<AccordionItem value="item-2">
@@ -33,12 +34,12 @@ const FAQHome = () => {
 					</AccordionItem>
 					<AccordionItem value="item-3">
 						<AccordionTrigger className="text-left">
-							Can I use this for any stock market?
+							What stock exchanges are supported?
 						</AccordionTrigger>
 						<AccordionContent className="text-left">
-							Currently, we support major US stock exchanges. We're working on
-							expanding our coverage to include international markets in the
-							future.
+							Currently, we support major US stock exchanges NASDAQ, S&P 100 and
+							BIST. We're working on expanding our coverage to include other
+							international markets in the future.
 						</AccordionContent>
 					</AccordionItem>
 					<AccordionItem value="item-4">
@@ -46,8 +47,9 @@ const FAQHome = () => {
 							Is there a free trial?
 						</AccordionTrigger>
 						<AccordionContent className="text-left">
-							Yes! We offer a 7-day free trial. After the trial, you can choose
-							to subscribe to our service for only €9.99 per month.
+							Yes! We offer a 7-day free trial. You can cancel anytime. After
+							the trial, you can choose to subscribe to our service for €99.99
+							per month.
 						</AccordionContent>
 					</AccordionItem>
 				</Accordion>

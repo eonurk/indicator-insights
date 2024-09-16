@@ -469,7 +469,9 @@ export function Home({ user }: StockChartProps) {
 							viewport={{ once: true }}
 							transition={{ duration: 0.5, delay: 0.4 }}
 						>
-							Enjoy all premium features for the price of a coffee ☕
+							Discover the power of advanced market analysis with our
+							comprehensive suite of tools. Join us today and take your trading
+							to the next level.
 						</motion.p>
 
 						<motion.div
@@ -514,9 +516,25 @@ export function Home({ user }: StockChartProps) {
 					</div>
 				)}
 
-				{/* Customer Testimonials */}
-
 				{!user && <FAQHome />}
+
+				{!user && (
+					<div className="text-center mt-10 mb-10 ">
+						<p className="text-muted-foreground text-lg">
+							Any questions or feedback? Just send us a message.
+						</p>
+
+						<Link
+							to="contact"
+							rel="noopener noreferrer"
+							className="mt-4 inline-block text-sm font-medium hover:text-blue-500 transition-colors duration-300"
+						>
+							<Button className="text-sm bg-blue-600 text-white w-48 h-12 rounded-md">
+								Contact Us
+							</Button>
+						</Link>
+					</div>
+				)}
 
 				<SiteFooter />
 			</div>

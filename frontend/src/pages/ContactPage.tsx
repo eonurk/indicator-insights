@@ -44,6 +44,7 @@ const ContactPage: React.FC = () => {
 				});
 			}
 		} catch (error) {
+			console.error(error);
 			toast({
 				title: "Error",
 				description: "Failed to send message. Please try again.",
@@ -56,13 +57,15 @@ const ContactPage: React.FC = () => {
 		<>
 			<SiteHeader />
 			<div className="container mx-auto px-0 py-8 md:max-w-3xl">
-				<Card>
+				<Card className="rounded-md">
 					<CardHeader>
-						<CardTitle className="text-2xl font-bold">Contact Us</CardTitle>
+						<CardTitle className="text-2xl font-bold mb-4">
+							Contact Us
+						</CardTitle>
 						<CardContent>
-							<form onSubmit={handleSubmit} className="space-y-4">
+							<form onSubmit={handleSubmit} className="space-y-4 ">
 								<div>
-									<label htmlFor="name" className="block mb-2">
+									<label htmlFor="name" className="block mb-2 ">
 										Name
 									</label>
 									<Input
@@ -85,17 +88,23 @@ const ContactPage: React.FC = () => {
 									/>
 								</div>
 								<div>
-									<label htmlFor="message" className="block mb-2">
+									<label htmlFor="message" className="block mb-2 ">
 										Message
 									</label>
 									<Textarea
 										id="message"
+										rows={4}
 										value={message}
 										onChange={(e) => setMessage(e.target.value)}
 										required
 									/>
 								</div>
-								<Button type="submit">Send Message</Button>
+								<Button
+									type="submit"
+									className="w-48 h-12 bg-blue-600 text-white rounded-md"
+								>
+									Send Message
+								</Button>
 							</form>
 						</CardContent>
 					</CardHeader>

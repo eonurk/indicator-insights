@@ -16,13 +16,13 @@ const CheckIcon = () => (
 
 const PricingTable: React.FC = () => {
 	const features = [
-		"NASDAQ 100, S&P 100 and more",
-		"10 AI Stock Insights per day",
 		"Real-time market data",
-		"Valuable insights with indicators",
+		"NASDAQ 100, S&P 100 and more",
+		"100 AI Stock Insights per day",
+		"Comprehensive indicator insights",
 		"Customizable indicator settings",
 		"Advanced analytics dashboard",
-		"Historical data analysis",
+		"Unlimited access to all features",
 		"Priority email support",
 	];
 
@@ -43,9 +43,9 @@ const PricingTable: React.FC = () => {
 				</p>
 				<div className="flex items-end mb-4">
 					<span className="text-lg line-through text-gray-500 mr-2">
-						€12.99
+						€199.99
 					</span>
-					<span className="text-4xl font-bold">€9.99</span>
+					<span className="text-4xl font-bold">€99.99</span>
 					<span className="text-sm text-gray-500 ml-2 flex flex-col items-start leading-tight">
 						<span>per</span>
 						<span>month</span>
@@ -55,7 +55,7 @@ const PricingTable: React.FC = () => {
 				<button
 					className="w-full bg-blue-600 text-white text-sm py-3 rounded-md hover:bg-blue-700 transition duration-300"
 					onClick={() => {
-						window.location.href = "https://buy.stripe.com/bIYcQA37GenW4w0bIK";
+						window.location.href = "https://buy.stripe.com/28o03OcIgcfOfaE3cg";
 					}}
 				>
 					Start Free Trial
