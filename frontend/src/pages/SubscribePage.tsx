@@ -30,7 +30,8 @@ export function SubscribePage() {
 					viewport={{ once: true }}
 					transition={{ duration: 0.5, delay: 0.4 }}
 				>
-					Enjoy all premium features for the price of a coffee ☕
+					Discover the power of advanced market analysis with our comprehensive
+					suite of tools. Join us today and take your trading to the next level.
 				</motion.p>
 
 				<motion.div
