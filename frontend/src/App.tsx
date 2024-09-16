@@ -6,7 +6,6 @@ import LoginPage from "@/pages/LoginPage";
 import SignupPage from "@/pages/SignupPage";
 import TermsAndConditions from "@/pages/TermsPage";
 import AboutPage from "@/pages/AboutPage";
-import BlogPage from "@/pages/Jobs";
 import SubscribePage from "@/pages/SubscribePage";
 import UserProfile from "@/pages/UserProfilePage";
 import PrivacyPolicyPage from "@/pages/PrivacyPolicyPage";
@@ -17,6 +16,9 @@ import { useEffect, useState } from "react";
 import { getAuth, onAuthStateChanged, User } from "firebase/auth";
 import { Toaster } from "@/components/ui/toaster";
 import ResetPassword from "@/pages/ResetPassword";
+import BlogPage from "@/pages/Blog";
+import JobsPage from "@/pages/Jobs";
+import BlogPost from "./components/BlogPost";
 
 function App() {
 	const [user, setUser] = useState<User | null>(null); // Use User type from firebase/auth
@@ -36,7 +38,7 @@ function App() {
 				<Routes>
 					<Route path="/" element={<Home user={user} />} />
 					<Route path="/about" element={<AboutPage />} />
-					<Route path="/jobs/*" element={<BlogPage />} />
+					<Route path="/jobs/*" element={<JobsPage />} />
 					<Route path="/subscribe" element={<SubscribePage />} />
 					<Route path="/login" element={<LoginPage />} />
 					<Route path="/signup" element={<SignupPage />} />
@@ -46,6 +48,8 @@ function App() {
 					<Route path="/contact" element={<ContactPage />} />
 					<Route path="/faq" element={<FAQPage />} />
 					<Route path="/reset-password" element={<ResetPassword />} />
+					<Route path="/blog" element={<BlogPage />} />
+					<Route path="/blog/:slug" element={<BlogPost />} />
 					<Route path="*" element={<NotFoundPage />} />
 				</Routes>
 			</Router>

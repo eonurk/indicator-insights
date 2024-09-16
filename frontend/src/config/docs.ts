@@ -21,6 +21,10 @@ export const docsConfig: DocsConfig = {
 			href: "/jobs",
 		},
 		{
+			title: "Blog",
+			href: "/blog",
+		},
+		{
 			title: "Contact",
 			href: "/contact",
 		},

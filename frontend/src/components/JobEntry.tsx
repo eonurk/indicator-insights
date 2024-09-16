@@ -1,4 +1,5 @@
 import { Separator } from "@/components/ui/separator";
+import { Link } from "react-router-dom";
 
 interface BlogEntryProps {
 	title: string;
@@ -7,14 +8,14 @@ interface BlogEntryProps {
 	description: string;
 }
 
-export function JobEntry({ title, date, link, description }: BlogEntryProps) {
+export function BlogEntry({ title, date, link, description }: BlogEntryProps) {
 	return (
 		<>
 			<div className="text-2xl mx-auto font-normal text-left text-black dark:text-neutral-400">
 				<br />
-				<a href={link} className="hover:underline">
+				<Link to={link} className="hover:underline">
 					{title}
-				</a>
+				</Link>
 				<div className="mx-auto text-sm text-left text-neutral-600 dark:text-neutral-400">
 					{date}
 				</div>
@@ -29,4 +30,4 @@ export function JobEntry({ title, date, link, description }: BlogEntryProps) {
 	);
 }
 
-export default JobEntry;
+export default BlogEntry;

@@ -43,6 +43,17 @@ export function MainNav() {
 				>
 					Jobs (1)
 				</Link>
+
+				<Link
+					to="/blog"
+					className={cn(
+						"transition-colors hover:text-foreground/80",
+						pathname === "/blog" ? "text-foreground" : "text-foreground/60"
+					)}
+				>
+					Blog
+				</Link>
+
 				<Link
 					to="/contact"
 					className={cn(

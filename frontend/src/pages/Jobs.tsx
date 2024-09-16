@@ -2,7 +2,7 @@
 
 import { SiteFooter } from "@/components/Footer";
 import { SiteHeader } from "@/components/site-header";
-import JobEntry from "@/components/JobEntry"; // Import the BlogEntry component
+import JobEntry from "@/components/JobEntry"; // Import the component
 
 interface Blog {
 	title: string;
