@@ -18,11 +18,25 @@ const blogEntries: Blog[] = [
 			"We're excited to announce the launch of our new AI Summary feature, designed to transform the way you analyze stocks and make informed trading decisions. This powerful tool combines advanced technical indicators with artificial intelligence to provide you with concise, actionable insights.",
 	},
 	{
+		title: "How Useful Indicators Are",
+		date: "September 2, 2024",
+		link: "how-useful-indicators-are",
+		description:
+			"This article explores the effectiveness of trading indicators in technical analysis. It discusses the benefits and limitations of using indicators, provides best practices for their use, and emphasizes the importance of combining them with other forms of analysis.",
+	},
+	{
 		title: "What is RMI?",
 		date: "September 1, 2024",
 		link: "what-is-rmi",
 		description:
 			"Relative Momentum Index (RMI) is a technical indicator that measures the speed and change of price movements. It helps traders identify overbought or oversold conditions in the market. The RMI is calculated using the closing prices of a stock and is displayed on a scale from 0 to 100. Typically, the default time period for the RMI is 14 days, but it can be customized to fit various trading strategies.",
+	},
+	{
+		title: "How Can AI Help the Stock Market?",
+		date: "August 30, 2024",
+		link: "how-can-ai-help-stock-market",
+		description:
+			"Artificial Intelligence (AI) is revolutionizing various industries, and the stock market is no exception. From predictive analytics to automated trading, AI is reshaping how investors approach the market. But how exactly can AI help the stock market?",
 	},
 	{
 		title: "What is RSI?",
@@ -51,6 +65,14 @@ const blogEntries: Blog[] = [
 		link: "what-is-sma",
 		description:
 			"Simple Moving Average (SMA) is a technical analysis tool used to identify the average price of a security over a specified period of time. It is calculated by adding the closing prices of a stock over a specified period and dividing by the number of days in that period. SMA is used to identify the trend direction of a stock and can help traders determine when to enter or exit a trade.",
+	},
+
+	{
+		title: "What is EMA?",
+		date: "August 22, 2024",
+		link: "what-is-ema",
+		description:
+			"Exponential Moving Average (EMA) is a technical analysis tool used to identify the average price of a security over a specified period of time. It is calculated by adding the closing prices of a stock over a specified period and dividing by the number of days in that period. EMA is used to identify the trend direction of a stock and can help traders determine when to enter or exit a trade.",
 	},
 	{
 		title: "What is a Financial Indicator?",
