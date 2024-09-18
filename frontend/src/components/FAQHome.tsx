@@ -48,7 +48,7 @@ const FAQHome = () => {
 						</AccordionTrigger>
 						<AccordionContent className="text-left">
 							Yes! We offer a 7-day free trial. You can cancel anytime. After
-							the trial, you can choose to subscribe to our service for €99.99
+							the trial, you can choose to subscribe to our service for €9.99
 							per month.
 						</AccordionContent>
 					</AccordionItem>

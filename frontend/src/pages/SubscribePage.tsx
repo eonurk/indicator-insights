@@ -30,8 +30,8 @@ export function SubscribePage() {
 					viewport={{ once: true }}
 					transition={{ duration: 0.5, delay: 0.4 }}
 				>
-					Discover the power of advanced market analysis with our comprehensive
-					suite of tools. Join us today and take your trading to the next level.
+					We trust the value we offer so much, that we offer a 7-day free trial.
+					No credit card required. Cancel anytime. See for yourself!
 				</motion.p>
 
 				<motion.div

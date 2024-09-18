@@ -43,9 +43,9 @@ const PricingTable: React.FC = () => {
 				</p>
 				<div className="flex items-end mb-4">
 					<span className="text-lg line-through text-gray-500 mr-2">
-						€199.99
+						€19.99
 					</span>
-					<span className="text-4xl font-bold">€99.99</span>
+					<span className="text-4xl font-bold">€9.99</span>
 					<span className="text-sm text-gray-500 ml-2 flex flex-col items-start leading-tight">
 						<span>per</span>
 						<span>month</span>
@@ -55,7 +55,7 @@ const PricingTable: React.FC = () => {
 				<button
 					className="w-full bg-blue-600 text-white text-sm py-3 rounded-md hover:bg-blue-700 transition duration-300"
 					onClick={() => {
-						window.location.href = "https://buy.stripe.com/28o03OcIgcfOfaE3cg";
+						window.location.href = "https://buy.stripe.com/bIYcQA37GenW4w0bIK";
 					}}
 				>
 					Start Free Trial
@@ -63,7 +63,7 @@ const PricingTable: React.FC = () => {
 
 				{/* Add the "Cancel anytime" text here */}
 				<p className="text-xs text-gray-500 mt-2 text-center">
-					Cancel anytime. No commitments, no hidden fees.
+					No card required for the free trial. Cancel anytime.
 				</p>
 
 				<ul className="mt-4 space-y-2 text-sm">
