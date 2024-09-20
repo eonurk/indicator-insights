@@ -185,7 +185,7 @@ function SankeyChart({ selectedStock, availableStocks }: SankeyChartProps) {
 	}
 
 	return (
-		<Card className="mt-4 w-full md:w-2/3 md:mx-auto p-2 md:p-4 ">
+		<Card className="mt-4 w-full md:w-2/3 md:mx-auto p-0 md:p-4 ">
 			<CardHeader>
 				<CardTitle>Financial Flow Chart</CardTitle>
 				<CardDescription>

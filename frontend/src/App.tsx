@@ -19,6 +19,7 @@ import ResetPassword from "@/pages/ResetPassword";
 import BlogPage from "@/pages/Blog";
 import JobsPage from "@/pages/Jobs";
 import BlogPost from "./components/BlogPost";
+import DashboardPage from "./pages/DashboardPage";
 
 function App() {
 	const [user, setUser] = useState<User | null>(null); // Use User type from firebase/auth
@@ -38,6 +39,7 @@ function App() {
 				<Routes>
 					<Route path="/" element={<Home user={user} />} />
 					<Route path="/about" element={<AboutPage />} />
+					<Route path="/dashboard" element={<DashboardPage user={user} />} />
 					<Route path="/jobs/*" element={<JobsPage />} />
 					<Route path="/subscribe" element={<SubscribePage />} />
 					<Route path="/login" element={<LoginPage />} />

@@ -317,9 +317,9 @@ const NotificationBoard: React.FC<NotificationBoardProps> = ({
 	}, [checkForSignals]);
 
 	return (
-		<Card className="mt-4 w-full md:w-2/3 md:mx-auto">
+		<Card className="w-full md:w-2/3 md:mx-auto">
 			<CardHeader className="flex flex-wrap justify-between items-center">
-				<div className="flex items-center ml-2">
+				<div className="flex items-center ml-3">
 					<CardTitle>Real-time Insights</CardTitle>
 					<a
 						className="ml-2 cursor-pointer"

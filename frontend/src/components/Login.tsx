@@ -30,7 +30,7 @@ export default function Login() {
 		e.preventDefault();
 		try {
 			await signInWithEmailAndPassword(auth, email, password);
-			navigate("/"); // Redirect to the dashboard after login
+			navigate("/dashboard"); // Redirect to the dashboard after login
 		} catch (error: unknown) {
 			setError(error instanceof Error ? error.message : "Failed to sign in");
 		}
@@ -40,7 +40,7 @@ export default function Login() {
 		const provider = new GoogleAuthProvider();
 		try {
 			await signInWithPopup(auth, provider);
-			navigate("/");
+			navigate("/dashboard");
 		} catch (error: unknown) {
 			setError(error instanceof Error ? error.message : "Failed to sign in");
 		}
@@ -100,7 +100,11 @@ export default function Login() {
 				</form>
 				<div className="mt-4 text-center text-sm">
 					Don&apos;t have an account?{" "}
-					<Link to="/subscribe" className="underline">
+					<Link
+						to="/subscribe"
+						className="underline"
+						onClick={() => window.scrollTo(0, 0)}
+					>
 						{" "}
 						{/* Update this to your signup route */}
 						Get Started Here

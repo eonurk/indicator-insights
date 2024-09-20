@@ -67,13 +67,14 @@ const HeroSection = () => {
 							</motion.span>
 						))}
 					</div>
-
 					<div className="flex justify-center space-x-4 transition-all duration-300 ">
 						<Button
 							asChild
 							className="py-6 px-8 hover:shadow-lg hover:scale-105 transition-all duration-300"
 						>
-							<Link to="/subscribe">Get Started</Link>
+							<Link to="/subscribe" onClick={() => window.scrollTo(0, 0)}>
+								Get Started
+							</Link>
 						</Button>
 						<Button
 							className="py-6 px-8 hover:shadow-lg hover:scale-105 transition-all duration-300"
@@ -83,6 +84,10 @@ const HeroSection = () => {
 							Learn More
 						</Button>
 					</div>
+					<div className="text-sm text-muted-foreground mt-2 credit-card-note">
+						No card required. Cancel anytime.
+					</div>
+
 					<div className="flex justify-center space-x-4 transition-all duration-300 mt-6">
 						<SocialProof />
 					</div>

@@ -6,6 +6,12 @@ import { MainNav } from "@/components/nav-main";
 import { MobileNav } from "@/components/nav-mobile";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
+const DashboardButton = () => (
+	<Link to="/dashboard">
+		<Button variant="ghost">Dashboard</Button>
+	</Link>
+);
+
 export function SiteHeader() {
 	const [user, setUser] = useState<User | null>(null);
 	const auth = getAuth();
@@ -41,12 +47,13 @@ export function SiteHeader() {
 							<Link to="/login">
 								<Button variant="outline">Login</Button>
 							</Link>
-							<Link to="/subscribe">
+							<Link to="/subscribe" onClick={() => window.scrollTo(0, 0)}>
 								<Button className="bg-blue-600">Get Started</Button>
 							</Link>
 						</>
 					) : (
 						<>
+							<DashboardButton />
 							<Link to="/profile">
 								<Avatar className="h-8 w-8">
 									<AvatarImage src={user.photoURL || undefined} alt="Profile" />
@@ -55,6 +62,7 @@ export function SiteHeader() {
 									</AvatarFallback>
 								</Avatar>
 							</Link>
+
 							<Button variant="outline" onClick={handleLogout}>
 								Logout
 							</Button>

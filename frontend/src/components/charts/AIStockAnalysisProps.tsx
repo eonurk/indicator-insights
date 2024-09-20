@@ -212,26 +212,19 @@ Please provide a structured summary with the following sections:
 	};
 
 	return (
-		<Card
-			className="
-			mt-4 w-full md:w-2/3 md:mx-auto p-2 md:p-4 
-			items-center bg-gradient-to-r shadow-xl rounded-xl
-		from-indigo-500 via-purple-500 to-pink-500"
-		>
-			<CardHeader className="items-center">
-				<CardTitle className="mt-4 text-3xl text-white">
+		<Card className="mt-4 w-full md:w-2/3 md:mx-auto p-0 md:p-4 bg-gradient-to-r shadow-xl rounded-xl from-indigo-500 via-purple-500 to-pink-500">
+			<CardHeader className="text-center">
+				<CardTitle className="text-white text-2xl md:text-3xl">
 					AI Stock Insights
 				</CardTitle>
-				<CardDescription className="text-white">
-					Leverage artificial intelligence to gain insights into stock market
+				<CardDescription className="text-white text-base mx-4">
+					Leverage Artificial Intelligence to gain insights into the stock
+					market
 				</CardDescription>
 			</CardHeader>
-			<CardContent className="mt-4 w-full px-0">
+			<CardContent className="mt-4 w-full px-4">
 				<Select value={stockSymbol} onValueChange={setStockSymbol}>
-					<SelectTrigger
-						className="bg-white text-indigo-600 mt-2 max-w-[250px] mx-auto text-sm"
-						aria-label="Select a value"
-					>
+					<SelectTrigger className="bg-white text-indigo-600 mt-2 max-w-[250px] mx-auto text-sm">
 						<SelectValue placeholder="AAPL" />
 					</SelectTrigger>
 					<SelectContent position="popper">
@@ -264,11 +257,8 @@ Please provide a structured summary with the following sections:
 				)}
 
 				{!user && hasUsedFreeTry ? (
-					<Link to="/subscribe">
-						<Button
-							className="transition-all duration-300 hover:scale-105 bg-white 
-						text-indigo-600 text-base py-6 px-8 rounded-full shadow-lg hover:text-white "
-						>
+					<Link to="/subscribe" onClick={() => window.scrollTo(0, 0)}>
+						<Button className="transition-all duration-300 hover:scale-105 bg-white text-indigo-600 text-base p-6 rounded-full shadow-lg hover:text-white">
 							<p className="animate-pulse">Get Started</p>
 						</Button>
 					</Link>
@@ -278,20 +268,21 @@ Please provide a structured summary with the following sections:
 						disabled={isLoading}
 						className={`transition-all duration-300 ${
 							isLoading ? "scale-95" : "scale-100"
-						} hover:scale-105 bg-white text-indigo-600 font-bold py-6 text-base px-8 rounded-full shadow-lg`}
+						} hover:scale-105 bg-white text-indigo-600 font-bold py-6 text-sm px-6 rounded-full shadow-lg`}
 					>
 						{isLoading ? (
 							<div className="items-center space-x-2 flex">
 								<Loader2 className="mr-2 h-6 w-6 animate-spin text-indigo-600" />
-								<span className="animate-pulse text-indigo-600">Analyzing</span>
+								<span className="animate-pulse">Analyzing</span>
 							</div>
 						) : (
-							<span className="text-indigo-600 text-base">
+							<span className="text-indigo-600 text-base ">
 								{!user && hasUsedFreeTry ? "Analyze More" : "Analyze Stock"}
 							</span>
 						)}
 					</Button>
 				)}
+
 				{summary && (
 					<div className="mt-8 bg-white p-8 rounded-lg shadow-lg w-full">
 						<h3 className="text-lg font-semibold mb-4 text-indigo-600">
@@ -319,14 +310,13 @@ Please provide a structured summary with the following sections:
 								</ReactMarkdown>
 							</div>
 						</div>
-						<div className="mt-4 flex justify-center space-x-2 items-center ">
+						<div className="mt-4 flex justify-center space-x-2 items-center">
 							<Button onClick={copyToClipboard} variant="ghost" size="sm">
 								<Copy className="w-4 h-4 mr-2" />
 							</Button>
 							<Button onClick={shareOnTwitter} variant="ghost" size="sm">
 								<Icons.twitter className="w-4 h-4 mr-2" />
 							</Button>
-
 							<Button onClick={shareOnTelegram} variant="ghost" size="sm">
 								<Icons.telegram className="w-4 h-4 mr-2" />
 							</Button>
@@ -341,13 +331,13 @@ Please provide a structured summary with the following sections:
 					</p>
 				)}
 				{!user && hasUsedFreeTry && (
-					<p className="text-white text-center mt-8 text-lg">
+					<p className="text-white text-center mt-8 mx-4 text-base">
 						Unlock AI-powered stock analyses by signing up today!
 					</p>
 				)}
 			</CardContent>
-			<CardFooter className="text-xs items-center justify-center text-white text-center">
-				<p className="text-center max-w-sm">
+			<CardFooter className="items-center justify-center">
+				<p className="text-center max-w-sm text-xs text-white">
 					AI models may not always be accurate. Always conduct your own research
 					before making investment decisions.
 				</p>
