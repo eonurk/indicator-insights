@@ -325,7 +325,7 @@ Please provide a structured summary with the following sections:
 				)}
 
 				{!user && !hasUsedFreeTry && (
-					<p className="text-white text-center mt-8 text-base">
+					<p className="text-white text-center mt-8 text-base mx-4">
 						You have 1 complimentary analysis available. Sign up for unlimited
 						access to our premium features.
 					</p>
