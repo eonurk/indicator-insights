@@ -204,11 +204,11 @@ export function Dashboard({ user }: { user: User | null }) {
 
 						<div className="my-4"></div>
 
-						<IndicatorChecker user={user} />
+						<IndicatorChecker user={user} availableStocks={availableStocks} />
 
 						<div className="my-4"></div>
 
-						<UMAPChart user={user} />
+						<UMAPChart user={user} availableStocks={availableStocks} />
 					</div>
 				</div>
 

@@ -39,7 +39,6 @@ import {
 	calculateBollingerBandsProfit,
 } from "@/utils/calculateProfit";
 
-import { stocks } from "@/utils/stocks";
 import { fetchStockData } from "@/fetchStockData";
 import { User } from "firebase/auth";
 import { exportToCSV } from "@/utils/saveExcel"; // Add this import
@@ -65,6 +64,7 @@ interface SignalData {
 
 interface StockChartProps {
 	user: User | null; // Use User type from firebase/auth
+	availableStocks: Record<string, string>;
 }
 
 interface StockHistory {
@@ -90,7 +90,10 @@ interface Result {
 	closingPrices: number[];
 }
 
-export default function IndicatorChecker({ user }: StockChartProps) {
+export default function IndicatorChecker({
+	user,
+	availableStocks,
+}: StockChartProps) {
 	const [buttonDisable, setButtonDisable] = useState(false);
 	const [period, setPeriod] = useState<string>("1w");
 	const [indicator, setIndicator] = useState<string>("RMI");
@@ -99,20 +102,6 @@ export default function IndicatorChecker({ user }: StockChartProps) {
 	const handleStart = async () => {
 		try {
 			setButtonDisable(true);
-
-			const availableStocks = user
-				? stocks
-				: {
-						AAPL: "Apple Inc.",
-						ABNB: "Airbnb, Inc.",
-						AMZN: "Amazon.com, Inc.",
-						EBAY: "eBay Inc.",
-						GOOGL: "Alphabet Inc. (Class A)",
-						META: "Meta Platforms, Inc.",
-						NFLX: "Netflix, Inc.",
-						PLTR: "Palantir Technologies Inc.",
-						ZM: "Zoom Video Communications, Inc.",
-				  };
 
 			const symbols = Object.keys(availableStocks);
 

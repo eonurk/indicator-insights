@@ -342,7 +342,7 @@ export function Home({ user }: StockChartProps) {
 				</motion.section>
 
 				<section className="pb-20 pt-10 ">
-					<IndicatorChecker user={user} />
+					<IndicatorChecker user={user} availableStocks={availableStocks} />
 				</section>
 
 				<motion.section
@@ -384,7 +384,7 @@ export function Home({ user }: StockChartProps) {
 				</motion.section>
 
 				<section id="umap-board" className="pb-20 pt-10 ">
-					<UMAPChart user={user} />
+					<UMAPChart user={user} availableStocks={availableStocks} />
 				</section>
 
 				<div className="pb-20 pt-10 relative">

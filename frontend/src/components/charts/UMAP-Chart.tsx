@@ -1,11 +1,10 @@
 // Gets stock data from the backend, calculates the UMAP, and displays the chart
 
 import { ScatterDataPoint } from "chart.js";
-import { useEffect, useRef, useState, useCallback, useMemo } from "react";
+import { useEffect, useRef, useState, useCallback } from "react";
 import { Chart } from "chart.js/auto";
 import { User } from "firebase/auth";
 import { fetchStockData } from "@/fetchStockData";
-import { stocks } from "@/utils/stocks";
 import { UMAP } from "umap-js";
 import { Button } from "@/components/ui/button";
 import { Tooltip } from "chart.js";
@@ -66,6 +65,7 @@ const indicatorOptions = [
 
 interface UMAPChartProps {
 	user: User | null;
+	availableStocks: Record<string, string>;
 }
 
 // Define the StockData type
@@ -73,7 +73,7 @@ interface StockData {
 	history: Record<string, { Close: number }>;
 }
 
-function UMAPChart({ user }: UMAPChartProps) {
+function UMAPChart({ user, availableStocks }: UMAPChartProps) {
 	const chartRef = useRef<HTMLCanvasElement>(null);
 	const chartInstance = useRef<Chart | null>(null);
 	const [period, setPeriod] = useState<string>("1w");
@@ -82,38 +82,6 @@ function UMAPChart({ user }: UMAPChartProps) {
 	const [showChart, setShowChart] = useState(false);
 	const [isLoading, setIsLoading] = useState(false);
 	const [error, setError] = useState<string | null>(null);
-
-	const availableStocks = useMemo(() => {
-		return user
-			? stocks
-			: {
-					AAPL: "Apple Inc.",
-					ABNB: "Airbnb, Inc.",
-					AMZN: "Amazon.com, Inc.",
-					EBAY: "eBay Inc.",
-					GOOGL: "Alphabet Inc. (Class A)",
-					META: "Meta Platforms, Inc.",
-					MSFT: "Microsoft Corporation",
-					NFLX: "Netflix, Inc.",
-					NVDA: "NVIDIA Corporation",
-					PLTR: "Palantir Technologies Inc.",
-					TSLA: "Tesla, Inc.",
-					UBER: "Uber Technologies, Inc.",
-					DIS: "The Walt Disney Company",
-					PYPL: "PayPal Holdings, Inc.",
-					ADBE: "Adobe Inc.",
-					CRM: "Salesforce, Inc.",
-					INTC: "Intel Corporation",
-					AMD: "Advanced Micro Devices, Inc.",
-					ZM: "Zoom Video Communications, Inc.",
-					SNAP: "Snap Inc.",
-					TWLO: "Twilio Inc.",
-					SQ: "Block, Inc.",
-					SHOP: "Shopify Inc.",
-					ROKU: "Roku, Inc.",
-					DDOG: "Datadog, Inc.",
-			  };
-	}, [user]);
 
 	const updateChart = useCallback(() => {
 		if (chartInstance.current) {
