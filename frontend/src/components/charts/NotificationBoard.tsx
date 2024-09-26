@@ -1,4 +1,10 @@
-import React, { useState, useEffect, useCallback, useRef } from "react";
+import React, {
+	useState,
+	useEffect,
+	useCallback,
+	useRef,
+	useMemo,
+} from "react";
 import {
 	Card,
 	CardHeader,
@@ -147,10 +153,8 @@ const NotificationBoard: React.FC<NotificationBoardProps> = ({
 		time: Date;
 		period: string;
 		enabledIndicators: { [key: string]: boolean };
+		availableStocks: { [key: string]: string };
 	} | null>(null);
-	const [currentStocks, setCurrentStocks] = useState<{ [key: string]: string }>(
-		availableStocks
-	);
 
 	const toggleIndicator = (indicator: string) => {
 		setEnabledIndicators((prev) => ({
@@ -166,21 +170,33 @@ const NotificationBoard: React.FC<NotificationBoardProps> = ({
 			notification.indicator
 		);
 	};
-	const checkForSignals = useCallback(async () => {
-		setError(null); // Clear any previous errors
-		const symbols = Object.keys(currentStocks);
-		const newNotifications: Notification[] = [];
-		const currentTime = new Date();
 
-		// Check if we need to fetch new data
-		const shouldFetchNewData =
+	const shouldFetchNewData = useMemo(() => {
+		const currentTime = new Date();
+		return (
 			!lastFetchTimeRef.current ||
 			currentTime.getTime() - lastFetchTimeRef.current.time.getTime() >
 				5 * 60 * 1000 ||
 			selectedPeriod !== lastFetchTimeRef.current?.period ||
 			JSON.stringify(enabledIndicators) !==
 				JSON.stringify(lastFetchTimeRef.current?.enabledIndicators) ||
-			JSON.stringify(currentStocks) !== JSON.stringify(availableStocks);
+			JSON.stringify(availableStocks) !==
+				JSON.stringify(lastFetchTimeRef.current?.availableStocks)
+		);
+	}, [selectedPeriod, enabledIndicators, availableStocks]);
+
+	const checkForSignals = useCallback(async () => {
+		setError(null);
+		const symbols = Object.keys(availableStocks);
+
+		if (symbols.length === 0) {
+			setNotifications([]);
+			setIsLoading(false);
+			return;
+		}
+
+		const newNotifications: Notification[] = [];
+		const currentTime = new Date();
 
 		try {
 			let response;
@@ -197,6 +213,7 @@ const NotificationBoard: React.FC<NotificationBoardProps> = ({
 					time: currentTime,
 					period: selectedPeriod,
 					enabledIndicators: { ...enabledIndicators },
+					availableStocks: { ...availableStocks },
 				};
 				setIsLoading(false);
 			} else {
@@ -302,18 +319,15 @@ const NotificationBoard: React.FC<NotificationBoardProps> = ({
 				setError("An unexpected error occurred while fetching stock data.");
 			}
 		}
-	}, [currentStocks, selectedPeriod, enabledIndicators, availableStocks]);
+	}, [availableStocks, selectedPeriod, enabledIndicators, shouldFetchNewData]);
 
 	useEffect(() => {
-		setCurrentStocks(availableStocks);
-	}, [availableStocks]);
+		checkForSignals();
+	}, [checkForSignals]);
 
 	useEffect(() => {
-		checkForSignals(); // Trigger a new check when availableStocks changes or on mount
-
-		const intervalId = setInterval(checkForSignals, 5 * 60 * 1000); // Check every 5 minutes
-
-		return () => clearInterval(intervalId); // Cleanup the interval on unmount
+		const intervalId = setInterval(checkForSignals, 5 * 60 * 1000);
+		return () => clearInterval(intervalId);
 	}, [checkForSignals]);
 
 	return (
