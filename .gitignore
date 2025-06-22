@@ -68,3 +68,7 @@ node_modules/
 # dataconnect generated files
 .dataconnect
 telegram-notifier/TelegramConnect.js
+
+venv/
+myenv/
+telegram-notifier/TelegramConnect.js
